@@ -32,7 +32,7 @@
 .cs-category-btn {
   padding: 0.5rem 1rem;
   border-radius: 9999px;
-  transition: all 0.2s;
+  transition: background-color 0.2s, color 0.2s;
   border: none;
   cursor: pointer;
   background-color: #f3f4f6;
@@ -60,6 +60,10 @@
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid #e5e7eb;
   overflow: hidden;
+}
+
+.cs-faq-item.hidden {
+  display: none;
 }
 
 .cs-faq-question-btn {
@@ -127,12 +131,22 @@
   height: 1.25rem;
   color: #9ca3af;
   flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.cs-faq-item.active .cs-chevron-icon {
+  transform: rotate(180deg);
 }
 
 .cs-faq-answer {
+  display: none;
   padding: 0 1.5rem 1.5rem 1.5rem;
   border-top: 1px solid #e5e7eb;
   background-color: #f9fafb;
+}
+
+.cs-faq-item.active .cs-faq-answer {
+  display: block;
 }
 
 .cs-answer-content {

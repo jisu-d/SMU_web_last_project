@@ -4,6 +4,15 @@
   padding: 3rem 1rem;
 }
 
+/* View Switching */
+.view-section {
+  display: none;
+}
+
+.view-section.active {
+  display: block;
+}
+
 .mypage-login-container {
   max-width: 28rem;
   margin: 0 auto;
