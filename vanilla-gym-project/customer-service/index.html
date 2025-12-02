@@ -4,6 +4,14 @@
         자주 묻는 질문을 확인해보세요. 추가 문의사항은 02-1234-5678로 연락주세요.
     </p>
 
+    <!-- 검색 -->
+    <div class="cs-search-container">
+        <div class="cs-search-wrapper">
+            <i data-lucide="search" class="cs-search-icon"></i>
+            <input type="text" id="cs-search-input" class="cs-search-input" placeholder="질문을 검색해보세요">
+        </div>
+    </div>
+
     <div class="cs-content">
         <!-- 카테고리 필터 -->
         <div class="cs-categories">
@@ -167,26 +175,8 @@
 
         </div>
 
-        <!-- 추가 문의 -->
-        <div class="cs-contact">
-            <h2 className="cs-contact-title">더 궁금하신 사항이 있으신가요?</h2>
-            <p className="cs-contact-subtitle">
-                전화 또는 방문하여 문의해 주시면 친절하게 안내해 드리겠습니다.
-            </p>
-            <div className="cs-contact-grid">
-                <div className="cs-contact-card">
-                    <p className="cs-contact-label">전화 문의</p>
-                    <p className="cs-contact-value cs-contact-phone">📞 02-1234-5678</p>
-                </div>
-                <div className="cs-contact-card">
-                    <p className="cs-contact-label">운영 시간</p>
-                    <p className="cs-contact-value">평일 06:00 - 23:00</p>
-                </div>
-                <div className="cs-contact-card">
-                    <p className="cs-contact-label">이메일</p>
-                    <p className="cs-contact-value">kdong@fitness.com</p>
-                </div>
-            </div>
-        </div>
+        <!-- 페이지네이션 -->
+        <div id="cs-pagination" class="cs-pagination"></div>
+
     </div>
 </div>
