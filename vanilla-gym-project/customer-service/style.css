@@ -13,7 +13,52 @@
 .cs-subtitle {
   text-align: center;
   color: #6b7280;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+}
+
+/* Search Bar */
+.cs-search-container {
+  max-width: 48rem;
+  margin: 0 auto 3rem auto;
+  padding: 0 1rem;
+}
+
+.cs-search-wrapper {
+  position: relative;
+  display: block;
+}
+
+.cs-search-icon {
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #9ca3af;
+  pointer-events: none;
+  z-index: 10;
+}
+
+input[type="text"].cs-search-input {
+  display: block;
+  width: 100%;
+  padding: 1.8rem 1.5rem 1.8rem 4rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  font-size: 1.125rem;
+  background-color: white;
+  /* box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); */
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 0;
+  box-sizing: border-box;
+}
+
+input[type="text"].cs-search-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  /* transform: translateY(-2px); */
 }
 
 .cs-content {
@@ -173,52 +218,47 @@
   line-height: 1.75;
 }
 
-.cs-contact {
-  margin-top: 3rem;
-  background-color: #eff6ff;
-  border-radius: 0.75rem;
-  padding: 2rem;
-  text-align: center;
-}
-
-.cs-contact-title {
-  margin-bottom: 0.5rem;
-  font-size: 1.5rem;
-}
-
-.cs-contact-subtitle {
-  color: #374151;
-  margin-bottom: 1.5rem;
-}
-
-.cs-contact-grid {
+/* Pagination */
+.cs-pagination {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
   justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 3rem;
 }
 
-@media (min-width: 640px) {
-  .cs-contact-grid {
-    flex-direction: row;
-  }
-}
-
-.cs-contact-card {
-  background-color: white;
-  padding: 1rem 1.5rem;
+.cs-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
+  background-color: white;
+  color: #64748b;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.cs-contact-label {
-  font-size: 0.875rem;
-  color: #6b7280;
+.cs-page-btn:hover:not(:disabled) {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
 }
 
-.cs-contact-value {
-  margin-top: 0.25rem;
+.cs-page-btn.active {
+  background-color: #2563eb;
+  color: white;
+  border-color: #2563eb;
 }
 
-.cs-contact-phone {
-  color: #2563eb;
+.cs-page-btn:disabled {
+  background-color: #f8fafc;
+  color: #cbd5e1;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
 }
