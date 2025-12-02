@@ -39,6 +39,15 @@ window.initMyPage = function() {
         });
     }
 
+    // Auto-fill Test Credentials
+    const testAccountFillBtn = document.getElementById('test-account-fill-btn');
+    if (testAccountFillBtn) {
+        testAccountFillBtn.addEventListener('click', () => {
+            document.getElementById('userId').value = 'user123';
+            document.getElementById('password').value = '1234';
+        });
+    }
+
     // Logout Logic
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {

@@ -34,7 +34,7 @@ const FooterHTML = `
       <div class="footer-info">
         <div class="footer-info-item">
           <i data-lucide="clock" class="footer-icon"></i>
-          <span>평일 06:00 - 23:00</span>
+          <span>평일 06:00 - 23:00 / 토요일 09:00 - 18:00</span>
         </div>
         <div class="footer-info-item">
           <i data-lucide="map-pin" class="footer-icon"></i>

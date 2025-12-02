@@ -49,9 +49,12 @@ window.initAbout = function() {
 
             // 6. 인포윈도우에 표시할 내용
             var iwContent = [
-                '<div style="padding:10px; font-size:14px; line-height:1.5;">',
+                '<div style="padding:10px; min-width:250px; font-size:14px; line-height:1.5; word-break: keep-all;">',
                 '   <h4 style="margin: 0 0 5px 0; font-weight: bold;">' + firstPlace.place_name + '</h4>',
                 '   <p style="margin:0; color:#555;">' + (firstPlace.road_address_name || firstPlace.address_name) + '</p>',
+                '   <div style="margin-top: 5px;">',
+                '       <a href="https://map.kakao.com/link/to/' + firstPlace.place_name + ',' + firstPlace.y + ',' + firstPlace.x + '" target="_blank" style="color: #2563eb; text-decoration: underline;">길찾기</a>',
+                '   </div>',
                 '</div>'
             ].join('');
 
