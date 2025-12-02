@@ -17,13 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
     footerElement.innerHTML = FooterHTML;
   }
 
-  // Initialize Icons
-  if (window.lucide) {
-    lucide.createIcons();
-  }
-});
+              // Initialize Icons
 
-// Global function to update header based on login state
+              if (window.lucide) {
+
+                lucide.createIcons();
+
+              }
+
+            });// Global function to update header based on login state
 window.updateHeaderState = function() {
   const btn = document.querySelector('.header-mypage-btn');
   if (!btn) return;
@@ -33,12 +35,12 @@ window.updateHeaderState = function() {
   if (isLoggedIn) {
     btn.innerHTML = `
       <i data-lucide="user" class="header-mypage-icon"></i>
-      마이페이지
+      <span class="header-mypage-text">마이페이지</span>
     `;
   } else {
     btn.innerHTML = `
       <i data-lucide="log-in" class="header-mypage-icon"></i>
-      로그인
+      <span class="header-mypage-text">로그인</span>
     `;
   }
 

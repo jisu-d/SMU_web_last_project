@@ -1,21 +1,26 @@
 const HeaderHTML = `
 <div class="header-container">
-  <a href="#/" class="header-logo">
-    <img src="img/5.png" alt="Logo" class="header-logo-icon">
-    <span>Troy Horse Gym</span>
-  </a>
-  
-  <nav class="header-nav">
-    <a href="#/" class="header-nav-link">홈</a>
-    <a href="#/about" class="header-nav-link">소개</a>
-    <a href="#/notice" class="header-nav-link">공지사항</a>
-    <a href="#/equipment" class="header-nav-link">운동안내</a>
-    <a href="#/customer-service" class="header-nav-link">고객센터</a>
+  <div class="header-left-group">
+    <a href="#/" class="header-logo">
+      <img src="img/5.png" alt="Logo" class="header-logo-icon">
+      <span class="header-logo-text">Troy Horse Gym</span>
+    </a>
+    
+    <nav class="header-nav">
+      <a href="#/" class="header-nav-link">홈</a>
+      <a href="#/about" class="header-nav-link">소개</a>
+      <a href="#/notice" class="header-nav-link">공지사항</a>
+      <a href="#/equipment" class="header-nav-link">운동안내</a>
+      <a href="#/customer-service" class="header-nav-link">고객센터</a>
+    </nav>
+  </div>
+
+  <div class="header-right-group">
     <a href="#/mypage" class="header-mypage-btn">
       <i data-lucide="user" class="header-mypage-icon"></i>
-      마이페이지
+      <span class="header-mypage-text">마이페이지</span>
     </a>
-  </nav>
+  </div>
 </div>
 `;
 
