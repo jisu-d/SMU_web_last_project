@@ -1,0 +1,60 @@
+<div class="notice-container">
+    <h1 class="notice-title">공지사항</h1>
+
+    <!-- List View -->
+    <div id="notice-list-view" class="view-section active">
+        <div class="notice-list-container">
+            <div class="notice-table">
+                <div class="notice-table-header">
+                    <div class="notice-table-row">
+                        <div class="notice-table-cell center">번호</div>
+                        <div class="notice-table-cell">분류</div>
+                        <div class="notice-table-cell">제목</div>
+                        <div class="notice-table-cell">작성일</div>
+                        <div class="notice-table-cell center">조회</div>
+                    </div>
+                </div>
+                <div id="notice-list-body">
+                    <!-- Items will be injected here by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail View -->
+    <div id="notice-detail-view" class="view-section">
+        <div class="notice-detail-container">
+            <div class="notice-detail">
+                <div class="notice-detail-header">
+                    <div class="notice-detail-badge-container">
+                        <span id="detail-category-badge" class="notice-badge announcement">공지</span>
+                    </div>
+                    <h2 id="detail-title" class="notice-detail-title">제목</h2>
+                    <div class="notice-detail-meta">
+                        <div class="notice-detail-meta-item">
+                            <i data-lucide="user" class="notice-meta-icon"></i>
+                            <span id="detail-author">관리자</span>
+                        </div>
+                        <div class="notice-detail-meta-item">
+                            <i data-lucide="calendar" class="notice-meta-icon"></i>
+                            <span id="detail-date">2024-01-01</span>
+                        </div>
+                        <div class="notice-detail-meta-item">
+                            <i data-lucide="eye" class="notice-meta-icon"></i>
+                            <span id="detail-views">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="notice-detail-content">
+                    <div id="detail-content" class="notice-detail-text">
+                        내용
+                    </div>
+                </div>
+                <div class="notice-detail-footer">
+                    <button id="back-to-list-btn" class="notice-back-btn">목록으로</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,246 @@
+.equipment-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+}
+
+.equipment-title {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2.5rem;
+}
+
+.equipment-content {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.equipment-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.equipment-tab {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.equipment-tab:hover {
+  background-color: #e5e7eb;
+}
+
+.equipment-tab.active {
+  background-color: #2563eb;
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.equipment-grid {
+  display: none; /* Hide by default */
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.equipment-grid.active {
+  display: grid; /* Show only when active */
+}
+
+@media (min-width: 1024px) {
+  .equipment-grid {
+    /* grid-template-columns: repeat(2, 1fr); This is now handled in the active state or combined */
+  }
+  .equipment-grid.active {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.equipment-media-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.equipment-image-container {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.equipment-image {
+  width: 100%;
+  height: 20rem;
+  object-fit: cover;
+}
+
+.equipment-video-container {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.equipment-video-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.equipment-video-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #2563eb;
+}
+
+.equipment-video-title {
+  font-size: 1.125rem;
+}
+
+.equipment-video-wrapper {
+  aspect-ratio: 16 / 9;
+}
+
+.equipment-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.equipment-info-card {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+}
+
+.equipment-category-badge {
+  padding: 0.5rem 0.75rem;
+  background-color: #dbeafe;
+  color: #1e40af;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.equipment-name {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.equipment-description {
+  color: #374151;
+  line-height: 1.75;
+}
+
+.equipment-subtitle {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.equipment-muscles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.equipment-muscle-tag {
+  padding: 0.5rem 1rem;
+  background-color: #d1fae5;
+  color: #065f46;
+  border-radius: 9999px;
+}
+
+.equipment-usage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.equipment-usage-item {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.equipment-usage-number {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+}
+
+.equipment-usage-text {
+  color: #374151;
+  padding-top: 0.125rem;
+}
+
+.equipment-caution-title {
+  margin-bottom: 1rem;
+  color: #dc2626;
+  font-size: 1.125rem;
+}
+
+.equipment-caution-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.equipment-caution-item {
+  display: flex;
+  gap: 0.5rem;
+  color: #374151;
+}
+
+.equipment-caution-bullet {
+  color: #dc2626;
+}
+
+.equipment-inquiry {
+  margin-top: 3rem;
+  background-color: #eff6ff;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.equipment-inquiry-title {
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.equipment-inquiry-text {
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.equipment-inquiry-phone {
+  color: #2563eb;
+}
