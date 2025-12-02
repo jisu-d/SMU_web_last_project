@@ -1,8 +1,8 @@
 const HeaderHTML = `
 <div class="header-container">
   <a href="#/" class="header-logo">
-    <i data-lucide="dumbbell" class="header-logo-icon"></i>
-    <span>K동 헬스장</span>
+    <img src="img/5.png" alt="Logo" class="header-logo-icon">
+    <span>Troy Horse Gym</span>
   </a>
   
   <nav class="header-nav">
@@ -23,7 +23,7 @@ const FooterHTML = `
 <div class="footer-container">
   <div class="footer-grid">
     <div>
-      <h3 class="footer-title">K동 헬스장</h3>
+      <h3 class="footer-title">Troy Horse Gym</h3>
       <p class="footer-text">
         건강한 삶을 위한 최고의 선택
       </p>
@@ -38,7 +38,7 @@ const FooterHTML = `
         </div>
         <div class="footer-info-item">
           <i data-lucide="map-pin" class="footer-icon"></i>
-          <span>서울시 강남구 테헤란로 123</span>
+          <span>충청남도 천안시 동남구 상명대길 31 상명스포츠센터</span>
         </div>
       </div>
     </div>
@@ -48,18 +48,18 @@ const FooterHTML = `
       <div class="footer-info">
         <div class="footer-info-item">
           <i data-lucide="phone" class="footer-icon"></i>
-          <span>02-1234-5678</span>
+          <span>041-550-5114</span>
         </div>
         <div class="footer-info-item">
           <i data-lucide="mail" class="footer-icon"></i>
-          <span>kdong@fitness.com</span>
+          <span>Troy_Horse@gym.com</span>
         </div>
       </div>
     </div>
   </div>
   
   <div class="footer-bottom">
-    <p>&copy; 2024 K동 헬스장. All rights reserved.</p>
+    <p>&copy; 2025 Troy Horse Gym. All rights reserved.</p>
   </div>
 </div>
 `;
