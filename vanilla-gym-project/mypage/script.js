@@ -31,6 +31,8 @@ window.initMyPage = function() {
                 viewLogin.classList.remove('active');
                 viewMain.classList.add('active');
                 updateExpirationDate();
+                // Update Header
+                if (window.updateHeaderState) window.updateHeaderState();
             } else {
                 alert('아이디 또는 비밀번호가 일치하지 않습니다.');
             }
@@ -45,6 +47,8 @@ window.initMyPage = function() {
             viewLogin.classList.add('active');
             document.getElementById('userId').value = '';
             document.getElementById('password').value = '';
+            // Update Header
+            if (window.updateHeaderState) window.updateHeaderState();
         });
     }
 
