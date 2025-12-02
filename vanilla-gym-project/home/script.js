@@ -1,6 +1,5 @@
 window.initHome = function() {
     // Home page specific logic if any
-};
 
     const mapPopupBtn = document.getElementById('home-map-popup-btn');
     const mapModal = document.getElementById('map-modal');
