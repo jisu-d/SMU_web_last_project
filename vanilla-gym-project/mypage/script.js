@@ -1,159 +1,443 @@
-window.initMyPage = function() {
-    const viewLogin = document.getElementById('view-login');
-    const viewMain = document.getElementById('view-main');
-    const viewPayment = document.getElementById('view-payment');
-    
-    // Only setup if elements exist (sanity check)
-    if (!viewLogin) return;
+// 회원 데이터 (로컬 스토리지 사용 안 함)
+const MEMBERS = [
+    {
+        id: "user123",
+        password: "1234",
+        name: "홍길동",
+        contact: "010-1234-5678",
+        email: "hong@example.com",
+        membershipExpireDate: "2024-12-31", // YYYY-MM-DD 형식
+        lockerNumber: 42,
+        lockerPassword: "1357"
+    },
+    {
+        id: "admin",
+        password: "admin",
+        name: "관리자",
+        contact: "010-9876-5432",
+        email: "admin@example.com",
+        membershipExpireDate: "2025-12-31",
+        lockerNumber: 100,
+        lockerPassword: "2468"
+    }
+];
 
-    const loginForm = document.getElementById('login-form');
-    const logoutBtn = document.getElementById('logout-btn');
-    const toPaymentBtns = document.querySelectorAll('.to-payment-btn');
-    const cancelPaymentBtn = document.getElementById('cancel-payment-btn');
-    const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
+// 쿠폰 데이터 (mon: 할인율(%))
+const COUPONS = [
+    { code: "X-mas", mon: 30 }, // 30% 할인
+    { code: "WELCOME", mon: 10 }, // 10% 할인
+    { code: "NEWYEAR", mon: 20 }  // 20% 할인 (예시 추가)
+];
 
-    // Check if user is already "logged in" (simple session persistence simulation)
-    if (sessionStorage.getItem('isLoggedIn') === 'true') {
-        viewLogin.classList.remove('active');
-        viewMain.classList.add('active');
-        updateExpirationDate();
+let loggedInUser = null; // 현재 로그인된 사용자 정보 객체
+let appliedCoupons = []; // 현재 적용된 쿠폰 목록 (객체 배열)
+
+// DOM 요소 캐싱
+const viewLogin = document.getElementById("view-login");
+const viewMain = document.getElementById("view-main");
+const viewPayment = document.getElementById("view-payment");
+const loginForm = document.getElementById("login-form");
+const userIdInput = document.getElementById("userId");
+const passwordInput = document.getElementById("password");
+const loginButton = document.getElementById("login-button");
+const logoutBtn = document.getElementById("logout-btn");
+const testAccountFillBtn = document.getElementById("test-account-fill-btn");
+const cancelPaymentBtn = document.getElementById("cancel-payment-btn");
+
+// 개인 정보 표시 요소
+const memberNameElem = document.getElementById("member-name");
+const memberIdElem = document.getElementById("member-id");
+const memberContactElem = document.getElementById("member-contact");
+const memberEmailElem = document.getElementById("member-email");
+
+// 등록 현황 표시 요소
+const expireDateDisplayElem = document.getElementById("expire-date-display");
+const daysRemainingTextElem = document.getElementById("days-remaining-text");
+
+// 사물함 정보 표시 요소
+const lockerNumberDisplayElem = document.getElementById("locker-number-display");
+const lockerPasswordDigit1Elem = document.getElementById("locker-password-digit-1");
+const lockerPasswordDigit2Elem = document.getElementById("locker-password-digit-2");
+const lockerPasswordDigit3Elem = document.getElementById("locker-password-digit-3");
+const lockerPasswordDigit4Elem = document.getElementById("locker-password-digit-4");
+
+// 결제 관련 요소
+const monthSelect = document.getElementById("month-select");
+const baseMonthDisplay = document.getElementById("base-month-display");
+const basePriceDisplay = document.getElementById("base-price-display");
+const discountRow = document.getElementById("discount-row");
+const discountCountElem = document.getElementById("discount-count");
+const discountAmountElem = document.getElementById("discount-amount");
+const couponRow = document.getElementById("coupon-row");
+const couponRateDisplay = document.getElementById("coupon-rate-display");
+const couponAmountElem = document.getElementById("coupon-amount");
+const totalPriceDisplay = document.getElementById("total-price-display");
+const couponInput = document.getElementById("coupon-input");
+const applyCouponBtn = document.getElementById("apply-coupon-btn");
+const appliedCouponsContainer = document.getElementById("applied-coupons-container"); // New container
+const confirmPaymentBtn = document.getElementById("confirm-payment-btn");
+
+
+/**
+ * 로그인 처리 함수
+ * @param {string} id - 사용자 ID
+ * @param {string} pw - 비밀번호
+ */
+function login(id, pw) {
+    console.log("Attempting login with ID:", id, "Password:", pw); // Debug log
+    const trimmedId = id.trim();
+    const trimmedPw = pw.trim();
+    const user = MEMBERS.find(member => member.id === trimmedId && member.password === trimmedPw);
+    console.log("Found user:", user); // Debug log
+
+    if (user) {
+        loggedInUser = user;
+        showView("main");
+        displayMemberInfo(loggedInUser); // 로그인 성공 시 회원 정보 표시
+        alert(`${loggedInUser.name}님 환영합니다!`);
+    } else {
+        alert("아이디 또는 비밀번호가 올바르지 않습니다.");
+        loggedInUser = null;
+    }
+}
+
+/**
+ * 로그아웃 처리 함수
+ */
+function logout() {
+    loggedInUser = null;
+    showView("login");
+    alert("로그아웃되었습니다.");
+    // 로그인 폼 초기화
+    if (loginForm) {
+        loginForm.reset();
+    }
+    resetPaymentForm();
+}
+
+/**
+ * 뷰 전환 함수
+ * @param {string} viewName - "login" 또는 "main" 또는 "payment"
+ */
+function showView(viewName) {
+    console.log("Switching view to:", viewName); // Debug log
+    // 모든 뷰 비활성화
+    viewLogin.classList.remove("active");
+    viewMain.classList.remove("active");
+    viewPayment.classList.remove("active");
+
+    // 선택된 뷰만 활성화
+    if (viewName === "login") {
+        viewLogin.classList.add("active");
+    } else if (viewName === "main") {
+        viewMain.classList.add("active");
+    } else if (viewName === "payment") {
+        viewPayment.classList.add("active");
+        // 결제 화면 진입 시 폼 초기화 및 가격 계산
+        resetPaymentForm();
+        calculateTotal();
+    }
+}
+
+/**
+ * 로그인 상태 확인 및 UI 렌더링
+ */
+function checkLoginStatusAndRenderUI() {
+    // 초기 로드 시에는 로그인 상태가 없으므로 항상 로그인 뷰를 표시
+    showView("login");
+}
+
+
+/**
+ * 로그인한 사용자의 정보를 view-main에 동적으로 표시하는 함수
+ * @param {Object} member - 로그인한 사용자 객체
+ */
+function displayMemberInfo(member) {
+    // 개인 정보
+    if (memberNameElem) memberNameElem.textContent = member.name;
+    if (memberIdElem) memberIdElem.textContent = member.id;
+    if (memberContactElem) memberContactElem.textContent = member.contact;
+    if (memberEmailElem) memberEmailElem.textContent = member.email;
+
+    // 등록 현황
+    if (expireDateDisplayElem) {
+        expireDateDisplayElem.textContent = member.membershipExpireDate.replace(/-/g, '. '); // YYYY-MM-DD -> YYYY. MM. DD.
     }
 
-    // Login Logic
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const userId = document.getElementById('userId').value;
-            const userPw = document.getElementById('password').value;
+    if (daysRemainingTextElem) {
+        const today = new Date();
+        // 시간을 00:00:00으로 맞춰서 날짜만 비교하도록 설정
+        today.setHours(0, 0, 0, 0);
+        
+        const expireDate = new Date(member.membershipExpireDate);
+        expireDate.setHours(0, 0, 0, 0);
 
-            if (userId === 'user123' && userPw === '1234') {
-                sessionStorage.setItem('isLoggedIn', 'true');
-                viewLogin.classList.remove('active');
-                viewMain.classList.add('active');
-                updateExpirationDate();
-                // Update Header
-                if (window.updateHeaderState) window.updateHeaderState();
+        // 날짜 차이 계산
+        const diffTime = expireDate.getTime() - today.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // 밀리초를 일수로 변환
+        
+        // 부모 요소(배경 컨테이너) 가져오기
+        const container = daysRemainingTextElem.parentElement;
+
+        if (diffDays < 0) {
+            daysRemainingTextElem.textContent = "회원권이 만료되었습니다.";
+            daysRemainingTextElem.style.color = "#dc2626"; // 빨간색 텍스트
+            if (container) container.style.backgroundColor = "#fef2f2"; // 연한 빨간색 배경
+        } else {
+            daysRemainingTextElem.textContent = `회원권이 ${diffDays}일 남았습니다.`;
+            daysRemainingTextElem.style.color = "#2563eb"; // 기본 파란색 텍스트
+            if (container) container.style.backgroundColor = "#eff6ff"; // 연한 파란색 배경
+        }
+    }
+
+    // 사물함 정보
+    if (lockerNumberDisplayElem) {
+        lockerNumberDisplayElem.textContent = `${member.lockerNumber}번`;
+    }
+
+    if (member.lockerPassword) {
+        const passwordDigits = member.lockerPassword.split('');
+        if (lockerPasswordDigit1Elem) lockerPasswordDigit1Elem.textContent = passwordDigits[0] || '';
+        if (lockerPasswordDigit2Elem) lockerPasswordDigit2Elem.textContent = passwordDigits[1] || '';
+        if (lockerPasswordDigit3Elem) lockerPasswordDigit3Elem.textContent = passwordDigits[2] || '';
+        if (lockerPasswordDigit4Elem) lockerPasswordDigit4Elem.textContent = passwordDigits[3] || '';
+    }
+}
+
+/**
+ * 결제 금액 계산 함수
+ */
+function calculateTotal() {
+    const months = parseInt(monthSelect.value);
+    
+    // 1. 기본 금액 계산 (1개월 = 10,000원)
+    const basePrice = months * 10000;
+    
+    // 2. 기간 할인 계산 (3개월 단위로 1,000원 할인)
+    const discountCount = Math.floor(months / 3);
+    const discountPrice = discountCount * 1000;
+    
+    // 3. 중간 합계 (쿠폰 적용 전)
+    let subTotal = basePrice - discountPrice;
+    
+    // 4. 쿠폰 할인 계산 (중간 합계에 대해 % 할인 합산)
+    // 여러 쿠폰의 할인율을 합산 (최대 100% 제한)
+    let totalCouponRate = appliedCoupons.reduce((sum, coupon) => sum + coupon.mon, 0);
+    if (totalCouponRate > 100) totalCouponRate = 100;
+
+    const couponDiscountPrice = Math.floor(subTotal * (totalCouponRate / 100));
+    
+    // 5. 최종 금액
+    const totalPrice = subTotal - couponDiscountPrice;
+    
+    // UI 업데이트
+    baseMonthDisplay.textContent = months;
+    basePriceDisplay.textContent = basePrice.toLocaleString() + "원";
+    
+    if (discountCount > 0) {
+        discountRow.style.display = "flex";
+        discountCountElem.textContent = `${discountCount}회 (${discountCount * 3}개월)`;
+        discountAmountElem.textContent = "-" + discountPrice.toLocaleString() + "원";
+    } else {
+        discountRow.style.display = "none";
+    }
+    
+    if (totalCouponRate > 0) {
+        couponRow.style.display = "flex";
+        couponRateDisplay.textContent = totalCouponRate; // 합산된 할인율 표시
+        couponAmountElem.textContent = "-" + couponDiscountPrice.toLocaleString() + "원";
+    } else {
+        couponRow.style.display = "none";
+    }
+    
+    totalPriceDisplay.textContent = totalPrice.toLocaleString() + "원";
+}
+
+/**
+ * 적용된 쿠폰을 UI에 렌더링하는 함수
+ */
+function renderAppliedCoupons() {
+    // 기존 내용 초기화
+    appliedCouponsContainer.innerHTML = "";
+
+    if (appliedCoupons.length === 0) {
+        appliedCouponsContainer.style.display = "none";
+        return;
+    }
+
+    appliedCouponsContainer.style.display = "flex";
+    
+    appliedCoupons.forEach((coupon, index) => {
+        const tag = document.createElement("div");
+        tag.className = "mypage-coupon-tag";
+        tag.innerHTML = `
+            <span>${coupon.code} (-${coupon.mon}%)</span>
+            <button type="button" class="remove-coupon-btn" data-index="${index}">&times;</button>
+        `;
+        appliedCouponsContainer.appendChild(tag);
+    });
+
+    // 삭제 버튼 이벤트 리스너 추가
+    const removeBtns = appliedCouponsContainer.querySelectorAll(".remove-coupon-btn");
+    removeBtns.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const index = parseInt(e.target.getAttribute("data-index"));
+            removeCoupon(index);
+        });
+    });
+}
+
+/**
+ * 쿠폰 삭제 함수
+ * @param {number} index - 삭제할 쿠폰의 인덱스
+ */
+function removeCoupon(index) {
+    appliedCoupons.splice(index, 1);
+    renderAppliedCoupons();
+    calculateTotal();
+}
+
+
+/**
+ * 결제 폼 초기화 함수
+ */
+function resetPaymentForm() {
+    monthSelect.value = "1";
+    couponInput.value = "";
+    appliedCoupons = []; // 쿠폰 목록 초기화
+    renderAppliedCoupons();
+    calculateTotal();
+}
+
+
+// 페이지 로드 시 실행될 초기화 함수
+function initMypage() {
+    console.log("initMypage called."); // Debug log
+    // Lucide Icons 초기화
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+
+    console.log("DOM elements check:"); // Debug log
+    console.log("loginForm:", loginForm);
+    console.log("userIdInput:", userIdInput);
+    console.log("passwordInput:", passwordInput);
+    console.log("loginButton:", loginButton); // New debug log
+    console.log("logoutBtn:", logoutBtn);
+    console.log("testAccountFillBtn:", testAccountFillBtn);
+
+
+    // 로그인 버튼 클릭 이벤트 (폼 제출 대신 직접 버튼 클릭 이벤트로 연결)
+    if (loginButton) {
+        loginButton.addEventListener("click", (e) => {
+            // submit 타입 버튼이 form 안에 있을 경우 기본 동작(페이지 리로드) 방지
+            e.preventDefault(); 
+            const id = userIdInput.value;
+            const pw = passwordInput.value;
+            login(id, pw);
+        });
+    }
+
+    // 로그아웃 버튼 클릭 이벤트
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", logout);
+    }
+
+    // 테스트 계정 자동 채우기 버튼 이벤트
+    if (testAccountFillBtn) {
+        testAccountFillBtn.addEventListener("click", () => {
+            userIdInput.value = "user123";
+            passwordInput.value = "1234";
+        });
+    }
+
+    // 결제 화면 이동 버튼 이벤트 (여러 개일 수 있음)
+    const toPaymentBtns = document.querySelectorAll(".to-payment-btn");
+    toPaymentBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            showView("payment");
+        });
+    });
+
+    // 결제 취소 버튼 이벤트
+    if (cancelPaymentBtn) {
+        cancelPaymentBtn.addEventListener("click", () => {
+            showView("main");
+        });
+    }
+
+    // 개월 수 변경 이벤트
+    if (monthSelect) {
+        monthSelect.addEventListener("change", calculateTotal);
+    }
+
+    // 쿠폰 적용 버튼 이벤트
+    if (applyCouponBtn) {
+        applyCouponBtn.addEventListener("click", () => {
+            const code = couponInput.value.trim();
+            if (!code) {
+                alert("쿠폰 코드를 입력해주세요.");
+                return;
+            }
+
+            // 이미 적용된 쿠폰인지 확인
+            if (appliedCoupons.some(c => c.code === code)) {
+                alert("이미 적용된 쿠폰입니다.");
+                couponInput.value = "";
+                return;
+            }
+
+            const coupon = COUPONS.find(c => c.code === code);
+            
+            if (coupon) {
+                appliedCoupons.push(coupon);
+                renderAppliedCoupons();
+                calculateTotal();
+                couponInput.value = ""; // 입력창 초기화
             } else {
-                alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+                alert("유효하지 않은 쿠폰입니다.");
             }
         });
     }
 
-    // Auto-fill Test Credentials
-    const testAccountFillBtn = document.getElementById('test-account-fill-btn');
-    if (testAccountFillBtn) {
-        testAccountFillBtn.addEventListener('click', () => {
-            document.getElementById('userId').value = 'user123';
-            document.getElementById('password').value = '1234';
-        });
-    }
-
-    // Logout Logic
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            sessionStorage.removeItem('isLoggedIn');
-            viewMain.classList.remove('active');
-            viewLogin.classList.add('active');
-            document.getElementById('userId').value = '';
-            document.getElementById('password').value = '';
-            // Update Header
-            if (window.updateHeaderState) window.updateHeaderState();
-        });
-    }
-
-    // Navigation to Payment
-    toPaymentBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            viewMain.classList.remove('active');
-            viewPayment.classList.add('active');
-            calculateTotal(); // Init calculation
-        });
-    });
-
-    // Cancel Payment
-    if (cancelPaymentBtn) {
-        cancelPaymentBtn.addEventListener('click', () => {
-            viewPayment.classList.remove('active');
-            viewMain.classList.add('active');
-        });
-    }
-
-    // Payment Calculation Logic
-    const monthSelect = document.getElementById('month-select');
-    const couponInput = document.getElementById('coupon-input');
-    
-    const baseMonthDisplay = document.getElementById('base-month-display');
-    const basePriceDisplay = document.getElementById('base-price-display');
-    const discountRow = document.getElementById('discount-row');
-    const discountCount = document.getElementById('discount-count');
-    const discountAmount = document.getElementById('discount-amount');
-    const couponRow = document.getElementById('coupon-row');
-    const couponAmountDisplay = document.getElementById('coupon-amount');
-    const totalPriceDisplay = document.getElementById('total-price-display');
-    const couponAppliedMsg = document.getElementById('coupon-applied-msg');
-
-    function calculateTotal() {
-        if (!monthSelect) return;
-        const months = parseInt(monthSelect.value);
-        let price = months * 10000;
-        
-        // Base Display
-        baseMonthDisplay.textContent = months;
-        basePriceDisplay.textContent = (months * 10000).toLocaleString() + '원';
-
-        // Volume Discount
-        if (months >= 3) {
-            const discMonths = Math.floor(months / 3);
-            price -= discMonths * 1000;
-            
-            discountRow.style.display = 'flex';
-            discountCount.textContent = discMonths;
-            discountAmount.textContent = '-' + (discMonths * 1000).toLocaleString() + '원';
-        } else {
-            discountRow.style.display = 'none';
-        }
-
-        // Coupon Discount
-        const code = couponInput.value.trim().toLowerCase();
-        if (code === 'x-mas') {
-            price = Math.floor(price * 0.8);
-            
-            couponRow.style.display = 'flex';
-            couponAmountDisplay.textContent = '20% 적용'; 
-            couponAppliedMsg.style.display = 'flex';
-        } else {
-            couponRow.style.display = 'none';
-            couponAppliedMsg.style.display = 'none';
-        }
-
-        totalPriceDisplay.textContent = price.toLocaleString() + '원';
-    }
-
-    if (monthSelect) monthSelect.addEventListener('change', calculateTotal);
-    if (couponInput) couponInput.addEventListener('input', calculateTotal);
-
-    // Confirm Payment
+    // 결제 완료 버튼 이벤트
     if (confirmPaymentBtn) {
-        confirmPaymentBtn.addEventListener('click', () => {
-            const months = monthSelect.value;
-            const price = totalPriceDisplay.textContent;
-            const method = document.querySelector('input[name="payment"]:checked').value;
-            const methodText = method === 'card' ? '신용카드' : '현금';
+        confirmPaymentBtn.addEventListener("click", () => {
+            if (!loggedInUser) return;
 
-            alert(`결제가 완료되었습니다!\n\n기간: ${months}개월\n결제 금액: ${price}\n결제 방법: ${methodText}`);
+            const monthsToAdd = parseInt(monthSelect.value);
             
-            viewPayment.classList.remove('active');
-            viewMain.classList.add('active');
+            // 현재 만료일과 오늘 날짜 비교
+            let currentExpireDate = new Date(loggedInUser.membershipExpireDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            currentExpireDate.setHours(0, 0, 0, 0);
+
+            // 만료되었으면 오늘부터 시작, 아니면 기존 만료일부터 연장
+            let newBaseDate = currentExpireDate < today ? today : currentExpireDate;
+            
+            // 개월 수 더하기
+            let newExpireDate = new Date(newBaseDate);
+            newExpireDate.setMonth(newExpireDate.getMonth() + monthsToAdd);
+            
+            // YYYY-MM-DD 형식으로 변환
+            const year = newExpireDate.getFullYear();
+            const month = String(newExpireDate.getMonth() + 1).padStart(2, '0');
+            const day = String(newExpireDate.getDate()).padStart(2, '0');
+            const newExpireDateString = `${year}-${month}-${day}`;
+
+            // 데이터 갱신
+            loggedInUser.membershipExpireDate = newExpireDateString;
+            
+            // UI 갱신
+            displayMemberInfo(loggedInUser);
+
+            const total = totalPriceDisplay.textContent;
+            alert(`${monthsToAdd}개월 회원권 (${total}) 결제가 완료되었습니다!\n회원권이 ${newExpireDateString}까지 연장되었습니다.`);
+            showView("main");
         });
     }
-
-    function updateExpirationDate() {
-        const expireEl = document.getElementById('expire-date-display');
-        if (expireEl) {
-            const today = new Date();
-            const expire = new Date(today.getTime() + (6 * 24 * 60 * 60 * 1000)); // 6 days later
-            const dateString = expire.getFullYear() + '. ' + (expire.getMonth() + 1) + '. ' + expire.getDate() + '.';
-            expireEl.textContent = dateString;
-        }
-    }
-};
+}
+    // 초기 로그인 상태 확인 및 UI 렌더링
+// 페이지가 완전히 로드된 후 초기화 함수 실행
+initMypage()

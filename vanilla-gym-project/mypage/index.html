@@ -21,7 +21,7 @@
                         <input type="password" id="password" placeholder="비밀번호를 입력하세요" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">로그인</button>
+                    <button type="submit" id="login-button" class="btn btn-primary" style="width: 100%;">로그인</button>
                 </form>
 
                 <div id="test-account-fill-btn" class="mypage-test-account" style="cursor: pointer;">
@@ -51,19 +51,19 @@
                     <div class="mypage-info-list">
                         <div class="mypage-info-item">
                             <p class="mypage-info-label">이름</p>
-                            <p class="mypage-info-value">홍길동</p>
+                            <p id="member-name" class="mypage-info-value">홍길동</p>
                         </div>
                         <div class="mypage-info-item">
                             <p class="mypage-info-label">아이디</p>
-                            <p class="mypage-info-value">user123</p>
+                            <p id="member-id" class="mypage-info-value">user123</p>
                         </div>
                         <div class="mypage-info-item">
                             <p class="mypage-info-label">연락처</p>
-                            <p class="mypage-info-value">010-1234-5678</p>
+                            <p id="member-contact" class="mypage-info-value">010-1234-5678</p>
                         </div>
                         <div class="mypage-info-item">
                             <p class="mypage-info-label">이메일</p>
-                            <p class="mypage-info-value">hong@example.com</p>
+                            <p id="member-email" class="mypage-info-value">hong@example.com</p>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                             <p class="mypage-info-value" id="expire-date-display">2024. 12. 31.</p>
                         </div>
                         <div class="mypage-days-remaining">
-                            <p class="mypage-days-text">회원권이 6일 남았습니다.</p>
+                            <p id="days-remaining-text" class="mypage-days-text">회원권이 6일 남았습니다.</p>
                         </div>
                         <button class="btn btn-outline to-payment-btn" style="width: 100%;">
                             <i data-lucide="credit-card" style="width: 1rem; height: 1rem; margin-right: 0.5rem;"></i>
@@ -98,15 +98,15 @@
                     <div class="mypage-info-list">
                         <div class="mypage-info-item">
                             <p class="mypage-info-label">사물함 번호</p>
-                            <p class="mypage-info-value" style="font-size: 1.5rem;">42번</p>
+                            <p id="locker-number-display" class="mypage-info-value" style="font-size: 1.5rem;">42번</p>
                         </div>
                         <div class="mypage-info-item">
                             <p class="mypage-info-label">사물함 비밀번호</p>
                             <div class="mypage-locker-password">
-                                <div class="mypage-password-digit">1</div>
-                                <div class="mypage-password-digit">3</div>
-                                <div class="mypage-password-digit">5</div>
-                                <div class="mypage-password-digit">7</div>
+                                <div id="locker-password-digit-1" class="mypage-password-digit">1</div>
+                                <div id="locker-password-digit-2" class="mypage-password-digit">3</div>
+                                <div id="locker-password-digit-3" class="mypage-password-digit">5</div>
+                                <div id="locker-password-digit-4" class="mypage-password-digit">7</div>
                             </div>
                         </div>
                         <div class="mypage-warning">
@@ -147,44 +147,29 @@
                             <option value="4">4개월</option>
                             <option value="5">5개월</option>
                             <option value="6">6개월</option>
+                            <option value="7">7개월</option>
+                            <option value="8">8개월</option>
+                            <option value="9">9개월</option>
+                            <option value="10">10개월</option>
+                            <option value="11">11개월</option>
                             <option value="12">12개월</option>
                         </select>
                     </div>
 
-                    <!-- 가격 표시 -->
-                    <div class="mypage-price-box">
-                        <div class="mypage-price-row">
-                            <span>기본 금액 (<span id="base-month-display">1</span>개월)</span>
-                            <span id="base-price-display">10,000원</span>
-                        </div>
-
-                        <div id="discount-row" class="mypage-price-row mypage-price-discount" style="display: none;">
-                            <span>할인 (<span id="discount-count">0</span>회 x 1,000원)</span>
-                            <span id="discount-amount">-0원</span>
-                        </div>
-
-                        <div id="coupon-row" class="mypage-price-row mypage-price-coupon" style="display: none;">
-                            <span>쿠폰 할인 (20%)</span>
-                            <span id="coupon-amount">-0원</span>
-                        </div>
-
-                        <div class="mypage-price-row mypage-price-total">
-                            <span>최종 결제 금액</span>
-                            <span id="total-price-display" class="mypage-price-total-value">10,000원</span>
-                        </div>
-                    </div>
-
+                    
                     <!-- 쿠폰 입력 -->
                     <div>
-                        <label for="coupon-input">쿠폰 코드</label>
+                        <label for="coupon-input" style="margin-bottom: 0.5rem; display: block;">쿠폰 코드</label>
                         <div class="mypage-coupon-input">
-                            <input type="text" id="coupon-input" placeholder="쿠폰 코드 입력 (예: X-mas)">
-                            <div id="coupon-applied-msg" class="mypage-coupon-applied" style="display: none;">
-                                ✓ 적용됨
-                            </div>
+                            <input type="text" id="coupon-input" placeholder="쿠폰 코드 입력">
+                            <button id="apply-coupon-btn" class="btn btn-outline" type="button" style="white-space: nowrap; padding: 0.5rem 1rem;">적용하기</button>
+                        </div>
+                        <!-- 적용된 쿠폰 목록 표시 영역 -->
+                        <div id="applied-coupons-container" class="mypage-applied-coupons" style="display: none; margin-top: 0.5rem; gap: 0.5rem; flex-wrap: wrap;">
+                            <!-- 쿠폰 태그가 여기에 동적으로 추가됩니다 -->
                         </div>
                     </div>
-
+                    
                     <!-- 결제 방법 -->
                     <div>
                         <label style="margin-bottom: 0.5rem; display: block;">결제 방법</label>
@@ -203,6 +188,29 @@
                                     현금
                                 </label>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- 가격 표시 -->
+                    <div class="mypage-price-box">
+                        <div class="mypage-price-row">
+                            <span>기본 금액 (<span id="base-month-display">1</span>개월)</span>
+                            <span id="base-price-display">10,000원</span>
+                        </div>
+
+                        <div id="discount-row" class="mypage-price-row mypage-price-discount" style="display: none;">
+                            <span>기간 할인 (<span id="discount-count">0</span>회 적용)</span>
+                            <span id="discount-amount">-0원</span>
+                        </div>
+
+                        <div id="coupon-row" class="mypage-price-row mypage-price-coupon" style="display: none;">
+                            <span>쿠폰 할인 (<span id="coupon-rate-display">0</span>%)</span>
+                            <span id="coupon-amount">-0원</span>
+                        </div>
+
+                        <div class="mypage-price-row mypage-price-total">
+                            <span>최종 결제 금액</span>
+                            <span id="total-price-display" class="mypage-price-total-value">10,000원</span>
                         </div>
                     </div>
 
