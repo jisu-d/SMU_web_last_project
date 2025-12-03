@@ -4,32 +4,18 @@ window.initHome = function() {
         lucide.createIcons();
     }
 
-    // 배너 로직
-    const copyBtn = document.getElementById('btn-copy-code');
-    const codeDisplay = document.getElementById('coupon-code');
+    // X-mas 이벤트 배너 클릭 로직
+    const promoBanner = document.querySelector('.promo-banner');
 
-    // 쿠폰 복사 기능
-    copyBtn.addEventListener('click', () => {
-        const code = codeDisplay.innerText;
-        
-        navigator.clipboard.writeText(code).then(() => {
-            // 복사 성공 피드백
-            const originalHTML = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i data-lucide="check"></i> Copied!';
-            copyBtn.style.backgroundColor = '#10B981'; // Success Green
-            copyBtn.style.color = 'white';
+    if (promoBanner) {
+        promoBanner.style.cursor = 'pointer';
+        promoBanner.addEventListener('click', (e) => {
+            // 세션 스토리지에 쿠폰 정보 저장
+            sessionStorage.setItem('pendingPayment', 'true');
+            sessionStorage.setItem('pendingCoupon', 'X-mas');
             
-            if (window.lucide) lucide.createIcons();
-
-            setTimeout(() => {
-                copyBtn.innerHTML = originalHTML;
-                copyBtn.style.backgroundColor = 'white';
-                copyBtn.style.color = 'var(--tech-blue)'; // Back to Blue
-                if (window.lucide) lucide.createIcons();
-            }, 2000);
-        }).catch(err => {
-            console.error('복사 실패', err);
-            alert('코드를 직접 복사해주세요: ' + code);
+            // 마이페이지로 이동
+            window.location.href = '#/mypage';
         });
-    });
+    }
 };

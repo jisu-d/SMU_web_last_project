@@ -92,7 +92,19 @@ function login(id, pw) {
 
     if (user) {
         loggedInUser = user;
-        showView("main");
+        // 로컬 스토리지에 사용자 정보 저장 (로그인 유지)
+        localStorage.setItem('user', JSON.stringify(user));
+        
+        // 헤더 UI 업데이트 (로그인 -> 마이페이지)
+        if (window.updateHeaderState) window.updateHeaderState();
+
+        // 결제 대기 상태 확인
+        if (sessionStorage.getItem('pendingPayment') === 'true') {
+            checkPendingPayment();
+        } else {
+            showView("main");
+        }
+        
         displayMemberInfo(loggedInUser); // 로그인 성공 시 회원 정보 표시
         alert(`${loggedInUser.name}님 환영합니다!`);
     } else {
@@ -106,6 +118,11 @@ function login(id, pw) {
  */
 function logout() {
     loggedInUser = null;
+    localStorage.removeItem('user'); // 세션 삭제
+    
+    // 헤더 UI 업데이트 (마이페이지 -> 로그인)
+    if (window.updateHeaderState) window.updateHeaderState();
+    
     showView("login");
     alert("로그아웃되었습니다.");
     // 로그인 폼 초기화
@@ -310,8 +327,35 @@ function resetPaymentForm() {
 }
 
 
+/**
+ * 결제 대기 상태 확인 및 처리 함수
+ */
+function checkPendingPayment() {
+    if (sessionStorage.getItem('pendingPayment') === 'true') {
+        showView('payment');
+        
+        const couponCode = sessionStorage.getItem('pendingCoupon');
+        if (couponCode) {
+            const couponInput = document.getElementById('coupon-input');
+            if (couponInput) {
+                couponInput.value = couponCode;
+                
+                // 쿠폰 적용 버튼 클릭 트리거
+                const applyBtn = document.getElementById('apply-coupon-btn');
+                if (applyBtn) {
+                    applyBtn.click();
+                }
+            }
+        }
+        
+        // 처리 후 플래그 삭제
+        sessionStorage.removeItem('pendingPayment');
+        sessionStorage.removeItem('pendingCoupon');
+    }
+}
+
 // 페이지 로드 시 실행될 초기화 함수
-function initMypage() {
+window.initMyPage = function() {
     console.log("initMypage called."); // Debug log
     // Lucide Icons 초기화
     if (typeof lucide !== 'undefined') {
@@ -437,7 +481,24 @@ function initMypage() {
             showView("main");
         });
     }
-}
-    // 초기 로그인 상태 확인 및 UI 렌더링
+
+    // 초기 화면 상태 결정
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+        loggedInUser = JSON.parse(storedUser);
+    }
+
+    if (loggedInUser) {
+        if (sessionStorage.getItem('pendingPayment') === 'true') {
+            checkPendingPayment();
+        } else {
+            showView('main');
+            displayMemberInfo(loggedInUser);
+        }
+    } else {
+        showView('login');
+    }
+};
+
 // 페이지가 완전히 로드된 후 초기화 함수 실행
-initMypage()
+window.initMyPage();

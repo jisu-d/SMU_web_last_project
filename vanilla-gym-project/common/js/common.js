@@ -195,14 +195,16 @@ window.updateHeaderState = function() {
   const btn = document.querySelector('.header-mypage-btn');
   if (!btn) return;
 
-  const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+  const user = localStorage.getItem('user');
   
-  if (isLoggedIn) {
+  if (user) {
+    // 로그인 상태: 마이페이지
     btn.innerHTML = `
       <i data-lucide="user" class="header-mypage-icon"></i>
       <span class="header-mypage-text">마이페이지</span>
     `;
   } else {
+    // 로그아웃 상태: 로그인
     btn.innerHTML = `
       <i data-lucide="log-in" class="header-mypage-icon"></i>
       <span class="header-mypage-text">로그인</span>
