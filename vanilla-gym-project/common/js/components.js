@@ -2,7 +2,6 @@ const HeaderHTML = `
 <div class="header-container">
   <div class="header-left-group">
     <a href="#/" class="header-logo">
-      <img src="img/5.png" alt="Logo" class="header-logo-icon">
       <span class="header-logo-text">Troy Horse Gym</span>
     </a>
     
