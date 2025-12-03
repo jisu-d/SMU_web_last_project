@@ -17,10 +17,20 @@ const MEMBERS = [
         contact: "010-9876-5432",
         email: "admin@example.com",
         membershipExpireDate: "2025-12-31",
-        lockerNumber: 100,
+        lockerNumber: 1,
         lockerPassword: "2468"
     }
 ];
+
+// --- Load Locker Module ---
+(function loadLockerModule() {
+    if (!document.querySelector('script[src="mypage/modules/locker.js"]')) {
+        const script = document.createElement('script');
+        script.src = 'mypage/modules/locker.js';
+        document.body.appendChild(script);
+    }
+})();
+// -------------------------
 
 // 쿠폰 데이터 (mon: 할인율(%))
 const COUPONS = [
@@ -354,7 +364,44 @@ function checkPendingPayment() {
 
 // 페이지 로드 시 실행될 초기화 함수
 window.initMyPage = function() {
-    // console.log("initMypage called.");
+    // Locker Modal Events (Using LockerManager Module)
+    const editLockerBtn = document.getElementById("edit-locker-btn");
+    const closeLockerModalBtn = document.getElementById("close-locker-modal-btn");
+    const cancelLockerBtn = document.getElementById("cancel-locker-btn");
+    const saveLockerBtn = document.getElementById("save-locker-btn");
+
+    if (editLockerBtn) {
+        editLockerBtn.addEventListener("click", () => {
+            if (window.LockerManager) {
+                window.LockerManager.openModal(loggedInUser, MEMBERS);
+            } else {
+                console.error("LockerManager module not loaded");
+            }
+        });
+    }
+    
+    if (closeLockerModalBtn) {
+        closeLockerModalBtn.addEventListener("click", () => {
+            if (window.LockerManager) window.LockerManager.closeModal();
+        });
+    }
+    
+    if (cancelLockerBtn) {
+        cancelLockerBtn.addEventListener("click", () => {
+            if (window.LockerManager) window.LockerManager.closeModal();
+        });
+    }
+    
+    if (saveLockerBtn) {
+        saveLockerBtn.addEventListener("click", () => {
+            if (window.LockerManager) {
+                window.LockerManager.saveInfo(loggedInUser, MEMBERS, (updatedUser) => {
+                    displayMemberInfo(updatedUser);
+                });
+            }
+        });
+    }
+
     // Lucide Icons 초기화
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
