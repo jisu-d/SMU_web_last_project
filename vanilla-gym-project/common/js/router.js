@@ -155,34 +155,35 @@ class Router {
         });
     }
 
-    loadScript(src, initFunctionName) {
-        return new Promise((resolve, reject) => {
-            if (!src) return resolve();
+    async loadScript(src, initFunctionName) {
+        if (!src) return;
 
-            // 이미 로드된 스크립트인지 확인
-            const existingScript = document.querySelector(`script[src="${src}"]`);
-            
-            if (existingScript) {
-                // 이미 있으면 초기화 함수만 다시 호출
-                if (typeof window[initFunctionName] === 'function') {
-                    window[initFunctionName]();
-                }
-                resolve();
-                return;
-            }
+        const scriptsToLoad = Array.isArray(src) ? src : [src];
 
-            // 새 스크립트 로드
-            const script = document.createElement('script');
-            script.src = src;
-            script.onload = () => {
-                if (typeof window[initFunctionName] === 'function') {
-                    window[initFunctionName]();
+        // Wait for ALL scripts to finish loading
+        const loadPromises = scriptsToLoad.map(scriptSrc => {
+            return new Promise((resolve, reject) => {
+                const existingScript = document.querySelector(`script[src="${scriptSrc}"]`);
+                
+                if (existingScript) {
+                    resolve(); // Already loaded
+                    return;
                 }
-                resolve();
-            };
-            script.onerror = reject;
-            document.head.appendChild(script);
+
+                const script = document.createElement('script');
+                script.src = scriptSrc;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
         });
+
+        await Promise.all(loadPromises);
+
+        // Only AFTER all scripts are loaded, call the initialization function
+        if (typeof window[initFunctionName] === 'function') {
+            window[initFunctionName]();
+        }
     }
     
     // HTML 내부에서 onclick으로 호출하는 함수들을 위해 전역 노출

@@ -18,4 +18,19 @@ window.initHome = function() {
             window.location.href = '#/mypage';
         });
     }
+
+    // 커뮤니티 업데이트 섹션 (공지사항 스크립트 연결)
+    if (window.renderCommunityUpdates) {
+        window.renderCommunityUpdates('home-community-list', 3); 
+    } else {
+        // notice/script.js가 로드되지 않았을 경우 동적으로 로드
+        const script = document.createElement('script');
+        script.src = 'notice/script.js';
+        script.onload = () => {
+            if (window.renderCommunityUpdates) {
+                window.renderCommunityUpdates('home-community-list', 3);
+            }
+        };
+        document.head.appendChild(script);
+    }
 };

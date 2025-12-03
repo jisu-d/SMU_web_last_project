@@ -1,9 +1,8 @@
-window.initNotice = function() {
-    const notices = [
-        {
-            id: 1,
-            title: "12월 정기 회원 모집 안내",
-            content: `안녕하세요, K동 헬스장입니다.
+const notices = [
+    {
+        id: 1,
+        title: "12월 정기 회원 모집 안내",
+        content: `안녕하세요, K동 헬스장입니다.
 
 2024년 12월 정기 회원을 모집합니다.
 
@@ -21,15 +20,15 @@ window.initNotice = function() {
 많은 관심 부탁드립니다.
 
 문의: 02-1234-5678`,
-            author: "관리자",
-            date: "2024-12-01",
-            views: 245,
-            category: "모집",
-        },
-        {
-            id: 2,
-            title: "🎄 크리스마스 특별 할인 이벤트",
-            content: `크리스마스를 맞아 특별 할인 이벤트를 진행합니다!
+        author: "관리자",
+        date: "2024-12-01",
+        views: 245,
+        category: "모집",
+    },
+    {
+        id: 2,
+        title: "🎄 크리스마스 특별 할인 이벤트",
+        content: `크리스마스를 맞아 특별 할인 이벤트를 진행합니다!
 
 [이벤트 내용]
 - 쿠폰 코드: X-mas
@@ -43,15 +42,15 @@ window.initNotice = function() {
 ※ 신규 회원 및 기존 회원 모두 사용 가능
 
 행복한 연말 보내세요!`,
-            author: "관리자",
-            date: "2024-12-01",
-            views: 389,
-            category: "이벤트",
-        },
-        {
-            id: 3,
-            title: "12월 휴무일 안내",
-            content: `12월 휴무일을 안내드립니다.
+        author: "관리자",
+        date: "2024-12-01",
+        views: 389,
+        category: "이벤트",
+    },
+    {
+        id: 3,
+        title: "12월 휴무일 안내",
+        content: `12월 휴무일을 안내드립니다.
 
 [정기 휴무]
 - 매주 일요일
@@ -62,15 +61,15 @@ window.initNotice = function() {
 ※ 토요일은 오후 6시까지만 운영합니다.
 
 이용에 참고 부탁드립니다.`,
-            author: "관리자",
-            date: "2024-11-28",
-            views: 156,
-            category: "공지",
-        },
-        {
-            id: 4,
-            title: "운동 기구 사용 안전 수칙",
-            content: `회원 여러분의 안전한 운동을 위해 기구 사용 안전 수칙을 안내드립니다.
+        author: "관리자",
+        date: "2024-11-28",
+        views: 156,
+        category: "공지",
+    },
+    {
+        id: 4,
+        title: "운동 기구 사용 안전 수칙",
+        content: `회원 여러분의 안전한 운동을 위해 기구 사용 안전 수칙을 안내드립니다.
 
 [안전 수칙]
 1. 운동 전 반드시 스트레칭을 실시하세요.
@@ -82,15 +81,15 @@ window.initNotice = function() {
 ※ 기구 사용법이 궁금하시면 언제든 트레이너에게 문의하세요.
 
 안전한 운동 문화를 만들어갑시다.`,
-            author: "관리자",
-            date: "2024-11-25",
-            views: 201,
-            category: "공지",
-        },
-        {
-            id: 5,
-            title: "신규 운동 기구 도입 안내",
-            content: `회원 여러분께 반가운 소식을 전합니다.
+        author: "관리자",
+        date: "2024-11-25",
+        views: 201,
+        category: "공지",
+    },
+    {
+        id: 5,
+        title: "신규 운동 기구 도입 안내",
+        content: `회원 여러분께 반가운 소식을 전합니다.
 
 12월부터 신규 운동 기구가 도입됩니다!
 
@@ -102,86 +101,305 @@ window.initNotice = function() {
 기존 기구보다 더 안전하고 효과적인 운동이 가능합니다.
 
 많은 이용 부탁드립니다!`,
-            author: "관리자",
-            date: "2024-11-20",
-            views: 312,
-            category: "공지",
-        },
-    ];
+        author: "관리자",
+        date: "2024-11-20",
+        views: 312,
+        category: "공지",
+    },
+];
+
+window.findNoticeById = function(id) {
+
+    return notices.find(notice => notice.id === id);
+
+};
+
+
+
+// Helper to get category class (Global)
+
+function getCategoryClass(category) {
+
+    switch (category) {
+
+        case "모집": return "recruitment";
+
+        case "이벤트": return "event";
+
+        default: return "announcement";
+
+    }
+
+}
+
+
+
+// Show Detail (made global for external calls)
+
+window.showNoticeDetail = function(notice) {
 
     const listView = document.getElementById('notice-list-view');
-    const detailView = document.getElementById('notice-detail-view');
-    const listBody = document.getElementById('notice-list-body');
-    const backBtn = document.getElementById('back-to-list-btn');
 
-    // Helper to get category class
-    const getCategoryClass = (category) => {
-        switch (category) {
-            case "모집": return "recruitment";
-            case "이벤트": return "event";
-            default: return "announcement";
+    const detailView = document.getElementById('notice-detail-view');
+
+    
+
+    if (!listView || !detailView) {
+
+        console.error("Notice views not found for showNoticeDetail.");
+
+        return;
+
+    }
+
+
+
+    document.getElementById('detail-title').textContent = notice.title;
+
+    document.getElementById('detail-author').textContent = notice.author;
+
+    document.getElementById('detail-date').textContent = notice.date;
+
+    document.getElementById('detail-views').textContent = notice.views;
+
+    document.getElementById('detail-content').innerText = notice.content; // preserve newlines
+
+
+
+    const badge = document.getElementById('detail-category-badge');
+
+    badge.textContent = notice.category;
+
+    badge.className = `notice-badge ${getCategoryClass(notice.category)}`;
+
+
+
+    listView.classList.remove('active');
+
+    detailView.classList.add('active');
+
+
+
+    if (window.lucide) lucide.createIcons(); // Re-create icons for newly shown content
+
+};
+
+    
+
+    // Render notices for community section on Home page
+
+    window.renderCommunityUpdates = function(containerId, limit = 3) {
+
+        const container = document.getElementById(containerId);
+
+        if (!container) {
+
+            console.error(`Container with ID '${containerId}' not found for community updates.`);
+
+            return;
+
         }
+
+    
+
+        container.innerHTML = ''; // Clear existing content
+
+    
+
+        notices.slice(0, limit).forEach(notice => {
+
+            const item = document.createElement('div');
+
+            item.className = 'comm-item';
+
+            item.innerHTML = `
+
+                <span class="comm-badge ${getCategoryClass(notice.category)}">${notice.category}</span>
+
+                <span class="comm-title">${notice.title}</span>
+
+                <span class="comm-date">${notice.date}</span>
+
+            `;
+
+            item.style.cursor = 'pointer'; // Indicate it's clickable
+
+    
+
+            item.addEventListener('click', () => {
+
+                sessionStorage.setItem('targetNoticeId', notice.id);
+
+                window.location.hash = '#/notice';
+
+            });
+
+            container.appendChild(item);
+
+        });
+
+    
+
+        if (window.lucide) lucide.createIcons();
+
     };
 
-    // Render List
-    function renderList() {
-        if (!listBody) return;
-        listBody.innerHTML = '';
-        notices.forEach(notice => {
-            const item = document.createElement('button');
-            item.className = 'notice-item';
-            item.innerHTML = `
-                <div class="notice-table-row">
-                    <div class="notice-table-cell center">
-                        <span class="notice-number">${notice.id}</span>
+    
+
+    
+
+    window.initNotice = function() {
+
+        const listView = document.getElementById('notice-list-view');
+
+        const detailView = document.getElementById('notice-detail-view');
+
+        const listBody = document.getElementById('notice-list-body');
+
+        const backBtn = document.getElementById('back-to-list-btn');
+
+    
+
+        // Check if there's a specific notice to show
+
+        const targetNoticeId = sessionStorage.getItem('targetNoticeId');
+
+        if (targetNoticeId) {
+
+            const notice = window.findNoticeById(parseInt(targetNoticeId));
+
+            if (notice) {
+
+                window.showNoticeDetail(notice);
+
+                // After showing, ensure list is rendered in background if user goes back
+
+                renderList();
+
+            } else {
+
+                console.error(`Notice with ID ${targetNoticeId} not found.`);
+
+                renderList(); // Fallback to list view if not found
+
+            }
+
+            sessionStorage.removeItem('targetNoticeId'); // Clear after use
+
+        } else {
+
+            // Default behavior: render the list
+
+            renderList();
+
+        }
+
+    
+
+            // Back to List
+
+    
+
+            if (backBtn) {
+
+    
+
+                backBtn.addEventListener('click', () => {
+
+    
+
+                    detailView.classList.remove('active');
+
+    
+
+                    listView.classList.add('active');
+
+    
+
+                    renderList(); // Ensure list is refreshed if needed
+
+    
+
+                });
+
+    
+
+            }
+
+    
+
+        
+
+    
+
+            // Render List (local to initNotice, for main notice page)
+
+    
+
+            function renderList() {
+
+            if (!listBody) return;
+
+            listBody.innerHTML = '';
+
+            notices.forEach(notice => {
+
+                const item = document.createElement('button');
+
+                item.className = 'notice-item';
+
+                item.innerHTML = `
+
+                    <div class="notice-table-row">
+
+                        <div class="notice-table-cell center">
+
+                            <span class="notice-number">${notice.id}</span>
+
+                        </div>
+
+                        <div class="notice-table-cell">
+
+                            <span class="notice-badge ${getCategoryClass(notice.category)}">
+
+                                ${notice.category}
+
+                            </span>
+
+                        </div>
+
+                        <div class="notice-table-cell">${notice.title}</div>
+
+                        <div class="notice-table-cell">
+
+                            <span class="notice-date">${notice.date}</span>
+
+                        </div>
+
+                        <div class="notice-table-cell center">
+
+                            <span class="notice-views">
+
+                                <i data-lucide="eye" class="notice-view-icon"></i>
+
+                                ${notice.views}
+
+                            </span>
+
+                        </div>
+
                     </div>
-                    <div class="notice-table-cell">
-                        <span class="notice-badge ${getCategoryClass(notice.category)}">
-                            ${notice.category}
-                        </span>
-                    </div>
-                    <div class="notice-table-cell">${notice.title}</div>
-                    <div class="notice-table-cell">
-                        <span class="notice-date">${notice.date}</span>
-                    </div>
-                    <div class="notice-table-cell center">
-                        <span class="notice-views">
-                            <i data-lucide="eye" class="notice-view-icon"></i>
-                            ${notice.views}
-                        </span>
-                    </div>
-                </div>
-            `;
-            item.addEventListener('click', () => showDetail(notice));
-            listBody.appendChild(item);
-        });
-        if (window.lucide) lucide.createIcons();
-    }
 
-    // Show Detail
-    function showDetail(notice) {
-        document.getElementById('detail-title').textContent = notice.title;
-        document.getElementById('detail-author').textContent = notice.author;
-        document.getElementById('detail-date').textContent = notice.date;
-        document.getElementById('detail-views').textContent = notice.views;
-        document.getElementById('detail-content').innerText = notice.content; // preserve newlines
+                `;
 
-        const badge = document.getElementById('detail-category-badge');
-        badge.textContent = notice.category;
-        badge.className = `notice-badge ${getCategoryClass(notice.category)}`;
+                item.addEventListener('click', () => window.showNoticeDetail(notice));
 
-        listView.classList.remove('active');
-        detailView.classList.add('active');
-    }
+                listBody.appendChild(item);
 
-    // Back to List
-    if (backBtn) {
-        backBtn.addEventListener('click', () => {
-            detailView.classList.remove('active');
-            listView.classList.add('active');
-        });
-    }
+            });
 
-    // Init
-    renderList();
-};
+            if (window.lucide) lucide.createIcons();
+
+        }
+
+    };
