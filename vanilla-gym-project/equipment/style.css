@@ -47,10 +47,25 @@
   display: none; /* Hide by default */
   grid-template-columns: 1fr;
   gap: 2rem;
+  opacity: 0; /* Start invisible */
+  transform: translateY(20px); /* Start slightly lower */
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Transition for smooth effect */
 }
 
 .equipment-grid.active {
   display: grid; /* Show only when active */
+  animation: slideUpFadeIn 0.6s ease-out forwards; /* Apply animation */
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (min-width: 1024px) {
