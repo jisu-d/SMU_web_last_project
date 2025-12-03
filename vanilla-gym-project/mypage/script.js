@@ -32,50 +32,50 @@ const COUPONS = [
 let loggedInUser = null; // 현재 로그인된 사용자 정보 객체
 let appliedCoupons = []; // 현재 적용된 쿠폰 목록 (객체 배열)
 
-// DOM 요소 캐싱
-const viewLogin = document.getElementById("view-login");
-const viewMain = document.getElementById("view-main");
-const viewPayment = document.getElementById("view-payment");
-const loginForm = document.getElementById("login-form");
-const userIdInput = document.getElementById("userId");
-const passwordInput = document.getElementById("password");
-const loginButton = document.getElementById("login-button");
-const logoutBtn = document.getElementById("logout-btn");
-const testAccountFillBtn = document.getElementById("test-account-fill-btn");
-const cancelPaymentBtn = document.getElementById("cancel-payment-btn");
+// DOM 요소 캐싱 (재할당 가능하도록 let 사용)
+let viewLogin = null;
+let viewMain = null;
+let viewPayment = null;
+let loginForm = null;
+let userIdInput = null;
+let passwordInput = null;
+let loginButton = null;
+let logoutBtn = null;
+let testAccountFillBtn = null;
+let cancelPaymentBtn = null;
 
 // 개인 정보 표시 요소
-const memberNameElem = document.getElementById("member-name");
-const memberIdElem = document.getElementById("member-id");
-const memberContactElem = document.getElementById("member-contact");
-const memberEmailElem = document.getElementById("member-email");
+let memberNameElem = null;
+let memberIdElem = null;
+let memberContactElem = null;
+let memberEmailElem = null;
 
 // 등록 현황 표시 요소
-const expireDateDisplayElem = document.getElementById("expire-date-display");
-const daysRemainingTextElem = document.getElementById("days-remaining-text");
+let expireDateDisplayElem = null;
+let daysRemainingTextElem = null;
 
 // 사물함 정보 표시 요소
-const lockerNumberDisplayElem = document.getElementById("locker-number-display");
-const lockerPasswordDigit1Elem = document.getElementById("locker-password-digit-1");
-const lockerPasswordDigit2Elem = document.getElementById("locker-password-digit-2");
-const lockerPasswordDigit3Elem = document.getElementById("locker-password-digit-3");
-const lockerPasswordDigit4Elem = document.getElementById("locker-password-digit-4");
+let lockerNumberDisplayElem = null;
+let lockerPasswordDigit1Elem = null;
+let lockerPasswordDigit2Elem = null;
+let lockerPasswordDigit3Elem = null;
+let lockerPasswordDigit4Elem = null;
 
 // 결제 관련 요소
-const monthSelect = document.getElementById("month-select");
-const baseMonthDisplay = document.getElementById("base-month-display");
-const basePriceDisplay = document.getElementById("base-price-display");
-const discountRow = document.getElementById("discount-row");
-const discountCountElem = document.getElementById("discount-count");
-const discountAmountElem = document.getElementById("discount-amount");
-const couponRow = document.getElementById("coupon-row");
-const couponRateDisplay = document.getElementById("coupon-rate-display");
-const couponAmountElem = document.getElementById("coupon-amount");
-const totalPriceDisplay = document.getElementById("total-price-display");
-const couponInput = document.getElementById("coupon-input");
-const applyCouponBtn = document.getElementById("apply-coupon-btn");
-const appliedCouponsContainer = document.getElementById("applied-coupons-container"); // New container
-const confirmPaymentBtn = document.getElementById("confirm-payment-btn");
+let monthSelect = null;
+let baseMonthDisplay = null;
+let basePriceDisplay = null;
+let discountRow = null;
+let discountCountElem = null;
+let discountAmountElem = null;
+let couponRow = null;
+let couponRateDisplay = null;
+let couponAmountElem = null;
+let totalPriceDisplay = null;
+let couponInput = null;
+let applyCouponBtn = null;
+let appliedCouponsContainer = null;
+let confirmPaymentBtn = null;
 
 
 /**
@@ -356,25 +356,62 @@ function checkPendingPayment() {
 
 // 페이지 로드 시 실행될 초기화 함수
 window.initMyPage = function() {
-    console.log("initMypage called."); // Debug log
+    console.log("initMypage called.");
     // Lucide Icons 초기화
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
 
-    console.log("DOM elements check:"); // Debug log
-    console.log("loginForm:", loginForm);
-    console.log("userIdInput:", userIdInput);
-    console.log("passwordInput:", passwordInput);
-    console.log("loginButton:", loginButton); // New debug log
-    console.log("logoutBtn:", logoutBtn);
-    console.log("testAccountFillBtn:", testAccountFillBtn);
+    // --- DOM 요소 최신화 (Global Variables Update) ---
+    viewLogin = document.getElementById("view-login");
+    viewMain = document.getElementById("view-main");
+    viewPayment = document.getElementById("view-payment");
+    loginForm = document.getElementById("login-form");
+    userIdInput = document.getElementById("userId");
+    passwordInput = document.getElementById("password");
+    loginButton = document.getElementById("login-button");
+    logoutBtn = document.getElementById("logout-btn");
+    testAccountFillBtn = document.getElementById("test-account-fill-btn");
+    cancelPaymentBtn = document.getElementById("cancel-payment-btn");
 
+    memberNameElem = document.getElementById("member-name");
+    memberIdElem = document.getElementById("member-id");
+    memberContactElem = document.getElementById("member-contact");
+    memberEmailElem = document.getElementById("member-email");
 
-    // 로그인 버튼 클릭 이벤트 (폼 제출 대신 직접 버튼 클릭 이벤트로 연결)
+    expireDateDisplayElem = document.getElementById("expire-date-display");
+    daysRemainingTextElem = document.getElementById("days-remaining-text");
+
+    lockerNumberDisplayElem = document.getElementById("locker-number-display");
+    lockerPasswordDigit1Elem = document.getElementById("locker-password-digit-1");
+    lockerPasswordDigit2Elem = document.getElementById("locker-password-digit-2");
+    lockerPasswordDigit3Elem = document.getElementById("locker-password-digit-3");
+    lockerPasswordDigit4Elem = document.getElementById("locker-password-digit-4");
+
+    monthSelect = document.getElementById("month-select");
+    baseMonthDisplay = document.getElementById("base-month-display");
+    basePriceDisplay = document.getElementById("base-price-display");
+    discountRow = document.getElementById("discount-row");
+    discountCountElem = document.getElementById("discount-count");
+    discountAmountElem = document.getElementById("discount-amount");
+    couponRow = document.getElementById("coupon-row");
+    couponRateDisplay = document.getElementById("coupon-rate-display");
+    couponAmountElem = document.getElementById("coupon-amount");
+    totalPriceDisplay = document.getElementById("total-price-display");
+    couponInput = document.getElementById("coupon-input");
+    applyCouponBtn = document.getElementById("apply-coupon-btn");
+    appliedCouponsContainer = document.getElementById("applied-coupons-container");
+    confirmPaymentBtn = document.getElementById("confirm-payment-btn");
+    // ---------------------------------------------------
+
+    // 로그인 버튼 클릭 이벤트
     if (loginButton) {
+        // Clone to remove old listeners
+        const newLoginBtn = loginButton.cloneNode(true);
+        loginButton.parentNode.replaceChild(newLoginBtn, loginButton);
+        loginButton = newLoginBtn; // Update global ref
+
         loginButton.addEventListener("click", (e) => {
-            // submit 타입 버튼이 form 안에 있을 경우 기본 동작(페이지 리로드) 방지
             e.preventDefault(); 
             const id = userIdInput.value;
             const pw = passwordInput.value;
@@ -384,20 +421,32 @@ window.initMyPage = function() {
 
     // 로그아웃 버튼 클릭 이벤트
     if (logoutBtn) {
+        const newLogoutBtn = logoutBtn.cloneNode(true);
+        logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
+        logoutBtn = newLogoutBtn;
+
         logoutBtn.addEventListener("click", logout);
     }
 
     // 테스트 계정 자동 채우기 버튼 이벤트
     if (testAccountFillBtn) {
+        const newTestBtn = testAccountFillBtn.cloneNode(true);
+        testAccountFillBtn.parentNode.replaceChild(newTestBtn, testAccountFillBtn);
+        testAccountFillBtn = newTestBtn;
+
         testAccountFillBtn.addEventListener("click", () => {
             userIdInput.value = "user123";
             passwordInput.value = "1234";
         });
     }
 
-    // 결제 화면 이동 버튼 이벤트 (여러 개일 수 있음)
+    // 결제 화면 이동 버튼 이벤트
     const toPaymentBtns = document.querySelectorAll(".to-payment-btn");
     toPaymentBtns.forEach(btn => {
+        // Note: Cloning node removes listeners but for class-based selection 
+        // we are iterating. Since these elements are newly created by router,
+        // we don't strictly need to remove old listeners (they are gone with old DOM).
+        // Just adding new ones is fine.
         btn.addEventListener("click", () => {
             showView("payment");
         });
@@ -405,6 +454,10 @@ window.initMyPage = function() {
 
     // 결제 취소 버튼 이벤트
     if (cancelPaymentBtn) {
+        const newCancelBtn = cancelPaymentBtn.cloneNode(true);
+        cancelPaymentBtn.parentNode.replaceChild(newCancelBtn, cancelPaymentBtn);
+        cancelPaymentBtn = newCancelBtn;
+
         cancelPaymentBtn.addEventListener("click", () => {
             showView("main");
         });
@@ -412,11 +465,19 @@ window.initMyPage = function() {
 
     // 개월 수 변경 이벤트
     if (monthSelect) {
+        const newMonthSelect = monthSelect.cloneNode(true);
+        monthSelect.parentNode.replaceChild(newMonthSelect, monthSelect);
+        monthSelect = newMonthSelect;
+
         monthSelect.addEventListener("change", calculateTotal);
     }
 
     // 쿠폰 적용 버튼 이벤트
     if (applyCouponBtn) {
+        const newApplyBtn = applyCouponBtn.cloneNode(true);
+        applyCouponBtn.parentNode.replaceChild(newApplyBtn, applyCouponBtn);
+        applyCouponBtn = newApplyBtn;
+
         applyCouponBtn.addEventListener("click", () => {
             const code = couponInput.value.trim();
             if (!code) {
@@ -437,7 +498,7 @@ window.initMyPage = function() {
                 appliedCoupons.push(coupon);
                 renderAppliedCoupons();
                 calculateTotal();
-                couponInput.value = ""; // 입력창 초기화
+                couponInput.value = ""; 
             } else {
                 alert("유효하지 않은 쿠폰입니다.");
             }
@@ -446,9 +507,13 @@ window.initMyPage = function() {
 
     // 결제 완료 버튼 이벤트
     if (confirmPaymentBtn) {
-        confirmPaymentBtn.addEventListener("click", () => {
-            if (!loggedInUser) return;
+        const newConfirmBtn = confirmPaymentBtn.cloneNode(true);
+        confirmPaymentBtn.parentNode.replaceChild(newConfirmBtn, confirmPaymentBtn);
+        confirmPaymentBtn = newConfirmBtn;
 
+        newConfirmBtn.addEventListener("click", () => {
+            if (!loggedInUser) return;
+            
             const monthsToAdd = parseInt(monthSelect.value);
             
             // 현재 만료일과 오늘 날짜 비교
@@ -472,6 +537,7 @@ window.initMyPage = function() {
 
             // 데이터 갱신
             loggedInUser.membershipExpireDate = newExpireDateString;
+            localStorage.setItem('user', JSON.stringify(loggedInUser)); 
             
             // UI 갱신
             displayMemberInfo(loggedInUser);
@@ -482,23 +548,24 @@ window.initMyPage = function() {
         });
     }
 
-    // 초기 화면 상태 결정
+    // 초기 화면 상태 결정: 항상 localStorage를 기준으로 상태 동기화
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-        loggedInUser = JSON.parse(storedUser);
-    }
+    loggedInUser = storedUser ? JSON.parse(storedUser) : null;
+    
+    console.log("Initial State - User:", loggedInUser); // Debug log
 
     if (loggedInUser) {
+        // 로그인 상태
+        displayMemberInfo(loggedInUser);
+        
         if (sessionStorage.getItem('pendingPayment') === 'true') {
             checkPendingPayment();
         } else {
             showView('main');
-            displayMemberInfo(loggedInUser);
         }
     } else {
+        // 비로그인 상태
         showView('login');
     }
 };
-
-// 페이지가 완전히 로드된 후 초기화 함수 실행
-window.initMyPage();
+// End of initMyPage (Do not call it automatically here, let the router handle it)
