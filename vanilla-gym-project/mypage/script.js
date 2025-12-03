@@ -84,12 +84,11 @@ let confirmPaymentBtn = null;
  * @param {string} pw - 비밀번호
  */
 function login(id, pw) {
-    console.log("Attempting login with ID:", id, "Password:", pw); // Debug log
+    // console.log("Attempting login with ID:", id, "Password:", pw); // Debug log
     const trimmedId = id.trim();
     const trimmedPw = pw.trim();
     const user = MEMBERS.find(member => member.id === trimmedId && member.password === trimmedPw);
-    console.log("Found user:", user); // Debug log
-
+    // console.log("Found user:", user); // Debug log
     if (user) {
         loggedInUser = user;
         // 로컬 스토리지에 사용자 정보 저장 (로그인 유지)
@@ -137,7 +136,6 @@ function logout() {
  * @param {string} viewName - "login" 또는 "main" 또는 "payment"
  */
 function showView(viewName) {
-    console.log("Switching view to:", viewName); // Debug log
     // 모든 뷰 비활성화
     viewLogin.classList.remove("active");
     viewMain.classList.remove("active");
@@ -356,7 +354,7 @@ function checkPendingPayment() {
 
 // 페이지 로드 시 실행될 초기화 함수
 window.initMyPage = function() {
-    console.log("initMypage called.");
+    // console.log("initMypage called.");
     // Lucide Icons 초기화
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
@@ -552,7 +550,7 @@ window.initMyPage = function() {
     const storedUser = localStorage.getItem('user');
     loggedInUser = storedUser ? JSON.parse(storedUser) : null;
     
-    console.log("Initial State - User:", loggedInUser); // Debug log
+    // console.log("Initial State - User:", loggedInUser); // Debug log
 
     if (loggedInUser) {
         // 로그인 상태
