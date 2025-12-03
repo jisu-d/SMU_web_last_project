@@ -329,7 +329,7 @@
     align-items: center;
     justify-content: space-between;
     color: white;
-    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3); /* Blue shadow */
+    /* Removed box-shadow */
     gap: 2rem;
     flex-wrap: wrap;
 }
