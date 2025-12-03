@@ -235,12 +235,61 @@ window.initCustomerService = function() {
     // Event Listeners - Search
     if (searchInput) {
         searchInput.addEventListener('input', debounce(() => {
+            // Reset category to 'All' when searching to search across all FAQs
+            currentCategory = '전체';
+            categoryButtons.forEach(btn => {
+                if (btn.getAttribute('data-category') === '전체') {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
             currentPage = 1;
             activeFaqId = null;
             renderList();
         }, 500));
     }
 
+    // Handle Deep Link from Global Search
+    const targetFaqId = sessionStorage.getItem('targetFaqId');
+    if (targetFaqId) {
+        const targetItem = faqs.find(f => f.id.toString() === targetFaqId.toString());
+        if (targetItem) {
+            // 1. Set Category
+            currentCategory = targetItem.category;
+            categoryButtons.forEach(btn => {
+                if (btn.getAttribute('data-category') === currentCategory) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // 2. Set Active Item
+            activeFaqId = targetItem.id;
+
+            // 3. Calculate Page
+            // We need to know the index of this item within its category to find the page
+            const categoryItems = faqs.filter(item => item.category === currentCategory);
+            const itemIndex = categoryItems.findIndex(item => item.id === targetItem.id);
+            if (itemIndex !== -1) {
+                currentPage = Math.ceil((itemIndex + 1) / itemsPerPage);
+            }
+        }
+        sessionStorage.removeItem('targetFaqId');
+    }
+
     // Initial Render
     renderList();
+    
+    // Scroll to active item if set via deep link
+    if (activeFaqId) {
+        setTimeout(() => {
+            const activeEl = document.querySelector(`.cs-faq-item[data-id="${activeFaqId}"]`);
+            if (activeEl) {
+                activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
+    }
 };

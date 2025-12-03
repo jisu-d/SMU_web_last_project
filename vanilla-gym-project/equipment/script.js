@@ -19,4 +19,15 @@ window.initEquipment = function() {
             }
         });
     });
+
+    // Check for Deep Link from Global Search
+    const targetEquipmentId = sessionStorage.getItem('targetEquipmentId');
+    if (targetEquipmentId) {
+        const targetTab = document.querySelector(`.equipment-tab[data-target="${targetEquipmentId}"]`);
+        if (targetTab) {
+            // Small delay to ensure rendering stability if needed, but usually safe here
+            setTimeout(() => targetTab.click(), 50);
+        }
+        sessionStorage.removeItem('targetEquipmentId');
+    }
 };

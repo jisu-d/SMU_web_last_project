@@ -16,6 +16,16 @@ const HeaderHTML = `
   </div>
 
   <div class="header-right-group">
+    <!-- Search Component -->
+    <div class="header-search-container" id="header-search">
+      <div class="header-search-icon">
+        <i data-lucide="search"></i>
+      </div>
+      <input type="text" class="header-search-input" placeholder="검색...">
+      <!-- Search Results Dropdown -->
+      <div class="header-search-results" id="search-results"></div>
+    </div>
+
     <a href="#/mypage" class="header-mypage-btn">
       <i data-lucide="user" class="header-mypage-icon"></i>
       <span class="header-mypage-text">마이페이지</span>

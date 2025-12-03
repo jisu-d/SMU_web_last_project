@@ -317,25 +317,931 @@ input:disabled {
 }
 
 .header-right-group {
+
   display: flex;
+
   align-items: center;
+
+  gap: 0.5rem; /* Add gap between search and mypage */
+
 }
 
-/* MyPage Button - Capsule Style */
-.header-mypage-btn {
+
+
+/* Header Search */
+
+
+
+.header-search-container {
+
+
+
   display: flex;
+
+
+
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1.25rem;
+
+
+
   background-color: transparent;
-  color: #1f2937;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 9999px; /* Fully rounded */
-  text-decoration: none;
-  transition: all 0.3s ease;
+
+
+
+  border-radius: 1rem; /* Matched to CS search: 1rem (16px) instead of 9999px */
+
+
+
+  padding: 0;
+
+
+
+  width: 40px;
+
+
+
+  height: 40px;
+
+
+
+  overflow: visible;
+
+
+
+  transition: all 0.2s ease-in-out; /* Matched to CS search transition */
+
+
+
+  border: 1px solid transparent;
+
+
+
   cursor: pointer;
+
+
+
+  position: relative;
+
+
+
+  outline: none;
+
+
+
+  -webkit-tap-highlight-color: transparent;
+
+
+
+}
+
+
+
+
+
+
+
+.header-search-container:focus-within {
+
+
+
+  border-color: #e5e7eb; /* Subtle border when focused */
+
+
+
+  box-shadow: none;
+
+
+
+  outline: none;
+
+
+
+}
+
+
+
+
+
+
+
+.header-search-container:hover {
+
+
+
+  background-color: #f3f4f6;
+
+
+
+}
+
+
+
+
+
+
+
+.header-search-container.active {
+
+
+
+  width: 260px;
+
+
+
+  background-color: white; /* CS search uses white background */
+
+
+
+  border: 1px solid #e5e7eb; /* CS search uses this border color */
+
+
+
+  padding: 0 0.75rem 0 0;
+
+
+
+  /* Optional: Add shadow if CS search has it, CS search has: box-shadow: 0 4px 6px ... on input? No, it was commented out in CS css, but focused state has shadow. */
+
+
+
+}
+
+
+
+
+
+
+
+/* Active state focus effect to match CS search focus */
+
+
+
+.header-search-container.active:focus-within {
+
+
+
+    border-color: #2563eb; /* Blue border on focus */
+
+
+
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); /* Blue ring on focus */
+
+
+
+}
+
+
+
+
+
+
+
+.header-search-icon {
+
+
+
+  width: 40px;
+
+
+
+  height: 100%;
+
+
+
+  display: flex;
+
+
+
+  align-items: center;
+
+
+
+  justify-content: center;
+
+
+
+  color: #4b5563;
+
+
+
+  flex-shrink: 0;
+
+
+
+  padding: 10px;
+
+
+
+  box-sizing: border-box;
+
+
+
+}
+
+
+
+
+
+
+
+.header-search-icon svg {
+
+
+
+  width: 100%;
+
+
+
+  height: 100%;
+
+
+
+}
+
+
+
+
+
+
+
+.header-search-input {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  border: none;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  background: transparent;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  outline: none; /* Remove default focus outline */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  padding: 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  margin: 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  width: 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  height: 100%;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  font-size: 0.95rem;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  opacity: 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  transition: all 0.3s ease-in-out;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  pointer-events: none;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.header-search-input:focus,
+
+
+
+
+
+
+
+.header-search-input:focus-visible {
+
+
+
+
+
+
+
+  outline: none;
+
+
+
+
+
+
+
+  box-shadow: none;
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+.header-search-container.active .header-search-input {
+
+
+
+  width: 100%;
+
+
+
+  opacity: 1;
+
+
+
+  pointer-events: auto;
+
+
+
+}
+
+
+
+
+
+
+
+.header-search-input::placeholder {
+
+
+
+  color: #9ca3af;
+
+
+
+}
+
+
+
+
+
+
+
+/* Search Results Dropdown */
+
+
+
+.header-search-results {
+
+
+
+  position: absolute;
+
+
+
+  top: calc(100% + 8px);
+
+
+
+  left: 0;
+
+
+
+  width: 100%;
+
+
+
+  background: white;
+
+
+
+  border: 1px solid #e5e7eb;
+
+
+
+  border-radius: 12px;
+
+
+
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+
+
+  padding: 0.5rem;
+
+
+
+  display: none;
+
+
+
+  flex-direction: column;
+
+
+
+  gap: 0.25rem;
+
+
+
+  z-index: 100;
+
+
+
+  max-height: 300px;
+
+
+
+  overflow-y: auto;
+
+
+
+  opacity: 0;
+
+
+
+  transform: translateY(-10px);
+
+
+
+  transition: all 0.2s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.header-search-results.show {
+
+
+
+  display: flex;
+
+
+
+  opacity: 1;
+
+
+
+  transform: translateY(0);
+
+
+
+}
+
+
+
+
+
+
+
+.search-result-item {
+
+
+
+  display: flex;
+
+
+
+  align-items: center;
+
+
+
+  gap: 0.75rem;
+
+
+
+  padding: 0.75rem;
+
+
+
+  border-radius: 8px;
+
+
+
+  cursor: pointer;
+
+
+
+  transition: background-color 0.2s;
+
+
+
+  text-decoration: none;
+
+
+
+  color: inherit;
+
+
+
+}
+
+
+
+
+
+
+
+.search-result-item:hover {
+
+
+
+  background-color: #f3f4f6;
+
+
+
+}
+
+
+
+
+
+
+
+.search-result-icon {
+
+
+
+  display: flex;
+
+
+
+  align-items: center;
+
+
+
+  justify-content: center;
+
+
+
+  width: 2rem;
+
+
+
+  height: 2rem;
+
+
+
+  background-color: #eff6ff;
+
+
+
+  color: #2563eb;
+
+
+
+  border-radius: 6px;
+
+
+
+  flex-shrink: 0;
+
+
+
+}
+
+
+
+
+
+
+
+.search-result-text {
+
+
+
+  display: flex;
+
+
+
+  flex-direction: column;
+
+
+
+  gap: 0.1rem;
+
+
+
+  overflow: hidden;
+
+
+
+}
+
+
+
+
+
+
+
+.search-result-title {
+
+
+
   font-size: 0.9rem;
+
+
+
   font-weight: 600;
+
+
+
+  color: #1f2937;
+
+
+
+  white-space: nowrap;
+
+
+
+  overflow: hidden;
+
+
+
+  text-overflow: ellipsis;
+
+
+
+}
+
+
+
+
+
+
+
+.search-result-subtitle {
+
+
+
+  font-size: 0.75rem;
+
+
+
+  color: #6b7280;
+
+
+
+  white-space: nowrap;
+
+
+
+  overflow: hidden;
+
+
+
+  text-overflow: ellipsis;
+
+
+
+}
+
+
+
+
+
+
+
+.search-empty {
+
+
+
+  padding: 1rem;
+
+
+
+  text-align: center;
+
+
+
+  color: #6b7280;
+
+
+
+  font-size: 0.9rem;
+
+
+
+}
+
+
+
+
+
+
+
+/* MyPage Button - Ensure alignment */
+
+.header-mypage-btn {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.5rem;
+
+  padding: 0 1.25rem; /* Vertical padding handled by height */
+
+  height: 40px; /* Match search bar height */
+
+  background-color: transparent;
+
+  color: #1f2937;
+
+  border: 1px solid #e5e7eb; /* Match border width */
+
+  border-radius: 9999px;
+
+  text-decoration: none;
+
+  transition: all 0.2s ease;
+
+  cursor: pointer;
+
+  font-size: 0.9rem;
+
+  font-weight: 600;
+
+  box-sizing: border-box; /* Ensure border is included in height */
+
 }
 
 .header-mypage-btn:hover {
