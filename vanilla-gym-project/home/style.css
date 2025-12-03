@@ -1,18 +1,20 @@
-/* Kakao Developers Theme inspired CSS */
+/* Kakao Developers Theme inspired CSS - Blue Theme Version */
 
 :root {
-    --kakao-yellow: #FEE500;
-    --kakao-black: #191919;
-    --kakao-gray: #888888;
-    --kakao-bg: #FFFFFF;
-    --kakao-border: #E5E7EB;
+    --tech-blue: #2563eb; /* Primary Blue */
+    --tech-blue-dark: #1d4ed8; /* Darker shade for hover/active */
+    --tech-blue-light: #eff6ff; /* Lighter shade for backgrounds/accents */
+    --dev-black: #191919;
+    --dev-gray: #888888;
+    --dev-bg: #FFFFFF;
+    --dev-border: #E5E7EB;
     --hover-bg: #FAFAFA;
 }
 
 .dev-container {
     width: 100%;
-    background-color: var(--kakao-bg);
-    color: var(--kakao-black);
+    background-color: var(--dev-bg);
+    color: var(--dev-black);
     padding-bottom: 0; /* Removed padding to attach to footer */
 }
 
@@ -62,9 +64,9 @@
     left: 0;
     width: 100%;
     height: 20px;
-    background-color: var(--kakao-yellow);
+    background-color: var(--tech-blue); /* Changed from yellow */
     z-index: -1;
-    opacity: 0.6;
+    opacity: 0.3; /* Blue highlight opacity */
 }
 
 .dev-subtitle {
@@ -81,12 +83,15 @@
     padding: 1rem 1.5rem;
     border-radius: 999px;
     margin-bottom: 1.5rem;
-    transition: box-shadow 0.2s;
-    cursor: pointer;
+    transition: all 0.2s;
+    cursor: text;
+    border: 2px solid transparent; /* Added for focus effect */
 }
 
-.dev-search-bar:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+.dev-search-bar:focus-within { /* Added for focus effect */
+    background: white;
+    border-color: var(--tech-blue);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
 }
 
 .dev-search-bar input {
@@ -97,7 +102,18 @@
     outline: none;
     color: #333;
     margin-left: 0.5rem;
+}
+
+.search-icon, .arrow-icon {
+    color: #6b7280;
+}
+
+.arrow-icon { /* Made clickable */
     cursor: pointer;
+}
+
+.arrow-icon:hover { /* Added hover for search icon */
+    color: var(--tech-blue);
 }
 
 .dev-tags {
@@ -107,12 +123,20 @@
 
 .tag {
     background-color: white;
-    border: 1px solid var(--kakao-border);
+    border: 1px solid var(--dev-border);
     padding: 0.4rem 0.8rem;
     border-radius: 20px;
     font-size: 0.85rem;
     color: #666;
     font-weight: 500;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.tag:hover { /* Added hover effect for tags */
+    border-color: var(--tech-blue);
+    color: var(--tech-blue);
+    background-color: var(--tech-blue-light);
 }
 
 .dev-hero-image {
@@ -141,6 +165,7 @@
     font-weight: 700;
     font-size: 0.9rem;
     animation: float 3s ease-in-out infinite;
+    color: var(--tech-blue); /* Changed from black */
 }
 
 .card-1 { top: 20%; left: 0; animation-delay: 0s; }
@@ -187,19 +212,19 @@
 
 .dev-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    border-color: var(--kakao-yellow);
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1); /* Changed from yellow */
+    border-color: var(--tech-blue); /* Changed from yellow */
 }
 
 .card-icon {
     width: 3rem;
     height: 3rem;
-    background-color: #f3f4f6;
+    background-color: var(--tech-blue-light); /* Changed from f3f4f6 */
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #333;
+    color: var(--tech-blue); /* Changed from #333 */
 }
 
 .card-text h3 {
@@ -232,19 +257,19 @@
 }
 
 .btn-kakao {
-    background-color: var(--kakao-yellow);
-    color: #3c1e1e; /* Kakao Brown ish */
+    background-color: var(--tech-blue); /* Changed from yellow */
+    color: white; /* Changed from kakao brown */
     border: none;
     padding: 0.8rem 1.5rem;
     border-radius: 8px;
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: background-color 0.2s;
 }
 
 .btn-kakao:hover {
-    opacity: 0.9;
+    background-color: var(--tech-blue-dark); /* Changed from opacity */
 }
 
 .community-list {
@@ -269,15 +294,16 @@
 
 .comm-item:hover {
     transform: translateX(5px);
+    border-color: var(--tech-blue); /* Added hover border color */
 }
 
 .comm-badge {
-    background: #eee;
+    background: var(--tech-blue-light); /* Changed from #eee */
+    color: var(--tech-blue); /* Changed from #555 */
     padding: 0.2rem 0.6rem;
     border-radius: 6px;
     font-size: 0.75rem;
     font-weight: 600;
-    color: #555;
 }
 
 .comm-title {
@@ -294,16 +320,16 @@
     color: #999;
 }
 
-/* Static Promo Banner */
+/* Static Promo Banner (Blue theme for X-mas) */
 .promo-banner {
-    background: linear-gradient(135deg, #D4183D, #b91c1c);
-    border-radius: 20px; /* Keep radius for the inner promo-banner card */
+    background: linear-gradient(135deg, #2563eb, #1d4ed8); /* Blue Gradient */
+    border-radius: 20px;
     padding: 2.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     color: white;
-    box-shadow: 0 10px 30px rgba(212, 24, 61, 0.2);
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3); /* Blue shadow */
     gap: 2rem;
     flex-wrap: wrap;
 }
@@ -332,14 +358,13 @@
     height: 2rem;
 }
 
-/* X-mas Font Change - now matches Pretendard */
 .promo-text h3.promo-title {
-    font-family: 'Pretendard', sans-serif; /* Changed to Pretendard */
-    font-size: 2rem; /* Adjusted for better fit with Pretendard */
-    font-weight: 800; /* Extra bold for impact */
+    font-family: 'Pretendard', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
     line-height: 1.2;
     margin-bottom: 0.5rem;
-    text-shadow: none; /* Removed text-shadow for cleaner look */
+    text-shadow: none;
 }
 
 .promo-text p.promo-desc {
@@ -358,7 +383,7 @@
 }
 
 .promo-code {
-    font-family: 'Pretendard', sans-serif; /* Changed to Pretendard */
+    font-family: 'Pretendard', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: 1px;
@@ -366,7 +391,7 @@
 
 .promo-btn {
     background: white;
-    color: #D4183D;
+    color: var(--tech-blue); /* Changed from red */
     border: none;
     padding: 0.8rem 1.5rem;
     border-radius: 999px;

@@ -16,7 +16,7 @@ window.initHome = function() {
             // 복사 성공 피드백
             const originalHTML = copyBtn.innerHTML;
             copyBtn.innerHTML = '<i data-lucide="check"></i> Copied!';
-            copyBtn.style.backgroundColor = '#10B981'; // Emerald Green
+            copyBtn.style.backgroundColor = '#10B981'; // Success Green
             copyBtn.style.color = 'white';
             
             if (window.lucide) lucide.createIcons();
@@ -24,7 +24,7 @@ window.initHome = function() {
             setTimeout(() => {
                 copyBtn.innerHTML = originalHTML;
                 copyBtn.style.backgroundColor = 'white';
-                copyBtn.style.color = '#D4183D';
+                copyBtn.style.color = 'var(--tech-blue)'; // Back to Blue
                 if (window.lucide) lucide.createIcons();
             }, 2000);
         }).catch(err => {
