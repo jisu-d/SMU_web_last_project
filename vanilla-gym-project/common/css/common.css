@@ -362,7 +362,7 @@ input:disabled {
 .footer {
   background-color: #111827;
   color: #d1d5db;
-  margin-top: 2rem;
+  /* margin-top: 2rem; - Removed to make it flush with the preceding section */
   border-top: 1px solid #1f2937;
 }
 
