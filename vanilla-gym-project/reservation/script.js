@@ -134,20 +134,27 @@ function initReservation() {
 
         for (let d = currentDay; d <= lastDay; d++) {
             const dateObj = new Date(year, month, d);
-            const dayName = days[dateObj.getDay()];
+            const dayIdx = dateObj.getDay(); // 0: Sun, 6: Sat
+            const dayName = days[dayIdx];
             const dateNum = d;
             
             const mStr = String(month + 1).padStart(2, '0');
             const dStr = String(d).padStart(2, '0');
             const fullDate = `${year}-${mStr}-${dStr}`;
 
+            const isSunday = (dayIdx === 0);
+
             const card = document.createElement('div');
-            card.className = `date-card ${state.selectedDate === fullDate ? 'selected' : ''}`;
+            card.className = `date-card ${state.selectedDate === fullDate ? 'selected' : ''} ${isSunday ? 'disabled' : ''}`;
             card.innerHTML = `
                 <span class="date-day">${dayName}</span>
                 <span class="date-num">${dateNum}</span>
             `;
-            card.onclick = () => selectDate(fullDate);
+            
+            if (!isSunday) {
+                card.onclick = () => selectDate(fullDate);
+            }
+            
             dateListEl.appendChild(card);
         }
     }
@@ -156,6 +163,25 @@ function initReservation() {
         timeListEl.innerHTML = '';
         if (!state.selectedTrainer || !state.selectedDate) return;
 
+        // Determine Day of Week for selected date
+        const selDateObj = new Date(state.selectedDate);
+        const dayIdx = selDateObj.getDay(); // 0: Sun, 6: Sat
+        
+        // Define Available Slots based on Day
+        // Weekday: 09:00 ~ 21:00 (All slots)
+        // Saturday: 09:00 ~ 18:00 (Limit)
+        // Sunday: None (Should not be selectable, but safe guard)
+        
+        let availableSlots = timeSlots; // Default all
+        
+        if (dayIdx === 6) { // Saturday
+            // 09:00 to 18:00 only. (last slot starts at 17:00? "09:00 - 18:00" usually means close at 18:00)
+            // If operation is until 18:00, the last 1-hour PT slot starts at 17:00.
+            availableSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+        } else if (dayIdx === 0) { // Sunday
+            availableSlots = [];
+        }
+
         // Check Real Reservations from LocalStorage
         const data = getGymData();
         // Filter reservations for this trainer and date
@@ -163,21 +189,30 @@ function initReservation() {
             .filter(r => r.trainer === state.selectedTrainer.name && r.date === state.selectedDate)
             .map(r => r.time);
 
-        // Also keep pseudo-random for demo filler (optional, remove if you want clean slate)
-        // Let's use ONLY real data + simple random for 'other users' simulation
-        // Simulation: Booked if hash matches AND not me. 
-        // For simplified logic: let's trust localStorage as the source of truth for 'My' bookings
-        // and generate some random 'Others' bookings.
-        
+        // Also keep pseudo-random for demo filler
         const seed = state.selectedTrainer.id + state.selectedDate.replace(/-/g, '');
         let rng = parseInt(seed.substring(seed.length - 3)) || 123;
 
-        timeSlots.forEach((time, index) => {
+        // --- Validation for Past Time ---
+        const now = new Date();
+        const currentDateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        const isToday = (state.selectedDate === currentDateStr);
+        const currentHour = now.getHours();
+
+        availableSlots.forEach((time, index) => {
             // 1. Check random 'other user' booking
             let isBooked = ((rng + index * 7) % 10) < 2; // 20% chance occupied by others
             
             // 2. Check MY real booking
             if (bookedTimes.includes(time)) isBooked = true;
+
+            // 3. Check Past Time (Real-time update)
+            if (isToday) {
+                const slotHour = parseInt(time.split(':')[0]);
+                if (slotHour <= currentHour) {
+                    isBooked = true; // Treat past time as 'booked' (disabled)
+                }
+            }
 
             const slot = document.createElement('div');
             slot.className = `time-slot ${isBooked ? 'booked' : ''} ${state.selectedTime === time ? 'selected' : ''}`;

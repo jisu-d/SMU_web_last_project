@@ -157,6 +157,13 @@
     color: var(--grey-600);
 }
 
+.date-card.disabled {
+    pointer-events: none;
+    opacity: 0.4;
+    filter: grayscale(100%);
+    cursor: not-allowed;
+}
+
 .date-card.selected {
     background: var(--toss-blue);
     color: var(--white);
