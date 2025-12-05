@@ -29,8 +29,8 @@
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 6rem 1.5rem;
-    gap: 4rem;
+    padding: 6rem 1.5rem 4rem; /* Adjusted top padding to 6rem */
+    gap: 2rem;
 }
 
 .dev-hero-content {
@@ -39,31 +39,42 @@
 }
 
 .dev-title {
-    font-size: 4rem;
+    font-size: 3rem; /* Reduced from 4rem */
     font-weight: 800;
     line-height: 1.2;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     letter-spacing: -0.02em;
     color: var(--grey-900);
 }
 
 .dev-title .highlight {
-    color: var(--toss-blue);
+    color: var(--grey-900); /* Changed to black */
     position: relative;
+    z-index: 1;
 }
 
-/* Remove the underline effect for a cleaner look, or keep it subtle */
+/* Blue underline effect */
 .dev-title .highlight::after {
-    display: none; 
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background-color: var(--toss-blue);
+    opacity: 0.3;
+    z-index: -1;
 }
 
 .dev-subtitle {
-    font-size: 1.25rem;
+    font-size: 1.1rem; /* Slightly smaller */
     color: var(--grey-600);
     line-height: 1.6;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     font-weight: 500;
 }
+
 
 .dev-tags {
     display: flex;
@@ -98,7 +109,7 @@
 
 .dev-hero-image img {
     width: 100%;
-    max-width: 480px;
+    max-width: 380px; /* Reduced from 480px */
     border-radius: 24px;
     box-shadow: var(--shadow-toss);
     transform: rotate(-2deg); /* Subtle tilt for dynamic feel */
@@ -140,34 +151,49 @@
 .dev-section {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 6rem 1.5rem;
+    padding: 7rem 1.5rem; /* Increased top padding slightly */
 }
 
 .dev-section-title {
     font-size: 2rem;
     font-weight: 800;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3.5rem; /* Increased margin to separate title from cards */
     color: var(--grey-900);
 }
 
+/* ... */
+
 .dev-card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(4, 1fr); /* Force 4 columns side-by-side */
+    gap: 1rem; /* Reduce gap to give more width to cards */
 }
 
 .dev-card {
     background: var(--white);
-    border-radius: 24px; /* Larger radius */
-    padding: 2.5rem;
+    border-radius: 24px;
+    padding: 1.5rem; /* Reduce padding to give more space for text */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     text-decoration: none;
     color: inherit;
-    /* Toss-style card: clean, no border initially, shadow on hover or subtle shadow always */
     box-shadow: 0 0 0 1px var(--grey-200); 
+    min-width: 0; /* Prevent flex items from overflowing */
+}
+
+/* Media query for responsiveness */
+@media (max-width: 1024px) {
+    .dev-card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .dev-card-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .dev-card:hover {
