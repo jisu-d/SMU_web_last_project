@@ -10,8 +10,8 @@ const routes = {
     },
     '/about': {
         template: 'about/index.html',
-        style: 'about/style.css',
-        script: 'about/script.js',
+        style: 'about/style.css', // Temporarily disable dynamic loading
+        script: 'about/script.js', // Temporarily disable dynamic loading
         init: 'initAbout'
     },
     '/customer-service': {
@@ -64,11 +64,8 @@ class Router {
     async handleLocation() {
         // Hash가 없으면 '/'로 간주 (홈)
         let path = window.location.hash.slice(1) || '/';
-        console.log('Router: Current Path:', path);
         
         const route = routes[path] || routes['/'];
-        console.log('Router: Resolved Route:', route);
-        console.log('Router: Is this the home route fallback?', route === routes['/']);
 
         try {
             // 1. HTML과 CSS를 병렬로 로드 시작

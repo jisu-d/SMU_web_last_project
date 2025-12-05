@@ -1,5 +1,5 @@
 <div class="about-wrapper page-content">
-    
+
     <!-- Hero Section -->
     <section class="toss-section hero-section">
         <div class="hero-content">
@@ -21,7 +21,7 @@
             <h2 class="toss-section-title scroll-reveal">각 분야 최고의<br>전문가와 함께하세요</h2>
             <p class="toss-section-desc scroll-reveal delay-100">검증된 실력의 트레이너진이 목표 달성을 돕습니다.</p>
         </div>
-        
+
         <div class="toss-scroll-wrapper">
             <div class="trainer-list">
                 <!-- Trainer 1 -->
@@ -139,3 +139,81 @@
         </div>
     </section>
 </div>
+<style>
+/* This will be loaded as part of the HTML template */
+@import url('about/style.css');
+</style>
+<script>
+// Function to dynamically load a script
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
+
+const KAKAO_SDK_URL = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=5a1e93aee4d6b36cbafed673728e7baf&libraries=services";
+
+document.addEventListener('DOMContentLoaded', async function() {
+    function initAbout() {
+        // --- Map Initialization (Existing) ---
+        const container = document.getElementById('kakao-map');
+
+        if (window.kakao && window.kakao.maps) {
+            const options = {
+                center: new kakao.maps.LatLng(36.833805, 127.179108),
+                level: 3
+            };
+            const map = new kakao.maps.Map(container, options);
+            map.setZoomable(false); // Disable zoom
+            map.setDraggable(false); // Disable drag
+            const markerPosition  = new kakao.maps.LatLng(36.833805, 127.179108);
+            const marker = new kakao.maps.Marker({
+                position: markerPosition
+            });
+            marker.setMap(map);
+        } else {
+            console.error('Kakao Map script not loaded within initAbout check.');
+        }
+
+        // --- Scroll Reveal Animation (New) ---
+        const observerOptions = {
+            threshold: 0.15, // Trigger when 15% of the element is visible
+            rootMargin: "0px 0px -50px 0px" // Trigger slightly before bottom
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                } else {
+                    // Remove active class when scrolling out of view to reverse animation
+                    entry.target.classList.remove('active');
+                }
+            });
+        }, observerOptions);
+
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        revealElements.forEach(el => observer.observe(el));
+    }
+
+    try {
+        await loadScript(KAKAO_SDK_URL);
+        // After Kakao SDK is loaded, then proceed with its callback
+        if (window.kakao && window.kakao.maps) {
+            kakao.maps.load(function() {
+                initAbout(); // This will run once Kakao maps is fully ready
+            });
+        } else {
+            console.error('Kakao Map SDK is present but window.kakao.maps is not defined. Proceeding with other page initializations.');
+            initAbout(); // Fallback to run scroll reveal
+        }
+    } catch (error) {
+        console.error('Failed to load Kakao Map SDK:', error);
+        initAbout(); // Run initAbout even if SDK fails (map part will be skipped by its own 'if')
+    }
+});
+</script>

@@ -20,13 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     footerElement.innerHTML = FooterHTML;
   }
 
-              // Initialize Icons
 
-              if (window.lucide) {
-
-                lucide.createIcons();
-
-              }
 
             });
 
@@ -216,8 +210,5 @@ window.updateHeaderState = function() {
     btn.setAttribute('href', '#/mypage');
   }
 
-  // Re-initialize icons for the new content
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+
 };

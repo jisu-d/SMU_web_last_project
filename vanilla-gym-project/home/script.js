@@ -1,8 +1,5 @@
 window.initHome = function() {
-    // Lucide 아이콘 초기화
-    if (window.lucide) {
-        lucide.createIcons();
-    }
+    // Lucide 아이콘 초기화 (router.js에서 처리하므로 여기서는 제거)
 
     // X-mas 이벤트 배너 클릭 로직
     const promoBanner = document.querySelector('.promo-banner');

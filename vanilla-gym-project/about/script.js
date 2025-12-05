@@ -1,7 +1,7 @@
 function initAbout() {
     // --- Map Initialization (Existing) ---
     const container = document.getElementById('kakao-map');
-    
+
     if (window.kakao && window.kakao.maps) {
         const options = {
             center: new kakao.maps.LatLng(36.833805, 127.179108),
@@ -10,7 +10,7 @@ function initAbout() {
         const map = new kakao.maps.Map(container, options);
         map.setZoomable(false); // Disable zoom
         map.setDraggable(false); // Disable drag
-        const markerPosition  = new kakao.maps.LatLng(36.833805, 127.179108); 
+        const markerPosition  = new kakao.maps.LatLng(36.833805, 127.179108);
         const marker = new kakao.maps.Marker({
             position: markerPosition
         });
@@ -39,4 +39,3 @@ function initAbout() {
     const revealElements = document.querySelectorAll('.scroll-reveal');
     revealElements.forEach(el => observer.observe(el));
 }
-// initAbout(); // Removed immediate call, router will now call it
