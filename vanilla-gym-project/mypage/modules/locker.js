@@ -138,9 +138,6 @@
             user.lockerNumber = newLockerNum;
             user.lockerPassword = newLockerPw;
         
-            // 3. 로컬 스토리지 저장
-            localStorage.setItem('user', JSON.stringify(user));
-        
             alert("사물함 정보가 수정되었습니다.");
             this.closeModal();
 
