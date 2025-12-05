@@ -152,24 +152,46 @@
     // 전역 객체에 할당하여 외부에서 접근 가능하게 함
     window.LockerManager = LockerManager;
 
-    // Initialize password toggle (run once)
-    document.addEventListener('click', function(e) {
-        const toggleBtn = e.target.closest('#toggle-locker-pw');
-        if (toggleBtn) {
-            const input = document.getElementById('modal-locker-pw');
-            const icon = toggleBtn.querySelector('i');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                // Update icon to 'eye-off' (requires lucide re-render or manual svg replacement, 
-                // but for simplicity we'll rely on Lucide if available or just keep it simple)
-                toggleBtn.innerHTML = '<i data-lucide="eye-off"></i>';
-            } else {
-                input.type = 'password';
-                toggleBtn.innerHTML = '<i data-lucide="eye"></i>';
-            }
-            
+    // Helper to toggle password visibility
+    function setPasswordVisible(visible) {
+        const input = document.getElementById('modal-locker-pw');
+        const btn = document.getElementById('toggle-locker-pw');
+        if (!input || !btn) return;
+
+        // Optimization: Don't update if already in desired state
+        const currentType = input.type;
+        const targetType = visible ? 'text' : 'password';
+        
+        if (currentType !== targetType) {
+            input.type = targetType;
+            btn.innerHTML = visible ? '<i data-lucide="eye-off"></i>' : '<i data-lucide="eye"></i>';
             if (window.lucide) lucide.createIcons();
         }
+    }
+
+    // Event Delegation for dynamic content
+    // Handle Mouse Down (Show)
+    document.addEventListener('mousedown', (e) => {
+        if (e.target.closest('#toggle-locker-pw')) {
+            setPasswordVisible(true);
+        }
     });
+
+    // Handle Mouse Up (Hide) - Listen globally to handle dragging out
+    document.addEventListener('mouseup', () => {
+        setPasswordVisible(false);
+    });
+    
+    // Handle Touch events for mobile support
+    document.addEventListener('touchstart', (e) => {
+        if (e.target.closest('#toggle-locker-pw')) {
+            e.preventDefault(); // Prevent focus loss or other touch behaviors
+            setPasswordVisible(true);
+        }
+    }, { passive: false });
+
+    document.addEventListener('touchend', () => {
+        setPasswordVisible(false);
+    });
+
 })();
