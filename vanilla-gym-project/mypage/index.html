@@ -152,6 +152,30 @@
                         </select>
                     </div>
 
+                    <!-- 결제 방법 선택 -->
+                    <div>
+                        <label style="margin-bottom: 0.5rem; display: block;">결제 방법</label>
+                        <div class="mypage-payment-methods">
+                            <label class="mypage-payment-method">
+                                <input type="radio" name="payment-method" value="cash" checked>
+                                <span class="mypage-payment-method-label">현금</span>
+                            </label>
+                            <label class="mypage-payment-method">
+                                <input type="radio" name="payment-method" value="card">
+                                <span class="mypage-payment-method-label">카드</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 쿠폰 입력 -->
+                    <div>
+                        <label style="margin-bottom: 0.5rem; display: block;">쿠폰 할인</label>
+                        <div id="coupon-input-wrapper">
+                            <input type="text" id="coupon-input" class="modal-input" placeholder="쿠폰 코드를 입력하세요 (예: LUCKY)">
+                            <p id="coupon-message" style="font-size: 0.85rem; margin-top: 0.5rem; min-height: 1.2em;"></p>
+                        </div>
+                    </div>
+
                     <!-- 가격 표시 -->
                     <div class="mypage-price-box">
                         <div class="mypage-price-row">
@@ -160,8 +184,13 @@
                         </div>
 
                         <div id="discount-row" class="mypage-price-row mypage-price-discount" style="display: none;">
-                            <span>할인 적용</span>
+                            <span>기간 할인</span>
                             <span id="discount-amount">-0원</span>
+                        </div>
+
+                        <div id="coupon-discount-row" class="mypage-price-row mypage-price-coupon" style="display: none;">
+                            <span>쿠폰 할인 (20%)</span>
+                            <span id="coupon-discount-amount">-0원</span>
                         </div>
 
                         <div class="mypage-price-row mypage-price-total">

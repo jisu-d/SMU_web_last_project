@@ -3,11 +3,10 @@
 .equipment-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 1.5rem; /* Reduced from 5rem */
+  padding: 2rem 1.5rem; 
 }
 
 .equipment-title {
-  /* This class is replaced by page-title in HTML, keeping for safety or removal */
   display: none; 
 }
 
@@ -16,39 +15,40 @@
   margin: 0 auto;
 }
 
-/* Tabs - Pill/Tag Style (Matched to Customer Service) */
+/* Tabs - Pill/Tag Style */
 .equipment-tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   justify-content: center;
-  /* Removed background-color and overflow scrolling */
 }
 
 .equipment-tab {
-  padding: 0.6rem 1.2rem;
-  border-radius: 20px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 24px;
   white-space: nowrap;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid transparent;
   cursor: pointer;
   background-color: var(--grey-100);
   color: var(--grey-600);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1rem;
   flex-shrink: 0;
 }
 
 .equipment-tab:hover {
   background-color: var(--grey-200);
   color: var(--grey-800);
+  transform: translateY(-2px);
 }
 
 .equipment-tab.active {
   background-color: var(--toss-blue);
   color: var(--white);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(0, 100, 255, 0.2);
+  transform: translateY(-2px);
 }
 
 /* Grid & Animations */
@@ -62,12 +62,13 @@
 
 .equipment-grid.active {
   display: grid;
-  animation: slideUpFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideUpFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @media (min-width: 1024px) {
   .equipment-grid.active {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 45% 55%; /* Adjusted ratio for better balance */
+      gap: 4rem;
   }
 }
 
@@ -75,20 +76,25 @@
 .equipment-media-section {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .equipment-image-container {
   background-color: var(--white);
-  border-radius: 24px;
-  box-shadow: var(--shadow-toss);
+  border-radius: 32px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08); /* Deeper shadow */
   overflow: hidden;
-  border: 1px solid var(--grey-200);
+  border: none;
+  transition: transform 0.3s ease;
+}
+
+.equipment-image-container:hover {
+    transform: translateY(-4px);
 }
 
 .equipment-image {
   width: 100%;
-  height: 320px;
+  height: 400px; /* Taller image */
   object-fit: cover;
 }
 
@@ -97,12 +103,12 @@
   border-radius: 24px;
   box-shadow: var(--shadow-toss);
   overflow: hidden;
-  border: 1px solid var(--grey-200);
+  border: 1px solid var(--grey-100);
 }
 
 .equipment-video-header {
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--grey-100);
+  border-bottom: 1px solid var(--grey-50);
   background-color: var(--white);
   display: flex;
   align-items: center;
@@ -117,9 +123,9 @@
 }
 
 .equipment-video-title {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--grey-900);
+  color: var(--grey-800);
 }
 
 .equipment-video-wrapper {
@@ -130,73 +136,92 @@
 .equipment-info-section {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .equipment-info-card {
   background-color: var(--white);
-  border-radius: 24px;
-  box-shadow: 0 0 0 1px var(--grey-200);
-  padding: 2rem;
+  border-radius: 32px; /* Larger radius */
+  /* Removed border, added refined shadow */
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0,0,0,0.02);
+  padding: 2.5rem;
+  transition: transform 0.2s ease;
+}
+
+/* Hover effect for interactive feel */
+.equipment-info-card:hover {
+    /* transform: translateY(-2px); Optional */
 }
 
 .equipment-category-badge {
-  padding: 0.4rem 0.8rem;
+  padding: 0.5rem 1rem;
   background-color: var(--toss-blue-light);
   color: var(--toss-blue);
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
   font-weight: 700;
   display: inline-block;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 }
 
 .equipment-name {
-  margin-bottom: 1rem;
-  font-size: 2rem;
+  margin-bottom: 1.2rem;
+  font-size: 2.5rem; /* Larger title */
   font-weight: 800;
   color: var(--grey-900);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .equipment-description {
   color: var(--grey-700);
   line-height: 1.7;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
+  font-weight: 400;
 }
 
 .equipment-subtitle {
-  margin-bottom: 1.25rem;
-  font-size: 1.25rem;
-  font-weight: 700;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 800;
   color: var(--grey-900);
+  letter-spacing: -0.01em;
 }
 
+/* Muscles */
 .equipment-muscles {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
 }
 
 .equipment-muscle-tag {
-  padding: 0.5rem 1rem;
-  background-color: var(--grey-100);
+  padding: 0.6rem 1.2rem;
+  background-color: var(--grey-50);
   color: var(--grey-700);
-  border-radius: var(--radius-full);
-  font-size: 0.95rem;
+  border-radius: 16px; /* Softer pill */
+  font-size: 1rem;
   font-weight: 600;
+  transition: all 0.2s;
+}
+
+.equipment-muscle-tag:hover {
+    background-color: var(--grey-100);
+    color: var(--grey-900);
 }
 
 /* Muscle Map */
 .muscle-map-container {
-  background-color: var(--grey-50);
-  border-radius: 16px;
-  border: 1px solid var(--grey-200);
+  background-color: #f9fafb; /* Very subtle grey */
+  border-radius: 24px;
+  border: none;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
   position: relative;
+  padding: 2rem; /* Added padding inside container */
 }
 
 .muscle-map-wrapper {
@@ -211,20 +236,26 @@
     height: 100%;
     object-fit: contain;
     display: block;
-    mix-blend-mode: multiply; /* Better integration with background */
+    mix-blend-mode: multiply;
+    opacity: 0.8; /* Slightly faded for better marker visibility */
 }
 
 .muscle-marker {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  background-color: #F04452; /* Toss Red */
-  border: 3px solid var(--white);
+  width: 24px; /* Larger marker */
+  height: 24px;
+  background-color: #F04452; 
+  border: 4px solid var(--white);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(240, 68, 82, 0.4);
   cursor: pointer;
   z-index: 10;
+  transition: transform 0.2s;
+}
+
+.muscle-marker:hover {
+    transform: translate(-50%, -50%) scale(1.2);
 }
 
 .muscle-marker::after {
@@ -241,64 +272,78 @@
   z-index: -1;
 }
 
-/* Usage Steps */
+/* Usage Steps - Timeline Style */
 .equipment-usage-list {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
   list-style: none;
 }
 
 .equipment-usage-item {
   display: flex;
-  gap: 1rem;
-  align-items: flex-start;
+  gap: 1.2rem;
+  align-items: flex-start; /* Changed to flex-start for multiline text */
+  padding: 1.2rem;
+  background-color: var(--grey-50);
+  border-radius: 20px;
+  transition: background-color 0.2s;
+}
+
+.equipment-usage-item:hover {
+    background-color: var(--grey-100);
 }
 
 .equipment-usage-number {
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   background-color: var(--toss-blue);
   color: var(--white);
-  border-radius: 50%;
+  border-radius: 12px; /* Squircle */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 800;
   margin-top: 2px;
+  box-shadow: 0 2px 6px rgba(0, 100, 255, 0.2);
 }
 
 .equipment-usage-text {
   color: var(--grey-800);
   line-height: 1.6;
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  padding-top: 2px;
 }
 
-/* Caution List */
+/* Caution List - Alert Style */
 .equipment-caution-title {
   margin-bottom: 1.25rem;
   color: #F04452;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1.2rem;
+  font-weight: 800;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
 }
 
 .equipment-caution-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.8rem;
 }
 
 .equipment-caution-item {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.8rem;
   color: var(--grey-700);
-  font-size: 0.95rem;
+  font-size: 1rem;
   align-items: flex-start;
+  padding: 0.8rem 1rem;
+  background-color: #FFF5F5; /* Very light red bg */
+  border-radius: 16px;
 }
 
 .equipment-caution-bullet {
@@ -309,31 +354,36 @@
 
 /* Inquiry Box */
 .equipment-inquiry {
-  margin-top: 4rem;
-  background: linear-gradient(135deg, #F9FAFB 0%, #F2F4F6 100%);
-  border-radius: 24px;
-  padding: 3rem;
+  margin-top: 6rem;
+  background-color: #F9FAFB;
+  border-radius: 32px;
+  padding: 4rem 2rem;
   text-align: center;
-  border: 1px solid var(--grey-200);
+  border: none;
 }
 
 .equipment-inquiry-title {
   margin-bottom: 1rem;
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.8rem;
+  font-weight: 800;
   color: var(--grey-900);
 }
 
 .equipment-inquiry-text {
   color: var(--grey-600);
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
 }
 
 .equipment-inquiry-phone {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background-color: var(--white);
   color: var(--toss-blue);
   font-size: 1.5rem;
   font-weight: 800;
+  border-radius: 100px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 
 @keyframes slideUpFadeIn {
@@ -342,14 +392,14 @@
 }
 
 @keyframes markerPulse {
-  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-  100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .equipment-container {
-    padding: 4rem 1rem;
+    padding: 3rem 1rem;
   }
   
   .equipment-title {
@@ -358,9 +408,14 @@
   
   .equipment-info-card {
     padding: 1.5rem;
+    border-radius: 24px;
   }
   
   .equipment-name {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+  }
+  
+  .equipment-image {
+    height: 260px;
   }
 }
