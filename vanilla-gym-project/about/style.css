@@ -1,3 +1,21 @@
+/* Scroll Reveal Animation */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px); /* Start slightly lower */
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); /* Premium easing */
+}
+
+.scroll-reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered Delays */
+.delay-100 { transition-delay: 0.1s; }
+.delay-200 { transition-delay: 0.2s; }
+.delay-300 { transition-delay: 0.3s; }
+.delay-400 { transition-delay: 0.4s; }
+
 /* About Page - New Toss Design */
 
 .about-wrapper {
@@ -130,7 +148,7 @@
 
 .trainer-list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive Grid */
     gap: 1.5rem;
 }
 
@@ -194,7 +212,7 @@
 
 .facility-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive Grid */
     gap: 2rem;
 }
 
