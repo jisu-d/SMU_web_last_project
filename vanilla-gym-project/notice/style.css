@@ -1,9 +1,9 @@
 /* Notice Page - Toss Design System */
 
 .notice-container {
-  max-width: 800px; /* Reduced width for better readability (app-like feel) */
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 6rem 1.5rem;
+  padding: 2rem 1.5rem; /* Reduced from 5rem */
 }
 
 .notice-title {

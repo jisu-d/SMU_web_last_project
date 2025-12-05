@@ -318,12 +318,13 @@ textarea::placeholder {
 }
 
 .page-title {
-  font-size: 2.5rem;
+  font-size: 2rem; /* Reduced from 2.5rem */
   font-weight: 800;
   color: var(--grey-900);
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem; /* Reduced from 2rem */
   text-align: center;
   letter-spacing: -0.02em;
+  padding-top: 1rem; /* Slight breathing room from header */
 }
 
 /* Header Search */
