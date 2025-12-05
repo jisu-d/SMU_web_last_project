@@ -1,300 +1,379 @@
-/* About Page - Toss Design System */
+/* About Page - New Toss Design */
 
-.about-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem; /* Reduced from 5rem */
+.about-wrapper {
+    width: 100%;
+    overflow-x: hidden;
+    padding-top: 0 !important; /* Override common padding */
 }
 
-.about-title {
-  text-align: left;
-  margin-bottom: 3rem;
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--grey-900);
-  letter-spacing: -0.02em;
+/* Common Utilities */
+.toss-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 1.5rem;
 }
 
-/* Animations */
-.about-grid,
-.trainers-grid,
-.facilities-grid {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: slideUpFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.toss-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: rgba(0, 100, 255, 0.1);
+    color: var(--toss-blue);
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
 }
 
-.about-grid { animation-delay: 0.1s; }
-.trainers-section .trainers-grid { animation-delay: 0.2s; }
-.facilities-section .facilities-grid { animation-delay: 0.3s; }
-
-@keyframes slideUpFadeIn {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
+.toss-section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    color: var(--grey-900);
+    letter-spacing: -0.02em;
 }
 
-/* Grid Layouts - Using Masonry-like feel or simple stack */
-.about-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 6rem;
+.toss-section-desc {
+    font-size: 1.1rem;
+    color: var(--grey-600);
+    line-height: 1.6;
 }
 
-/* Info Cards - Super clean, white, subtle shadow */
-.about-card {
-  background-color: var(--white);
-  padding: 2rem;
-  border-radius: 28px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); /* Very soft shadow */
-  border: 1px solid rgba(0,0,0,0.03); /* Extremely subtle border */
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+.toss-card {
+    background: var(--white);
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    border: 1px solid rgba(0,0,0,0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.about-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+.toss-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
 }
 
-.about-card-header {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 1.5rem;
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 4rem 1.5rem 4rem; /* Reduced from 8rem top, 6rem bottom for cleaner initial view */
+    background: radial-gradient(circle at 50% 50%, #F9FAFB 0%, #FFFFFF 100%);
 }
 
-.about-icon {
-  width: 24px;
-  height: 24px;
-  color: var(--toss-blue);
-  background-color: var(--toss-blue-light);
-  padding: 8px;
-  border-radius: 12px;
-  box-sizing: content-box;
+.toss-hero-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1.2;
+    color: var(--grey-900);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.03em;
 }
 
-.about-card-title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--grey-900);
+/* Responsive adjustments for hero title */
+@media (max-width: 1024px) {
+    .toss-hero-title {
+        font-size: 3rem;
+    }
 }
 
-.about-text {
-  color: var(--grey-700);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  font-size: 1.05rem;
-  font-weight: 400;
+@media (max-width: 768px) {
+    .toss-hero-title {
+        font-size: 2.5rem;
+    }
 }
 
-/* Map */
-.about-map {
-  width: 100%;
-  height: 240px;
-  background-color: var(--grey-100);
-  border-radius: 20px;
-  overflow: hidden;
-  border: none;
+.text-highlight {
+    color: var(--toss-blue);
+    position: relative;
+    display: inline-block;
 }
 
-/* Schedule */
-.about-schedule {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
+.text-highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background-color: rgba(0, 100, 255, 0.1);
+    z-index: -1;
+    transform: rotate(-1deg);
 }
 
-.about-schedule-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.05rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--grey-50); /* Very faint divider */
+.toss-hero-desc {
+    font-size: 1.25rem;
+    color: var(--grey-600);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-.about-schedule-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+/* Trainer Section */
+.trainer-section {
+    background-color: var(--grey-50);
+    width: 100%;
+    max-width: none; /* Full width background */
 }
 
-.about-schedule-label {
-  color: var(--grey-600);
-  font-weight: 600;
+.trainer-section .section-header {
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+    padding: 0 1.5rem;
+    text-align: left;
 }
 
-.about-schedule-closed {
-  color: #F04452; /* Toss Red */
-  font-weight: 700;
+.toss-scroll-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    overflow-x: visible;
 }
 
-/* Contact Info */
-.about-contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.about-contact-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.about-contact-label {
-  color: var(--grey-500);
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.about-contact-value {
-  color: var(--grey-900);
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-/* Calendar Styling */
-.about-card h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--grey-800);
-  margin-bottom: 1.2rem;
-  text-align: center;
-}
-
-/* Trainers Section */
-.trainers-section {
-  margin-bottom: 6rem;
-}
-
-.trainers-title {
-  text-align: left;
-  margin-bottom: 2.5rem;
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--grey-900);
-}
-
-.trainers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.5rem;
+.trainer-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
 }
 
 .trainer-card {
-  background-color: var(--white);
-  border-radius: 24px;
-  /* Removed border, relying on shadow */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-.trainer-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+.trainer-img-box {
+    width: 100%;
+    height: 280px;
+    background-color: #ececec;
+    overflow: hidden;
 }
 
-.trainer-image {
-  width: 100%;
-  height: 300px; /* Taller image */
-  object-fit: cover;
-  background-color: var(--grey-100);
+.trainer-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
-.trainer-info {
-  padding: 1.8rem;
+.trainer-card:hover .trainer-img-box img {
+    transform: scale(1.05);
+}
+
+.trainer-text {
+    padding: 1.5rem;
+}
+
+.trainer-role {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--toss-blue);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
 }
 
 .trainer-name {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-  color: var(--grey-900);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--grey-900);
+    margin-bottom: 0.3rem;
 }
 
-.trainer-specialty {
-  color: var(--toss-blue);
-  font-weight: 700;
-  font-size: 0.95rem;
-  margin-bottom: 0.3rem;
-  background-color: var(--toss-blue-light);
-  display: inline-block;
-  padding: 0.2rem 0.6rem;
-  border-radius: 6px;
+.trainer-exp {
+    font-size: 0.9rem;
+    color: var(--grey-500);
 }
 
-.trainer-experience {
-  color: var(--grey-500);
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-  display: block;
+/* Facility Section */
+.facility-section {
+    text-align: left;
 }
 
-/* Facilities Section */
-.facilities-section {
-  background-color: var(--grey-50);
-  border-radius: 32px;
-  padding: 4rem 2rem;
+.facility-section .section-header {
+    margin-bottom: 3rem;
 }
 
-.facilities-title {
-  text-align: left;
-  margin-bottom: 3rem;
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--grey-900);
-}
-
-.facilities-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+.facility-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
 }
 
 .facility-card {
-  background-color: var(--white);
-  padding: 2.5rem;
-  border-radius: 24px;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+    padding: 2.5rem;
+    border: 1px solid var(--grey-200);
+    box-shadow: none;
 }
 
 .facility-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: transparent;
 }
 
-.facility-title {
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
-  color: var(--grey-900);
+.facility-icon {
+    width: 56px;
+    height: 56px;
+    background-color: var(--toss-blue-light);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--toss-blue);
+    margin-bottom: 1.5rem;
 }
 
-.facility-description {
-  color: var(--grey-600);
-  line-height: 1.6;
-  font-size: 1.05rem;
+.facility-icon svg {
+    width: 28px;
+    height: 28px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .about-container {
-    padding: 4rem 1.5rem;
-  }
-  
-  .about-title, .trainers-title, .facilities-title {
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
-  }
-  
-  .about-grid {
-    grid-template-columns: 1fr;
+.facility-card h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 0.8rem;
+    color: var(--grey-900);
+}
+
+.facility-card p {
+    font-size: 1rem;
+    color: var(--grey-600);
+    line-height: 1.6;
+}
+
+/* Info Section */
+.info-section {
+    background-color: var(--background);
+    padding-top: 0;
+}
+
+.info-grid-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
     gap: 2rem;
-  }
+}
+
+.map-container-card {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.card-top h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.card-top p {
+    color: var(--grey-600);
+}
+
+.toss-map-view {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    background-color: var(--grey-100);
+    border-radius: 16px;
+}
+
+.right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.time-card, .contact-card-new {
+    padding: 2rem;
+}
+
+.time-card h3, .contact-card-new h3 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: var(--grey-900);
+}
+
+.time-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.time-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    color: var(--grey-700);
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--grey-100);
+}
+
+.time-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.time-list li.closed .time-val {
+    color: #F04452;
+    font-weight: 700;
+}
+
+.contact-phone {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--toss-blue);
+    margin-bottom: 1.5rem;
+}
+
+.contact-links {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.contact-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.8rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background-color: var(--grey-100);
+    color: var(--grey-700);
+    transition: all 0.2s;
+}
+
+.contact-btn:hover {
+    background-color: var(--grey-200);
+    color: var(--grey-900);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .trainer-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .facility-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .info-grid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .toss-hero-title {
+        font-size: 2.5rem;
+    }
+    .trainer-list {
+        grid-template-columns: 1fr;
+    }
+    .facility-grid {
+        grid-template-columns: 1fr;
+    }
+    .contact-links {
+        flex-direction: column;
+    }
 }

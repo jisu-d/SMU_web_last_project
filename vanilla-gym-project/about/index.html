@@ -1,204 +1,141 @@
-<div class="about-container page-content">
-    <h1 class="page-title">헬스장 소개</h1>
-
-    <!-- 기본 정보 -->
-    <div class="about-grid">
-        <!-- 위치 -->
-        <div class="about-card">
-            <div class="about-card-header">
-                <i data-lucide="map-pin" class="about-icon"></i>
-                <h2 class="about-card-title">위치</h2>
-            </div>
-            <p class="about-text">상명대학교 천안캠퍼스 상명스포츠센터</p>
-            <div class="about-map" id="kakao-map"></div>
-        </div>
-
-        <!-- 운영 시간 -->
-        <div class="about-card">
-            <div class="about-card-header">
-                <i data-lucide="clock" class="about-icon"></i>
-                <h2 class="about-card-title">운영 시간</h2>
-            </div>
-            <div class="about-schedule">
-                <div class="about-schedule-item">
-                    <span class="about-schedule-label">평일 (월-금)</span>
-                    <span>06:00 - 23:00</span>
-                </div>
-                <div class="about-schedule-item">
-                    <span class="about-schedule-label">토요일</span>
-                    <span>09:00 - 18:00</span>
-                </div>
-                <div class="about-schedule-item">
-                    <span class="about-schedule-label">일요일</span>
-                    <span class="about-schedule-closed">휴무</span>
-                </div>
-                <div class="about-schedule-item">
-                    <span class="about-schedule-label">공휴일</span>
-                    <span class="about-schedule-closed">휴무</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 연락처 -->
-        <div class="about-card">
-            <div class="about-card-header">
-                <i data-lucide="phone" class="about-icon"></i>
-                <h2 class="about-card-title">연락처</h2>
-            </div>
-            <div class="about-contact-info">
-                <div class="about-contact-item">
-                    <p class="about-contact-label">전화번호</p>
-                    <p class="about-contact-value">041-550-5114</p>
-                </div>
-                <div class="about-contact-item">
-                    <p class="about-contact-label">담당자</p>
-                    <p class="about-contact-value">홍길동 매니저</p>
-                </div>
-                <div class="about-contact-item">
-                    <p class="about-contact-label">이메일</p>
-                    <p class="about-contact-value">Troy_Horse@gym.com</p>
-                </div>
-                <div class="about-contact-item">
-                    <p class="about-contact-label">카카오톡 문의</p>
-                    <p class="about-contact-value">@Troy_Horse_gym</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 휴무일 (Simplified Calendar) -->
-        <div class="about-card">
-            <div class="about-card-header">
-                <i data-lucide="calendar" class="about-icon"></i>
-                <h2 class="about-card-title">휴무일 안내</h2>
-            </div>
-            <p class="about-text">
-                매주 토요일, 일요일 및 공휴일은 휴무입니다. (토요일 오후 6시까지 운영)
-            </p>
-            <!-- Simple Static Calendar for Dec 2024 -->
-            <div style="border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1rem; text-align: center;">
-                <h3 style="margin-bottom: 1rem;">2024년 12월</h3>
-                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; font-size: 0.875rem;">
-                    <div style="color: #dc2626;">일</div>
-                    <div>월</div>
-                    <div>화</div>
-                    <div>수</div>
-                    <div>목</div>
-                    <div>금</div>
-                    <div style="color: #2563eb;">토</div>
-                    
-                    <!-- Week 1 -->
-                    <div style="color: #dc2626; background-color: #fee2e2; border-radius: 9999px;">1</div>
-                    <div>2</div>
-                    <div>3</div>
-                    <div>4</div>
-                    <div>5</div>
-                    <div>6</div>
-                    <div>7</div>
-
-                    <!-- Week 2 -->
-                    <div style="color: #dc2626; background-color: #fee2e2; border-radius: 9999px;">8</div>
-                    <div>9</div>
-                    <div>10</div>
-                    <div>11</div>
-                    <div>12</div>
-                    <div>13</div>
-                    <div>14</div>
-
-                    <!-- Week 3 -->
-                    <div style="color: #dc2626; background-color: #fee2e2; border-radius: 9999px;">15</div>
-                    <div>16</div>
-                    <div>17</div>
-                    <div>18</div>
-                    <div>19</div>
-                    <div>20</div>
-                    <div>21</div>
-
-                    <!-- Week 4 -->
-                    <div style="color: #dc2626; background-color: #fee2e2; border-radius: 9999px;">22</div>
-                    <div>23</div>
-                    <div>24</div>
-                    <div style="color: #dc2626; background-color: #fee2e2; border-radius: 9999px; text-decoration: line-through;">25</div>
-                    <div>26</div>
-                    <div>27</div>
-                    <div>28</div>
-
-                    <!-- Week 5 -->
-                    <div style="color: #dc2626; background-color: #fee2e2; border-radius: 9999px;">29</div>
-                    <div>30</div>
-                    <div>31</div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            </div>
-            <p class="about-calendar-note">
-                * 빨간색 표시는 휴무일입니다
+<div class="about-wrapper page-content">
+    
+    <!-- Hero Section -->
+    <section class="toss-section hero-section">
+        <div class="hero-content">
+            <span class="toss-badge">Troy Horse Gym</span>
+            <h1 class="toss-hero-title">
+                건강한 변화,<br>
+                <span class="text-highlight">데이터</span>로 증명합니다.
+            </h1>
+            <p class="toss-hero-desc">
+                막연한 감이 아닌 정확한 데이터와 체계적인 시스템.<br>
+                트로이 목마 짐에서 당신의 한계를 뛰어넘으세요.
             </p>
         </div>
-    </div>
+    </section>
 
-    <!-- 트레이너 소개 -->
-    <div class="trainers-section">
-        <h2 class="trainers-title">전문 트레이너 소개</h2>
-        <div class="trainers-grid">
-            <div class="trainer-card">
-                <img src="img/1.png" alt="엄희수 트레이너" class="trainer-image">
-                <div class="trainer-info">
-                    <h3 class="trainer-name">엄희수 트레이너</h3>
-                    <p class="trainer-specialty">소프트웨어 전문</p>
-                    <p class="trainer-experience">202520912</p>
+    <!-- Trainers Section -->
+    <section class="toss-section trainer-section">
+        <div class="section-header">
+            <h2 class="toss-section-title">각 분야 최고의<br>전문가와 함께하세요</h2>
+            <p class="toss-section-desc">검증된 실력의 트레이너진이 목표 달성을 돕습니다.</p>
+        </div>
+        
+        <div class="toss-scroll-wrapper">
+            <div class="trainer-list">
+                <!-- Trainer 1 -->
+                <div class="toss-card trainer-card">
+                    <div class="trainer-img-box">
+                        <img src="img/1.png" alt="엄희수">
+                    </div>
+                    <div class="trainer-text">
+                        <div class="trainer-role">소프트웨어 전문</div>
+                        <h3 class="trainer-name">엄희수 트레이너</h3>
+                        <p class="trainer-exp">202520912</p>
+                    </div>
                 </div>
-            </div>
-            <div class="trainer-card">
-                <img src="img/2.png" alt="강건우 트레이너" class="trainer-image">
-                <div class="trainer-info">
-                    <h3 class="trainer-name">강건우 트레이너</h3>
-                    <p class="trainer-specialty">다이어트 전문</p>
-                    <p class="trainer-experience">8년 경력</p>
+                <!-- Trainer 2 -->
+                <div class="toss-card trainer-card">
+                    <div class="trainer-img-box">
+                        <img src="img/2.png" alt="강건우">
+                    </div>
+                    <div class="trainer-text">
+                        <div class="trainer-role">다이어트 전문</div>
+                        <h3 class="trainer-name">강건우 트레이너</h3>
+                        <p class="trainer-exp">경력 8년</p>
+                    </div>
                 </div>
-            </div>
-            <div class="trainer-card">
-                <img src="img/3.png" alt="최영우 트레이너" class="trainer-image">
-                <div class="trainer-info">
-                    <h3 class="trainer-name">최영우 트레이너</h3>
-                    <p class="trainer-specialty">재활 운동 전문</p>
-                    <p class="trainer-experience">12년 경력</p>
+                <!-- Trainer 3 -->
+                <div class="toss-card trainer-card">
+                    <div class="trainer-img-box">
+                        <img src="img/3.png" alt="최영우">
+                    </div>
+                    <div class="trainer-text">
+                        <div class="trainer-role">재활 운동 전문</div>
+                        <h3 class="trainer-name">최영우 트레이너</h3>
+                        <p class="trainer-exp">경력 12년</p>
+                    </div>
                 </div>
-            </div>
-            <div class="trainer-card">
-                <img src="img/4.png" alt="임지수 트레이너" class="trainer-image">
-                <div class="trainer-info">
-                    <h3 class="trainer-name">임지수 트레이너</h3>
-                    <p class="trainer-specialty">소프트웨어 전문</p>
-                    <p class="trainer-experience">202520923</p>
+                <!-- Trainer 4 -->
+                <div class="toss-card trainer-card">
+                    <div class="trainer-img-box">
+                        <img src="img/4.png" alt="임지수">
+                    </div>
+                    <div class="trainer-text">
+                        <div class="trainer-role">소프트웨어 전문</div>
+                        <h3 class="trainer-name">임지수 트레이너</h3>
+                        <p class="trainer-exp">202520923</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- 시설 소개 -->
-    <div class="facilities-section">
-        <h2 class="facilities-title">시설 안내</h2>
-        <div class="facilities-grid">
-            <div class="facility-card">
-                <h3 class="facility-title">최신 운동 기구</h3>
-                <p class="facility-description">
-                    국내외 유명 브랜드의 최신 운동 기구를 보유하고 있습니다.
-                </p>
+    <!-- Facilities Section -->
+    <section class="toss-section facility-section">
+        <div class="section-header">
+            <h2 class="toss-section-title">운동에만 집중하도록<br>모든 것을 갖췄습니다</h2>
+        </div>
+        <div class="facility-grid">
+            <div class="toss-card facility-card">
+                <div class="facility-icon"><i data-lucide="dumbbell"></i></div>
+                <h3>최신 머신 라인업</h3>
+                <p>해외 명품 브랜드의 최신 기구를<br>풀 세트로 구비했습니다.</p>
             </div>
-            <div class="facility-card">
-                <h3 class="facility-title">쾌적한 환경</h3>
-                <p class="facility-description">
-                    24시간 공기청정 시스템과 냉난방 시설이 완비되어 있습니다.
-                </p>
+            <div class="toss-card facility-card">
+                <div class="facility-icon"><i data-lucide="wind"></i></div>
+                <h3>쾌적한 공기질 관리</h3>
+                <p>대형 공기청정 시스템으로<br>24시간 맑은 공기를 유지합니다.</p>
             </div>
-            <div class="facility-card">
-                <h3 class="facility-title">편의시설</h3>
-                <p class="facility-description">
-                    샤워실, 사물함, 탈의실 등 편의시설이 완벽하게 갖춰져 있습니다.
-                </p>
+            <div class="toss-card facility-card">
+                <div class="facility-icon"><i data-lucide="shower-head"></i></div>
+                <h3>프리미엄 편의시설</h3>
+                <p>개인 샤워실과 파우더룸으로<br>운동 전후도 완벽하게.</p>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Info Section (Map, Time, Contact) -->
+    <section class="toss-section info-section">
+        <div class="info-grid-layout">
+            <!-- Left: Map & Address -->
+            <div class="toss-card map-container-card">
+                <div class="card-top">
+                    <h3>오시는 길</h3>
+                    <p>상명대학교 천안캠퍼스 상명스포츠센터</p>
+                </div>
+                <div id="kakao-map" class="toss-map-view"></div>
+            </div>
+
+            <!-- Right: Operation Info -->
+            <div class="right-col">
+                <div class="toss-card time-card">
+                    <h3>운영 시간</h3>
+                    <ul class="time-list">
+                        <li>
+                            <span>평일</span>
+                            <span class="time-val">06:00 - 23:00</span>
+                        </li>
+                        <li>
+                            <span>토요일</span>
+                            <span class="time-val">09:00 - 18:00</span>
+                        </li>
+                        <li class="closed">
+                            <span>일요일/공휴일</span>
+                            <span class="time-val">휴무</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="toss-card contact-card-new">
+                    <h3>문의하기</h3>
+                    <p class="contact-phone">041-550-5114</p>
+                    <div class="contact-links">
+                        <a href="#" class="contact-btn"><i data-lucide="message-circle"></i> 카카오톡</a>
+                        <a href="#" class="contact-btn"><i data-lucide="instagram"></i> 인스타그램</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>

@@ -305,11 +305,11 @@ textarea::placeholder {
 @keyframes pageFadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    /* transform: translateY(10px); Removed for cleaner fade */
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    /* transform: translateY(0); Removed for cleaner fade */
   }
 }
 
