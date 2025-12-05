@@ -13,7 +13,13 @@
 }
 
 .full-width-bg.bg-gray {
-    background-color: var(--grey-50);
+    background-color: var(--grey-100);
+    padding: 3rem 0;
+}
+
+.full-width-bg .dev-section {
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 /* Hero Section */
@@ -309,7 +315,7 @@
     color: white;
     gap: 3rem;
     flex-wrap: wrap;
-    box-shadow: 0 20px 40px -10px rgba(0, 100, 255, 0.3);
+    box-shadow: none; /* Removed shadow */
 }
 
 .promo-content {

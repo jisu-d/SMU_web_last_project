@@ -250,9 +250,9 @@ textarea::placeholder {
 }
 
 .header-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+  /* max-width: 1200px; Removed max-width for full screen width */
+  margin: 0;
+  padding: 0 2rem; /* Added padding back so it's not too close to edges */
   height: 64px;
   display: flex;
   align-items: center;
@@ -262,20 +262,14 @@ textarea::placeholder {
 .header-left-group {
   display: flex;
   align-items: center;
-  gap: 2.5rem;
-}
-
-.header-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  gap: 2rem; /* Reduced gap slightly */
 }
 
 .header-logo-text {
   font-weight: 800;
   font-size: 1.4rem;
   letter-spacing: -0.02em;
-  color: var(--toss-blue);
+  color: var(--black); /* Changed to black */
 }
 
 .header-nav {
@@ -305,6 +299,31 @@ textarea::placeholder {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+/* Page Transitions & Common Layout */
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-content {
+  animation: pageFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--grey-900);
+  margin-bottom: 3rem;
+  text-align: center;
+  letter-spacing: -0.02em;
 }
 
 /* Header Search */
@@ -494,10 +513,30 @@ textarea::placeholder {
 
 /* Footer Styles */
 .footer {
-  background-color: var(--grey-50);
+  background-color: var(--grey-200); /* Changed from grey-50 */
   border-top: 1px solid var(--grey-200);
   padding: 4rem 0 2rem;
   margin-top: auto;
+}
+
+/* Header Nav Link Underline Effect */
+.header-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--toss-blue);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  transform-origin: bottom right;
+}
+
+.header-nav-link:hover::after,
+.header-nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 .footer-container {
