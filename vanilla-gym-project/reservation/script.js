@@ -17,13 +17,15 @@ function initReservation() {
     let state = {
         selectedTrainer: null,
         selectedDate: null,
-        selectedTime: null
+        selectedTime: null,
+        viewMonthIndex: 0 // 0: Current Month, 1: Next Month, 2: Month after next
     };
 
     // --- DOM Elements ---
     const trainerListEl = document.getElementById('trainer-list');
     const dateListEl = document.getElementById('date-list');
     const timeListEl = document.getElementById('time-list');
+    const monthTabsEl = document.getElementById('month-tabs');
     
     const dateSection = document.getElementById('date-section');
     const timeSection = document.getElementById('time-section');
@@ -31,7 +33,7 @@ function initReservation() {
     const bottomBar = document.getElementById('bottom-bar');
     const summaryText = document.getElementById('summary-text');
     const confirmBtn = document.getElementById('res-confirm-btn');
-    
+
     // --- Render Functions ---
 
     // 1. Render Trainers
@@ -52,23 +54,64 @@ function initReservation() {
         });
     }
 
-    // 2. Render Dates (Next 14 days from TODAY)
+    // 2. Render Month Tabs (Current + 2 Months)
+    function renderMonthTabs() {
+        monthTabsEl.innerHTML = '';
+        const today = new Date();
+
+        for (let i = 0; i < 3; i++) {
+            const d = new Date(today.getFullYear(), today.getMonth() + i, 1);
+            const monthNum = d.getMonth() + 1;
+            
+            const tab = document.createElement('div');
+            tab.className = `res-month-tab ${state.viewMonthIndex === i ? 'active' : ''}`;
+            tab.textContent = `${monthNum}월`;
+            tab.onclick = () => {
+                state.viewMonthIndex = i;
+                renderMonthTabs(); // Update active state
+                renderDates(); // Update date list
+            };
+            monthTabsEl.appendChild(tab);
+        }
+    }
+
+    // 3. Render Dates for Selected Month
     function renderDates() {
         dateListEl.innerHTML = '';
-        const today = new Date(); // Always uses current client time
+        const today = new Date();
         const days = ['일', '월', '화', '수', '목', '금', '토'];
 
-        for (let i = 0; i < 14; i++) {
-            const d = new Date(today);
-            d.setDate(today.getDate() + i);
+        // Determine start and end date for the view
+        let startDate = new Date();
+        if (state.viewMonthIndex === 0) {
+            // Current Month: Start from Today
+            startDate = today;
+        } else {
+            // Future Month: Start from 1st
+            startDate = new Date(today.getFullYear(), today.getMonth() + state.viewMonthIndex, 1);
+        }
+
+        // End date is the last day of the target month
+        const targetMonth = new Date(today.getFullYear(), today.getMonth() + state.viewMonthIndex, 1);
+        const lastDay = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 0).getDate();
+        
+        // Loop from start date to end of month
+        let currentDay = startDate.getDate();
+        // Correctly handle month rollover logic if startDate is in the middle of month
+        // Actually simple loop:
+        
+        const year = startDate.getFullYear();
+        const month = startDate.getMonth(); // 0-based
+
+        for (let d = currentDay; d <= lastDay; d++) {
+            const dateObj = new Date(year, month, d);
+            const dayName = days[dateObj.getDay()];
+            const dateNum = d;
             
-            const dayName = days[d.getDay()];
-            const dateNum = d.getDate();
-            // Format: YYYY-MM-DD
-            const year = d.getFullYear();
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const day = String(d.getDate()).padStart(2, '0');
-            const fullDate = `${year}-${month}-${day}`;
+            // Format YYYY-MM-DD
+            const mStr = String(month + 1).padStart(2, '0');
+            const dStr = String(d).padStart(2, '0');
+            const fullDate = `${year}-${mStr}-${dStr}`;
 
             const card = document.createElement('div');
             card.className = `date-card ${state.selectedDate === fullDate ? 'selected' : ''}`;
@@ -81,21 +124,16 @@ function initReservation() {
         }
     }
 
-    // 3. Render Time Slots (with Random Availability)
+    // 4. Render Time Slots
     function renderTimes() {
         timeListEl.innerHTML = '';
         if (!state.selectedTrainer || !state.selectedDate) return;
 
-        // Create deterministic random based on trainer + date 
-        // to simulate persistent "booked" state for demo
         const seed = state.selectedTrainer.id + state.selectedDate.replace(/-/g, '');
-        let rng = parseInt(seed.substring(seed.length - 3)); 
+        let rng = parseInt(seed.substring(seed.length - 3)) || 123;
 
         timeSlots.forEach((time, index) => {
-            // Simulate booking: 30% chance it's booked
-            // Simple pseudo-random logic for demo
             const isBooked = ((rng + index * 7) % 10) < 3;
-
             const slot = document.createElement('div');
             slot.className = `time-slot ${isBooked ? 'booked' : ''} ${state.selectedTime === time ? 'selected' : ''}`;
             slot.textContent = time;
@@ -111,19 +149,19 @@ function initReservation() {
 
     function selectTrainer(trainer) {
         state.selectedTrainer = trainer;
-        // Reset subsequent steps
+        // Keep dates but reset time
         state.selectedDate = null;
         state.selectedTime = null;
         
         renderTrainers();
-        renderDates(); // Refresh selection visually
+        renderMonthTabs(); // Ensure tabs are rendered
+        renderDates(); 
         
-        // Activate Step 2
         dateSection.style.opacity = '1';
         dateSection.style.pointerEvents = 'auto';
         timeSection.style.opacity = '0.5';
         timeSection.style.pointerEvents = 'none';
-        timeListEl.innerHTML = ''; // Clear times
+        timeListEl.innerHTML = ''; 
 
         updateBottomBar();
     }
@@ -132,10 +170,9 @@ function initReservation() {
         state.selectedDate = date;
         state.selectedTime = null;
         
-        renderDates(); // Update visual state
-        renderTimes(); // Generate times
+        renderDates(); 
+        renderTimes(); 
 
-        // Activate Step 3
         timeSection.style.opacity = '1';
         timeSection.style.pointerEvents = 'auto';
 
@@ -145,7 +182,6 @@ function initReservation() {
     function selectTime(time) {
         state.selectedTime = time;
         
-        // Update visual state manually to avoid re-randomizing booked slots
         const slots = document.querySelectorAll('.time-slot');
         slots.forEach(slot => {
             if (slot.classList.contains('booked')) return;
@@ -163,7 +199,9 @@ function initReservation() {
             summaryText.innerHTML = `<span style="color:var(--toss-blue)">${selectedTrainer.name}</span>님과 <span style="color:var(--toss-blue)">${selectedTime}</span>에 운동해요`;
             confirmBtn.disabled = false;
         } else if (selectedTrainer && selectedDate) {
-            summaryText.textContent = '시간을 선택해주세요';
+            // Parse date to show pretty string e.g. "12월 25일"
+            const [y, m, d] = selectedDate.split('-');
+            summaryText.innerHTML = `<span style="color:var(--toss-blue)">${m}월 ${d}일</span> 시간을 선택해주세요`;
             confirmBtn.disabled = true;
         } else if (selectedTrainer) {
             summaryText.textContent = '날짜를 선택해주세요';
@@ -176,30 +214,24 @@ function initReservation() {
 
     // --- Initialization ---
     renderTrainers();
-    // Render dates initially but disabled visually until trainer picked? 
-    // Actually renderDates() is safe to call, step 2 section is opaque
-    renderDates(); 
+    renderMonthTabs();
+    renderDates();
 
     // --- Event Listeners ---
     confirmBtn.onclick = () => {
         if (confirmBtn.disabled) return;
         
-        // Fill Modal Data
         document.getElementById('modal-trainer').textContent = state.selectedTrainer.name;
         document.getElementById('modal-datetime').textContent = `${state.selectedDate} ${state.selectedTime}`;
         
-        // Show Modal
         const modal = document.getElementById('res-modal');
         modal.style.display = 'flex';
         
-        // Reset Lucide icons just in case
         if(window.lucide) lucide.createIcons();
     };
 
-    // Global Modal Closer
     window.closeResModal = () => {
         document.getElementById('res-modal').style.display = 'none';
-        // Optional: Reset page or redirect
-        window.location.hash = '#/mypage'; // Redirect to mypage after booking
+        window.location.hash = '#/mypage'; 
     };
 }

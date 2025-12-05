@@ -14,7 +14,13 @@
 
         <!-- Step 2: Date Selection -->
         <section class="res-section" id="date-section" style="opacity: 0.5; pointer-events: none;">
-            <h2 class="res-section-title">2. 날짜 선택</h2>
+            <div class="res-date-header">
+                <h2 class="res-section-title" style="margin-bottom: 0;">2. 날짜 선택</h2>
+                <!-- Month Tabs -->
+                <div class="res-month-tabs" id="month-tabs">
+                    <!-- JS Injected: [12월] [1월] [2월] -->
+                </div>
+            </div>
             <div class="res-date-picker">
                 <div class="date-scroll" id="date-list">
                     <!-- JS Injected -->
@@ -37,12 +43,13 @@
     </div>
 
     <!-- Bottom Floating Bar -->
-    <div class="res-bottom-bar" id="bottom-bar">
-        <div class="res-summary">
-            <span id="summary-text">트레이너를 선택해주세요</span>
-        </div>
-        <button class="btn btn-primary res-confirm-btn" id="res-confirm-btn" disabled>예약하기</button>
+</div>
+
+<div class="res-bottom-bar" id="bottom-bar">
+    <div class="res-summary">
+        <span id="summary-text">트레이너를 선택해주세요</span>
     </div>
+    <button class="btn btn-primary res-confirm-btn" id="res-confirm-btn" disabled>예약하기</button>
 </div>
 
 <!-- Reservation Success Modal -->
