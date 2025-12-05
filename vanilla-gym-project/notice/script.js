@@ -342,49 +342,61 @@ window.showNoticeDetail = function(notice) {
 
             listBody.innerHTML = '';
 
-                        notices.forEach(notice => {
+            notices.forEach(notice => {
 
-                            const item = document.createElement('button');
+                const item = document.createElement('button');
 
-                            item.className = 'notice-item';
+                item.className = 'notice-item';
 
-                            item.innerHTML = `
+                item.innerHTML = `
 
-                                <div class="notice-list-item-content">
+                    <div class="notice-table-row">
 
-                                    <div class="notice-item-main">
+                        <div class="notice-table-cell center">
 
-                                        <span class="notice-badge ${getCategoryClass(notice.category)}">${notice.category}</span>
+                            <span class="notice-number">${notice.id}</span>
 
-                                        <h3 class="notice-item-title">${notice.title}</h3>
+                        </div>
 
-                                    </div>
+                        <div class="notice-table-cell">
 
-                                    <div class="notice-item-meta">
+                            <span class="notice-badge ${getCategoryClass(notice.category)}">
 
-                                        <span class="notice-date">${notice.date}</span>
+                                ${notice.category}
 
-                                        <span class="notice-divider">•</span>
+                            </span>
 
-                                        <span class="notice-views">조회 ${notice.views}</span>
+                        </div>
 
-                                    </div>
+                        <div class="notice-table-cell">${notice.title}</div>
 
-                                </div>
+                        <div class="notice-table-cell">
 
-                                <div class="notice-item-arrow">
+                            <span class="notice-date">${notice.date}</span>
 
-                                    <i data-lucide="chevron-right"></i>
+                        </div>
 
-                                </div>
+                        <div class="notice-table-cell center">
 
-                            `;
+                            <span class="notice-views">
 
-                            item.addEventListener('click', () => window.showNoticeDetail(notice));
+                                <i data-lucide="eye" class="notice-view-icon"></i>
 
-                            listBody.appendChild(item);
+                                ${notice.views}
 
-                        });
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+                item.addEventListener('click', () => window.showNoticeDetail(notice));
+
+                listBody.appendChild(item);
+
+            });
 
             if (window.lucide) lucide.createIcons();
 

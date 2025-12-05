@@ -346,3 +346,5 @@ function initReservation() {
         window.location.hash = '#/mypage'; 
     };
 }
+
+initReservation(); // Initialize the reservation page functionality

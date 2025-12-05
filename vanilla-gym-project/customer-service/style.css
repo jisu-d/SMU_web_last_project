@@ -1,28 +1,26 @@
-/* Customer Service Page - Toss Design System */
-
 .cs-container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem 1.5rem; /* Reduced from 5rem */
+  padding: 3rem 1rem;
 }
 
 .cs-title {
-  /* Replaced by page-title, hiding old style just in case */
-  display: none;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
 }
 
 .cs-subtitle {
   text-align: center;
-  color: var(--grey-600);
-  margin-bottom: 2rem; /* Reduced from 4rem */
-  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 2rem;
 }
 
 /* Search Bar */
 .cs-search-container {
-  max-width: 600px;
-  margin: 0 auto 2rem auto; /* Reduced bottom margin from 4rem */
-  position: relative;
+  max-width: 48rem;
+  margin: 0 auto 3rem auto;
+  padding: 0 1rem;
 }
 
 .cs-search-wrapper {
@@ -35,9 +33,9 @@
   left: 1.5rem;
   top: 50%;
   transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  color: var(--grey-500);
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #9ca3af;
   pointer-events: none;
   z-index: 10;
 }
@@ -45,83 +43,68 @@
 input[type="text"].cs-search-input {
   display: block;
   width: 100%;
-  padding: 1.2rem 1.5rem 1.2rem 3.5rem;
-  border: 1px solid transparent;
-  border-radius: 24px;
-  font-size: 1.1rem;
-  background-color: var(--grey-100);
-  color: var(--grey-900);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: none;
+  padding: 1.8rem 1.5rem 1.8rem 4rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  font-size: 1.125rem;
+  background-color: white;
+  /* box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); */
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 0;
+  box-sizing: border-box;
 }
 
 input[type="text"].cs-search-input:focus {
   outline: none;
-  background-color: var(--white);
-  box-shadow: 0 0 0 2px var(--toss-blue);
-}
-
-input[type="text"].cs-search-input::placeholder {
-  color: var(--grey-500);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  /* transform: translateY(-2px); */
 }
 
 .cs-content {
-  max-width: 800px;
+  max-width: 56rem;
   margin: 0 auto;
 }
 
-/* Categories */
 .cs-categories {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 3rem;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
   justify-content: center;
 }
 
 .cs-category-btn {
-  padding: 0.6rem 1.2rem;
-  border-radius: 20px;
-  transition: all 0.2s;
-  border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  transition: background-color 0.2s, color 0.2s;
+  border: none;
   cursor: pointer;
-  background-color: var(--grey-100);
-  color: var(--grey-600);
-  font-weight: 600;
-  font-size: 0.95rem;
+  background-color: #f3f4f6;
+  color: #374151;
 }
 
 .cs-category-btn:hover {
-  background-color: var(--grey-200);
-  color: var(--grey-800);
+  background-color: #e5e7eb;
 }
 
 .cs-category-btn.active {
-  background-color: var(--toss-blue);
-  color: var(--white);
-  box-shadow: var(--shadow-sm);
+  background-color: #2563eb;
+  color: white;
 }
 
-/* FAQ List */
 .cs-faq-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 4rem;
 }
 
 .cs-faq-item {
-  background-color: var(--white);
-  border-radius: 20px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  border: 1px solid var(--grey-100); /* Subtle border */
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
   overflow: hidden;
-  transition: box-shadow 0.2s ease;
-}
-
-.cs-faq-item:hover {
-    box-shadow: var(--shadow-toss);
-    transform: translateY(-2px);
 }
 
 .cs-faq-item.hidden {
@@ -130,36 +113,39 @@ input[type="text"].cs-search-input::placeholder {
 
 .cs-faq-question-btn {
   width: 100%;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: none;
   border: none;
   cursor: pointer;
+  transition: background-color 0.2s;
   text-align: left;
-  font-family: inherit;
+}
+
+.cs-faq-question-btn:hover {
+  background-color: #f9fafb;
 }
 
 .cs-faq-question-content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   flex: 1;
 }
 
 .cs-q-badge {
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  background-color: var(--toss-blue-light);
-  color: var(--toss-blue);
-  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.875rem;
 }
 
 .cs-question-wrapper {
@@ -167,80 +153,69 @@ input[type="text"].cs-search-input::placeholder {
 }
 
 .cs-category-tag-wrapper {
-    margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .cs-category-tag {
-  display: inline-block;
-  padding: 0.2rem 0.6rem;
-  background-color: var(--grey-100);
-  color: var(--grey-600);
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  background-color: #dbeafe;
+  color: #1e40af;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
 }
 
 .cs-question-text {
-  color: var(--grey-900);
-  font-size: 1.1rem;
-  font-weight: 600;
+  color: #111827;
 }
 
 .cs-chevron-icon {
-  width: 20px;
-  height: 20px;
-  color: var(--grey-400);
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #9ca3af;
   flex-shrink: 0;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s;
 }
 
 .cs-faq-item.active .cs-chevron-icon {
   transform: rotate(180deg);
-  color: var(--toss-blue);
 }
 
-/* Answer Section */
 .cs-faq-answer {
   display: none;
-  padding: 0;
-  background-color: var(--grey-50);
-  border-top: 1px solid var(--grey-100);
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb;
 }
 
 .cs-faq-item.active .cs-faq-answer {
   display: block;
-  animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 .cs-answer-content {
   display: flex;
   gap: 1rem;
-  padding: 2rem;
+  padding-top: 1.5rem;
 }
 
 .cs-a-badge {
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  background-color: #34C759; /* Apple Green / Toss Success Green */
-  color: var(--white);
-  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: #059669;
+  color: white;
+  border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.875rem;
 }
 
 .cs-answer-text {
-  color: var(--grey-800);
-  line-height: 1.7;
-  font-size: 1rem;
+  color: #374151;
+  line-height: 1.75;
 }
 
 /* Pagination */
@@ -249,56 +224,41 @@ input[type="text"].cs-search-input::placeholder {
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  margin-top: 3rem;
 }
 
 .cs-page-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 40px;
-  height: 40px;
-  padding: 0 0.5rem;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  background-color: var(--white);
-  color: var(--grey-600);
-  font-size: 0.95rem;
-  font-weight: 600;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: #64748b;
+  font-size: 0.9375rem;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .cs-page-btn:hover:not(:disabled) {
-  background-color: var(--grey-100);
-  color: var(--grey-900);
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
 }
 
 .cs-page-btn.active {
-  background-color: var(--toss-blue);
-  color: var(--white);
-  box-shadow: var(--shadow-sm);
+  background-color: #2563eb;
+  color: white;
+  border-color: #2563eb;
 }
 
 .cs-page-btn:disabled {
-  opacity: 0.5;
+  background-color: #f8fafc;
+  color: #cbd5e1;
+  border-color: #e2e8f0;
   cursor: not-allowed;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .cs-container {
-    padding: 4rem 1rem;
-  }
-  
-  .cs-title {
-    font-size: 2rem;
-  }
-  
-  .cs-faq-question-btn {
-    padding: 1.2rem 1.5rem;
-  }
-  
-  .cs-question-text {
-    font-size: 1rem;
-  }
 }
