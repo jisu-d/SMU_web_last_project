@@ -1,307 +1,242 @@
+/* Equipment Page - Toss Design System */
+
 .equipment-container {
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 3rem 1rem;
+  padding: 6rem 1.5rem;
 }
 
 .equipment-title {
   text-align: center;
-  margin-bottom: 3rem;
-  font-size: 2.5rem;
+  margin-bottom: 4rem;
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--grey-900);
+  letter-spacing: -0.02em;
 }
 
 .equipment-content {
-  max-width: 72rem;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
+/* Tabs - Segmented Control Style */
 .equipment-tabs {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
   overflow-x: auto;
-  padding-bottom: 0.5rem;
+  padding: 0.5rem;
+  background-color: var(--grey-100);
+  border-radius: 16px;
+  scrollbar-width: none; /* Hide scrollbar */
+}
+
+.equipment-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .equipment-tab {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
   white-space: nowrap;
-  transition: background-color 0.2s, color 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
   cursor: pointer;
-  background-color: #f3f4f6;
-  color: #374151;
+  background-color: transparent;
+  color: var(--grey-600);
+  font-weight: 600;
+  font-size: 0.95rem;
+  flex-shrink: 0;
 }
 
 .equipment-tab:hover {
-  background-color: #e5e7eb;
+  color: var(--grey-900);
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .equipment-tab.active {
-  background-color: #2563eb;
-  color: white;
+  background-color: var(--white);
+  color: var(--toss-blue);
+  box-shadow: var(--shadow-sm);
 }
 
+/* Grid & Animations */
 .equipment-grid {
-  display: none; /* Hide by default */
+  display: none;
   grid-template-columns: 1fr;
-  gap: 2rem;
-  opacity: 0; /* Start invisible */
-  transform: translateY(20px); /* Start slightly lower */
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Transition for smooth effect */
+  gap: 3rem;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 .equipment-grid.active {
-  display: grid; /* Show only when active */
-  animation: slideUpFadeIn 0.6s ease-out forwards; /* Apply animation */
-}
-
-@keyframes slideUpFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  display: grid;
+  animation: slideUpFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @media (min-width: 1024px) {
-  .equipment-grid {
-    /* grid-template-columns: repeat(2, 1fr); This is now handled in the active state or combined */
-  }
   .equipment-grid.active {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
   }
 }
 
+/* Media Section */
 .equipment-media-section {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .equipment-image-container {
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  background-color: var(--white);
+  border-radius: 24px;
+  box-shadow: var(--shadow-toss);
   overflow: hidden;
+  border: 1px solid var(--grey-200);
 }
 
 .equipment-image {
   width: 100%;
-  height: 20rem;
+  height: 320px;
   object-fit: cover;
 }
 
 .equipment-video-container {
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  background-color: var(--white);
+  border-radius: 24px;
+  box-shadow: var(--shadow-toss);
   overflow: hidden;
+  border: 1px solid var(--grey-200);
 }
 
 .equipment-video-header {
-  padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
-  background-color: #f9fafb;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--grey-100);
+  background-color: var(--white);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .equipment-video-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: #2563eb;
+  width: 20px;
+  height: 20px;
+  color: var(--toss-blue);
+  fill: var(--toss-blue-light);
 }
 
 .equipment-video-title {
-  font-size: 1.125rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--grey-900);
 }
 
 .equipment-video-wrapper {
   aspect-ratio: 16 / 9;
 }
 
+/* Info Section */
 .equipment-info-section {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .equipment-info-card {
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
-  padding: 1.5rem;
+  background-color: var(--white);
+  border-radius: 24px;
+  box-shadow: 0 0 0 1px var(--grey-200);
+  padding: 2rem;
 }
 
 .equipment-category-badge {
-  padding: 0.5rem 0.75rem;
-  background-color: #dbeafe;
-  color: #1e40af;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  padding: 0.4rem 0.8rem;
+  background-color: var(--toss-blue-light);
+  color: var(--toss-blue);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
   display: inline-block;
   margin-bottom: 1rem;
 }
 
 .equipment-name {
   margin-bottom: 1rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--grey-900);
 }
 
 .equipment-description {
-  color: #374151;
-  line-height: 1.75;
+  color: var(--grey-700);
+  line-height: 1.7;
+  font-size: 1.05rem;
 }
 
 .equipment-subtitle {
-  margin-bottom: 1rem;
-  font-size: 1.125rem;
+  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--grey-900);
 }
 
 .equipment-muscles {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .equipment-muscle-tag {
   padding: 0.5rem 1rem;
-  background-color: #d1fae5;
-  color: #065f46;
-  border-radius: 9999px;
+  background-color: var(--grey-100);
+  color: var(--grey-700);
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
-.equipment-usage-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.equipment-usage-item {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.equipment-usage-number {
-  flex-shrink: 0;
-  width: 1.5rem;
-  height: 1.5rem;
-  background-color: #2563eb;
-  color: white;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-}
-
-.equipment-usage-text {
-  color: #374151;
-  padding-top: 0.125rem;
-}
-
-.equipment-caution-title {
-  margin-bottom: 1rem;
-  color: #dc2626;
-  font-size: 1.125rem;
-}
-
-.equipment-caution-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.equipment-caution-item {
-  display: flex;
-  gap: 0.5rem;
-  color: #374151;
-}
-
-.equipment-caution-bullet {
-  color: #dc2626;
-}
-
-.equipment-inquiry {
-  margin-top: 3rem;
-  background-color: #eff6ff;
-  border-radius: 0.75rem;
-  padding: 2rem;
-  text-align: center;
-}
-
-.equipment-inquiry-title {
-  margin-bottom: 0.5rem;
-  font-size: 1.125rem;
-}
-
-.equipment-inquiry-text {
-  color: #374151;
-  margin-bottom: 1rem;
-}
-
-.equipment-inquiry-phone {
-  color: #2563eb;
-}
-
-/* Muscle Map & Markers */
+/* Muscle Map */
 .muscle-map-container {
-  margin-top: 1.5rem;
-  background-color: white;
-  border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
-  /* padding: 2rem;  Removed to fit image to border */
+  background-color: var(--grey-50);
+  border-radius: 16px;
+  border: 1px solid var(--grey-200);
   display: flex;
-  justify-content: center; /* Center the wrapper horizontally */
+  justify-content: center;
   align-items: center;
-  overflow: hidden; /* Clip image to border radius */
+  overflow: hidden;
+  position: relative;
 }
 
-/* Wrapper to tightly fit the image so markers are relative to the image itself */
 .muscle-map-wrapper {
     position: relative;
     width: 100%;
-    /* 6.png 비율: 가로 665 / 세로 368 → 약 1.8:1 */
-    aspect-ratio: 665 / 368;   /* 최신 브라우저용 */
-    overflow: hidden;          /* 혹시 넘치는 부분 잘라내기 */
+    aspect-ratio: 665 / 368;
+    overflow: hidden;
 }
 
 .muscle-map-image {
     width: 100%;
     height: 100%;
-    object-fit: contain;       /* 이미지 전체가 틀 안에 보이게 */
+    object-fit: contain;
     display: block;
+    mix-blend-mode: multiply; /* Better integration with background */
 }
 
 .muscle-marker {
   position: absolute;
-  width: 24px;
-  height: 24px;
-  background-color: #ef4444; /* Red-500 */
-  border: 3px solid rgba(255, 255, 255, 0.9);
+  width: 20px;
+  height: 20px;
+  background-color: #F04452; /* Toss Red */
+  border: 3px solid var(--white);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Drop shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   z-index: 10;
 }
 
-/* Inner pulse ring */
 .muscle-marker::after {
   content: '';
   position: absolute;
@@ -309,20 +244,133 @@
   left: 50%;
   width: 100%;
   height: 100%;
-  background-color: rgba(239, 68, 68, 0.6);
+  background-color: rgba(240, 68, 82, 0.5);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   animation: markerPulse 2s infinite;
   z-index: -1;
 }
 
+/* Usage Steps */
+.equipment-usage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  list-style: none;
+}
+
+.equipment-usage-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.equipment-usage-number {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  background-color: var(--toss-blue);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.equipment-usage-text {
+  color: var(--grey-800);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Caution List */
+.equipment-caution-title {
+  margin-bottom: 1.25rem;
+  color: #F04452;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.equipment-caution-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.equipment-caution-item {
+  display: flex;
+  gap: 0.75rem;
+  color: var(--grey-700);
+  font-size: 0.95rem;
+  align-items: flex-start;
+}
+
+.equipment-caution-bullet {
+  color: #F04452;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* Inquiry Box */
+.equipment-inquiry {
+  margin-top: 4rem;
+  background: linear-gradient(135deg, #F9FAFB 0%, #F2F4F6 100%);
+  border-radius: 24px;
+  padding: 3rem;
+  text-align: center;
+  border: 1px solid var(--grey-200);
+}
+
+.equipment-inquiry-title {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--grey-900);
+}
+
+.equipment-inquiry-text {
+  color: var(--grey-600);
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.equipment-inquiry-phone {
+  color: var(--toss-blue);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+@keyframes slideUpFadeIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes markerPulse {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.8;
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .equipment-container {
+    padding: 4rem 1rem;
   }
-  100% {
-    transform: translate(-50%, -50%) scale(3);
-    opacity: 0;
+  
+  .equipment-title {
+    font-size: 2rem;
+  }
+  
+  .equipment-info-card {
+    padding: 1.5rem;
+  }
+  
+  .equipment-name {
+    font-size: 1.5rem;
   }
 }
