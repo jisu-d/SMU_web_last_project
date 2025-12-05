@@ -39,5 +39,4 @@ function initAbout() {
     const revealElements = document.querySelectorAll('.scroll-reveal');
     revealElements.forEach(el => observer.observe(el));
 }
-
-initAbout(); // Initialize the about page functionality
+// initAbout(); // Removed immediate call, router will now call it

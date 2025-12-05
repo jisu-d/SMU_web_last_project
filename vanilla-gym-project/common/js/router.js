@@ -64,8 +64,11 @@ class Router {
     async handleLocation() {
         // Hash가 없으면 '/'로 간주 (홈)
         let path = window.location.hash.slice(1) || '/';
+        console.log('Router: Current Path:', path);
         
         const route = routes[path] || routes['/'];
+        console.log('Router: Resolved Route:', route);
+        console.log('Router: Is this the home route fallback?', route === routes['/']);
 
         try {
             // 1. HTML과 CSS를 병렬로 로드 시작
@@ -125,7 +128,7 @@ class Router {
             } else {
                 link.classList.remove('active');
             }
-        });
+        })
     }
 
     // 스타일을 미리 로드하고 Promise 반환

@@ -592,7 +592,10 @@ textarea::placeholder {
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .header-nav {
-    display: none; /* Hide nav links on mobile for now, or implement a burger menu if needed */
+    /* display: none;  Removed to make nav links visible on mobile */
+    display: flex; /* Ensure it's displayed as flex for proper layout */
+    justify-content: center; /* Center the two links */
+    gap: 1rem; /* Adjust gap for mobile if needed */
   }
   
   .header-left-group {

@@ -346,5 +346,4 @@ function initReservation() {
         window.location.hash = '#/mypage'; 
     };
 }
-
-initReservation(); // Initialize the reservation page functionality
+// initReservation(); // Removed immediate call, router will now call it
