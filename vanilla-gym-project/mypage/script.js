@@ -251,6 +251,10 @@ function initMyPage() {
         if (!localStorage.getItem(dataKey)) {
             saveGymData({ membershipExpire: null, ptCount: 0, reservations: [] });
         }
+        
+        // Update Header immediately
+        if (window.updateHeaderState) window.updateHeaderState();
+        
         showMain();
     };
 
@@ -261,6 +265,10 @@ function initMyPage() {
 
     logoutBtn.onclick = () => {
         localStorage.removeItem(userKey);
+        
+        // Update Header immediately
+        if (window.updateHeaderState) window.updateHeaderState();
+        
         showLogin();
     };
 

@@ -117,7 +117,7 @@
                 </div>
 
                 <!-- PT 예약 현황 (New) -->
-                <div class="mypage-card" style="grid-column: 1 / -1;">
+                <div class="mypage-card">
                     <div class="mypage-card-header">
                         <i data-lucide="calendar-check" class="mypage-card-icon"></i>
                         <h2 class="mypage-card-title">PT 예약 현황</h2>
@@ -198,7 +198,12 @@
                 </div>
                 <div class="mypage-form-group" style="flex: 1;">
                     <label for="modal-locker-pw">비밀번호 (4자리 숫자)</label>
-                    <input type="password" id="modal-locker-pw" class="modal-input" maxlength="4" placeholder="숫자 4자리">
+                    <div style="position: relative;">
+                        <input type="password" id="modal-locker-pw" class="modal-input" maxlength="4" placeholder="숫자 4자리" style="padding-right: 3rem;">
+                        <button type="button" id="toggle-locker-pw" style="position: absolute; right: 0.8rem; top: 50%; transform: translateY(-50%); color: var(--grey-500); padding: 0.2rem;">
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

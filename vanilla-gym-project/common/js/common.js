@@ -195,20 +195,25 @@ window.updateHeaderState = function() {
   const btn = document.querySelector('.header-mypage-btn');
   if (!btn) return;
 
-  const user = localStorage.getItem('user');
+  // Check 'gym_user' which is used in mypage logic
+  const user = localStorage.getItem('gym_user');
   
   if (user) {
-    // 로그인 상태: 마이페이지
+    // Logged In: Show My Page
     btn.innerHTML = `
       <i data-lucide="user" class="header-mypage-icon"></i>
       <span class="header-mypage-text">마이페이지</span>
     `;
+    // Update link href to point to mypage (which handles its own view)
+    btn.setAttribute('href', '#/mypage');
   } else {
-    // 로그아웃 상태: 로그인
+    // Logged Out: Show Login
     btn.innerHTML = `
       <i data-lucide="log-in" class="header-mypage-icon"></i>
       <span class="header-mypage-text">로그인</span>
     `;
+    // Ensure clicking it goes to mypage (which defaults to login view if no user)
+    btn.setAttribute('href', '#/mypage');
   }
 
   // Re-initialize icons for the new content

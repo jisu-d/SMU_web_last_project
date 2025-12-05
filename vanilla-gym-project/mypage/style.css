@@ -284,8 +284,6 @@
   font-weight: 600;
   text-align: center;
 }
-
-/* CTA Card */
 .mypage-cta-card {
   padding: 2.5rem;
   background: linear-gradient(135deg, #E8F3FF 0%, #FFFFFF 100%);
@@ -445,10 +443,10 @@
   padding: 2.5rem;
   border-radius: 28px;
   width: 90%;
-  max-width: 800px;
+  max-width: 1200px; /* Increased from 800px to make it larger */
   box-shadow: var(--shadow-toss);
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: 95vh; /* Increased from 90vh, allowing more height */
+  overflow-y: auto; /* Changed back to auto to ensure accessibility if content overflows */
   animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -468,39 +466,39 @@
   color: var(--grey-900);
 }
 
+/* Locker Styles - Updated based on Gemini Memory */
 .locker-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
-  gap: 0.75rem;
-  padding: 2rem;
-  border: 1px solid var(--grey-100);
+  grid-template-columns: repeat(10, 1fr); /* Back to 10 columns for balanced size */
+  gap: 0.6rem; /* Slightly tighter gap */
+  padding: 1.5rem;
+  border: none;
   border-radius: 24px;
-  background-color: var(--white);
+  background-color: var(--grey-50);
 }
 
 .locker-item {
-  aspect-ratio: 1;
+  aspect-ratio: 1; /* Keep square */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
-  background-color: var(--grey-50);
+  border-radius: 12px;
+  background-color: var(--white);
   border: 2px solid transparent;
   font-weight: 700;
-  font-size: 1rem;
-  color: var(--grey-600);
+  font-size: 1.1rem; /* Balanced font size */
+  color: var(--grey-700);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .locker-item:hover:not(.disabled) {
-  transform: translateY(-3px) scale(1.05);
-  background-color: var(--white);
+  transform: translateY(-2px);
   border-color: var(--toss-blue);
   color: var(--toss-blue);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
   z-index: 1;
 }
 
@@ -508,34 +506,21 @@
   background-color: var(--toss-blue);
   color: var(--white);
   border-color: var(--toss-blue);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
   transform: scale(1.1);
   z-index: 2;
 }
 
 .locker-item.disabled {
-  background-color: var(--grey-100);
+  background-color: transparent;
   color: var(--grey-300);
   cursor: not-allowed;
   box-shadow: none;
+  border: 1px solid var(--grey-200);
 }
 
-/* Dot indicator */
+/* Removed Dot indicator completely */
 .locker-item::after {
-  content: '';
-  width: 4px;
-  height: 4px;
-  background-color: var(--grey-300);
-  border-radius: 50%;
-  margin-top: 4px;
-  transition: background-color 0.2s;
-}
-
-.locker-item.selected::after {
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
-.locker-item.disabled::after {
   display: none;
 }
 
@@ -599,7 +584,7 @@
   }
   
   .locker-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, 1fr); /* 5 cols on tablet/mobile */
   }
   
   .modal-content {

@@ -151,4 +151,25 @@
 
     // 전역 객체에 할당하여 외부에서 접근 가능하게 함
     window.LockerManager = LockerManager;
+
+    // Initialize password toggle (run once)
+    document.addEventListener('click', function(e) {
+        const toggleBtn = e.target.closest('#toggle-locker-pw');
+        if (toggleBtn) {
+            const input = document.getElementById('modal-locker-pw');
+            const icon = toggleBtn.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                // Update icon to 'eye-off' (requires lucide re-render or manual svg replacement, 
+                // but for simplicity we'll rely on Lucide if available or just keep it simple)
+                toggleBtn.innerHTML = '<i data-lucide="eye-off"></i>';
+            } else {
+                input.type = 'password';
+                toggleBtn.innerHTML = '<i data-lucide="eye"></i>';
+            }
+            
+            if (window.lucide) lucide.createIcons();
+        }
+    });
 })();
