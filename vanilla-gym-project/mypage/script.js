@@ -1,616 +1,349 @@
-// 회원 데이터 (로컬 스토리지 사용 안 함)
-const MEMBERS = [
-    {
-        id: "user123",
-        password: "1234",
-        name: "홍길동",
-        contact: "010-1234-5678",
-        email: "hong@example.com",
-        membershipExpireDate: "2024-12-31", // YYYY-MM-DD 형식
-        lockerNumber: 42,
-        lockerPassword: "1357"
-    },
-    {
-        id: "admin",
-        password: "admin",
-        name: "관리자",
-        contact: "010-9876-5432",
-        email: "admin@example.com",
-        membershipExpireDate: "2025-12-31",
-        lockerNumber: 1,
-        lockerPassword: "2468"
+function initMyPage() {
+    // --- State Management (Local Storage) ---
+    const userKey = 'gym_user';
+    const dataKey = 'gym_data';
+
+    // Helper to get data
+    function getGymData() {
+        const defaultData = {
+            membershipExpire: null, // YYYY-MM-DD or null
+            ptCount: 0,
+            reservations: [], // { id, trainer, date, time, createdAt }
+            lockerNumber: null,
+            lockerPassword: null
+        };
+        const stored = localStorage.getItem(dataKey);
+        return stored ? JSON.parse(stored) : defaultData;
     }
-];
 
-// --- Load Locker Module ---
-(function loadLockerModule() {
-    if (!document.querySelector('script[src="mypage/modules/locker.js"]')) {
-        const script = document.createElement('script');
-        script.src = 'mypage/modules/locker.js';
-        document.body.appendChild(script);
+    // Helper to save data
+    function saveGymData(data) {
+        localStorage.setItem(dataKey, JSON.stringify(data));
     }
-})();
-// -------------------------
 
-// 쿠폰 데이터 (mon: 할인율(%))
-const COUPONS = [
-    { code: "X-mas", mon: 30 }, // 30% 할인
-    { code: "WELCOME", mon: 10 }, // 10% 할인
-    { code: "NEWYEAR", mon: 20 }  // 20% 할인 (예시 추가)
-];
+    // Helper to get user info (like ID)
+    function getCurrentUserId() {
+        return localStorage.getItem(userKey);
+    }
 
-let loggedInUser = null; // 현재 로그인된 사용자 정보 객체
-let appliedCoupons = []; // 현재 적용된 쿠폰 목록 (객체 배열)
+    // --- Views ---
+    const viewLogin = document.getElementById('view-login');
+    const viewMain = document.getElementById('view-main');
+    const viewPayment = document.getElementById('view-payment');
 
-// DOM 요소 캐싱 (재할당 가능하도록 let 사용)
-let viewLogin = null;
-let viewMain = null;
-let viewPayment = null;
-let loginForm = null;
-let userIdInput = null;
-let passwordInput = null;
-let loginButton = null;
-let logoutBtn = null;
-let testAccountFillBtn = null;
-let cancelPaymentBtn = null;
+    // --- Elements ---
+    const loginForm = document.getElementById('login-form');
+    const testAccountBtn = document.getElementById('test-account-fill-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const toPaymentBtns = document.querySelectorAll('.to-payment-btn');
+    const cancelPaymentBtn = document.getElementById('cancel-payment-btn');
+    const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
 
-// 개인 정보 표시 요소
-let memberNameElem = null;
-let memberIdElem = null;
-let memberContactElem = null;
-let memberEmailElem = null;
+    // Payment Elements
+    const paymentTabs = document.querySelectorAll('.payment-tab');
+    const paymentSelect = document.getElementById('payment-select');
+    const basePriceDisplay = document.getElementById('base-price-display');
+    const discountRow = document.getElementById('discount-row');
+    const discountAmount = document.getElementById('discount-amount');
+    const totalPriceDisplay = document.getElementById('total-price-display');
+    const paymentSelectLabel = document.getElementById('payment-select-label');
 
-// 등록 현황 표시 요소
-let expireDateDisplayElem = null;
-let daysRemainingTextElem = null;
+    let currentPaymentType = 'membership'; // 'membership' or 'pt'
 
-// 사물함 정보 표시 요소
-let lockerNumberDisplayElem = null;
-let lockerPasswordDigit1Elem = null;
-let lockerPasswordDigit2Elem = null;
-let lockerPasswordDigit3Elem = null;
-let lockerPasswordDigit4Elem = null;
+    // --- Locker Elements ---
+    const editLockerBtn = document.getElementById('edit-locker-btn');
+    const cancelLockerBtn = document.getElementById('cancel-locker-btn');
+    const saveLockerBtn = document.getElementById('save-locker-btn');
+    const lockerNumberDisplay = document.getElementById('locker-number-display');
+    const lockerPasswordDigits = [
+        document.getElementById('locker-password-digit-1'),
+        document.getElementById('locker-password-digit-2'),
+        document.getElementById('locker-password-digit-3'),
+        document.getElementById('locker-password-digit-4')
+    ];
 
-// 결제 관련 요소
-let monthSelect = null;
-let baseMonthDisplay = null;
-let basePriceDisplay = null;
-let discountRow = null;
-let discountCountElem = null;
-let discountAmountElem = null;
-let couponRow = null;
-let couponRateDisplay = null;
-let couponAmountElem = null;
-let totalPriceDisplay = null;
-let couponInput = null;
-let applyCouponBtn = null;
-let appliedCouponsContainer = null;
-let confirmPaymentBtn = null;
-
-
-/**
- * 로그인 처리 함수
- * @param {string} id - 사용자 ID
- * @param {string} pw - 비밀번호
- */
-function login(id, pw) {
-    // console.log("Attempting login with ID:", id, "Password:", pw); // Debug log
-    const trimmedId = id.trim();
-    const trimmedPw = pw.trim();
-    const user = MEMBERS.find(member => member.id === trimmedId && member.password === trimmedPw);
-    // console.log("Found user:", user); // Debug log
-    if (user) {
-        loggedInUser = user;
-        // 로컬 스토리지에 사용자 정보 저장 (로그인 유지)
-        localStorage.setItem('user', JSON.stringify(user));
-        
-        // 헤더 UI 업데이트 (로그인 -> 마이페이지)
-        if (window.updateHeaderState) window.updateHeaderState();
-
-        // 결제 대기 상태 확인
-        if (sessionStorage.getItem('pendingPayment') === 'true') {
-            checkPendingPayment();
-        } else {
-            showView("main");
-        }
-        
-        displayMemberInfo(loggedInUser); // 로그인 성공 시 회원 정보 표시
-        alert(`${loggedInUser.name}님 환영합니다!`);
+    // --- Initialization Check ---
+    const currentUser = localStorage.getItem(userKey);
+    if (currentUser) {
+        showMain();
     } else {
-        alert("아이디 또는 비밀번호가 올바르지 않습니다.");
-        loggedInUser = null;
-    }
-}
-
-/**
- * 로그아웃 처리 함수
- */
-function logout() {
-    loggedInUser = null;
-    localStorage.removeItem('user'); // 세션 삭제
-    
-    // 헤더 UI 업데이트 (마이페이지 -> 로그인)
-    if (window.updateHeaderState) window.updateHeaderState();
-    
-    showView("login");
-    alert("로그아웃되었습니다.");
-    // 로그인 폼 초기화
-    if (loginForm) {
-        loginForm.reset();
-    }
-    resetPaymentForm();
-}
-
-/**
- * 뷰 전환 함수
- * @param {string} viewName - "login" 또는 "main" 또는 "payment"
- */
-function showView(viewName) {
-    // 모든 뷰 비활성화
-    viewLogin.classList.remove("active");
-    viewMain.classList.remove("active");
-    viewPayment.classList.remove("active");
-
-    // 선택된 뷰만 활성화
-    if (viewName === "login") {
-        viewLogin.classList.add("active");
-    } else if (viewName === "main") {
-        viewMain.classList.add("active");
-    } else if (viewName === "payment") {
-        viewPayment.classList.add("active");
-        // 결제 화면 진입 시 폼 초기화 및 가격 계산
-        resetPaymentForm();
-        calculateTotal();
-    }
-}
-
-/**
- * 로그인 상태 확인 및 UI 렌더링
- */
-function checkLoginStatusAndRenderUI() {
-    // 초기 로드 시에는 로그인 상태가 없으므로 항상 로그인 뷰를 표시
-    showView("login");
-}
-
-
-/**
- * 로그인한 사용자의 정보를 view-main에 동적으로 표시하는 함수
- * @param {Object} member - 로그인한 사용자 객체
- */
-function displayMemberInfo(member) {
-    // 개인 정보
-    if (memberNameElem) memberNameElem.textContent = member.name;
-    if (memberIdElem) memberIdElem.textContent = member.id;
-    if (memberContactElem) memberContactElem.textContent = member.contact;
-    if (memberEmailElem) memberEmailElem.textContent = member.email;
-
-    // 등록 현황
-    if (expireDateDisplayElem) {
-        expireDateDisplayElem.textContent = member.membershipExpireDate.replace(/-/g, '. '); // YYYY-MM-DD -> YYYY. MM. DD.
+        showLogin();
     }
 
-    if (daysRemainingTextElem) {
-        const today = new Date();
-        // 시간을 00:00:00으로 맞춰서 날짜만 비교하도록 설정
-        today.setHours(0, 0, 0, 0);
+    // --- Functions ---
+
+    function showLogin() {
+        viewLogin.classList.add('active');
+        viewMain.classList.remove('active');
+        viewPayment.classList.remove('active');
+    }
+
+    function showMain() {
+        viewLogin.classList.remove('active');
+        viewMain.classList.add('active');
+        viewPayment.classList.remove('active');
+        renderDashboard();
+    }
+
+    function showPayment() {
+        viewMain.classList.remove('active');
+        viewPayment.classList.add('active');
+        updatePaymentOptions(); // Reset to default
+    }
+
+    function renderDashboard() {
+        const data = getGymData();
         
-        const expireDate = new Date(member.membershipExpireDate);
-        expireDate.setHours(0, 0, 0, 0);
-
-        // 날짜 차이 계산
-        const diffTime = expireDate.getTime() - today.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // 밀리초를 일수로 변환
-        
-        // 부모 요소(배경 컨테이너) 가져오기
-        const container = daysRemainingTextElem.parentElement;
-
-        if (diffDays < 0) {
-            daysRemainingTextElem.textContent = "회원권이 만료되었습니다.";
-            daysRemainingTextElem.style.color = "#dc2626"; // 빨간색 텍스트
-            if (container) container.style.backgroundColor = "#fef2f2"; // 연한 빨간색 배경
-        } else {
-            daysRemainingTextElem.textContent = `회원권이 ${diffDays}일 남았습니다.`;
-            daysRemainingTextElem.style.color = "#2563eb"; // 기본 파란색 텍스트
-            if (container) container.style.backgroundColor = "#eff6ff"; // 연한 파란색 배경
-        }
-    }
-
-    // 사물함 정보
-    if (lockerNumberDisplayElem) {
-        lockerNumberDisplayElem.textContent = `${member.lockerNumber}번`;
-    }
-
-    if (member.lockerPassword) {
-        const passwordDigits = member.lockerPassword.split('');
-        if (lockerPasswordDigit1Elem) lockerPasswordDigit1Elem.textContent = passwordDigits[0] || '';
-        if (lockerPasswordDigit2Elem) lockerPasswordDigit2Elem.textContent = passwordDigits[1] || '';
-        if (lockerPasswordDigit3Elem) lockerPasswordDigit3Elem.textContent = passwordDigits[2] || '';
-        if (lockerPasswordDigit4Elem) lockerPasswordDigit4Elem.textContent = passwordDigits[3] || '';
-    }
-}
-
-/**
- * 결제 금액 계산 함수
- */
-function calculateTotal() {
-    const months = parseInt(monthSelect.value);
-    
-    // 1. 기본 금액 계산 (1개월 = 10,000원)
-    const basePrice = months * 10000;
-    
-    // 2. 기간 할인 계산 (3개월 단위로 1,000원 할인)
-    const discountCount = Math.floor(months / 3);
-    const discountPrice = discountCount * 1000;
-    
-    // 3. 중간 합계 (쿠폰 적용 전)
-    let subTotal = basePrice - discountPrice;
-    
-    // 4. 쿠폰 할인 계산 (중간 합계에 대해 % 할인 합산)
-    // 여러 쿠폰의 할인율을 합산 (최대 100% 제한)
-    let totalCouponRate = appliedCoupons.reduce((sum, coupon) => sum + coupon.mon, 0);
-    if (totalCouponRate > 100) totalCouponRate = 100;
-
-    const couponDiscountPrice = Math.floor(subTotal * (totalCouponRate / 100));
-    
-    // 5. 최종 금액
-    const totalPrice = subTotal - couponDiscountPrice;
-    
-    // UI 업데이트
-    baseMonthDisplay.textContent = months;
-    basePriceDisplay.textContent = basePrice.toLocaleString() + "원";
-    
-    if (discountCount > 0) {
-        discountRow.style.display = "flex";
-        discountCountElem.textContent = `${discountCount}회 (${discountCount * 3}개월)`;
-        discountAmountElem.textContent = "-" + discountPrice.toLocaleString() + "원";
-    } else {
-        discountRow.style.display = "none";
-    }
-    
-    if (totalCouponRate > 0) {
-        couponRow.style.display = "flex";
-        couponRateDisplay.textContent = totalCouponRate; // 합산된 할인율 표시
-        couponAmountElem.textContent = "-" + couponDiscountPrice.toLocaleString() + "원";
-    } else {
-        couponRow.style.display = "none";
-    }
-    
-    totalPriceDisplay.textContent = totalPrice.toLocaleString() + "원";
-}
-
-/**
- * 적용된 쿠폰을 UI에 렌더링하는 함수
- */
-function renderAppliedCoupons() {
-    // 기존 내용 초기화
-    appliedCouponsContainer.innerHTML = "";
-
-    if (appliedCoupons.length === 0) {
-        appliedCouponsContainer.style.display = "none";
-        return;
-    }
-
-    appliedCouponsContainer.style.display = "flex";
-    
-    appliedCoupons.forEach((coupon, index) => {
-        const tag = document.createElement("div");
-        tag.className = "mypage-coupon-tag";
-        tag.innerHTML = `
-            <span>${coupon.code} (-${coupon.mon}%)</span>
-            <button type="button" class="remove-coupon-btn" data-index="${index}">&times;</button>
-        `;
-        appliedCouponsContainer.appendChild(tag);
-    });
-
-    // 삭제 버튼 이벤트 리스너 추가
-    const removeBtns = appliedCouponsContainer.querySelectorAll(".remove-coupon-btn");
-    removeBtns.forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            const index = parseInt(e.target.getAttribute("data-index"));
-            removeCoupon(index);
-        });
-    });
-}
-
-/**
- * 쿠폰 삭제 함수
- * @param {number} index - 삭제할 쿠폰의 인덱스
- */
-function removeCoupon(index) {
-    appliedCoupons.splice(index, 1);
-    renderAppliedCoupons();
-    calculateTotal();
-}
-
-
-/**
- * 결제 폼 초기화 함수
- */
-function resetPaymentForm() {
-    monthSelect.value = "1";
-    couponInput.value = "";
-    appliedCoupons = []; // 쿠폰 목록 초기화
-    renderAppliedCoupons();
-    calculateTotal();
-}
-
-
-/**
- * 결제 대기 상태 확인 및 처리 함수
- */
-function checkPendingPayment() {
-    if (sessionStorage.getItem('pendingPayment') === 'true') {
-        showView('payment');
-        
-        const couponCode = sessionStorage.getItem('pendingCoupon');
-        if (couponCode) {
-            const couponInput = document.getElementById('coupon-input');
-            if (couponInput) {
-                couponInput.value = couponCode;
-                
-                // 쿠폰 적용 버튼 클릭 트리거
-                const applyBtn = document.getElementById('apply-coupon-btn');
-                if (applyBtn) {
-                    applyBtn.click();
-                }
-            }
-        }
-        
-        // 처리 후 플래그 삭제
-        sessionStorage.removeItem('pendingPayment');
-        sessionStorage.removeItem('pendingCoupon');
-    }
-}
-
-// 페이지 로드 시 실행될 초기화 함수
-window.initMyPage = function() {
-    // Locker Modal Events (Using LockerManager Module)
-    const editLockerBtn = document.getElementById("edit-locker-btn");
-    const closeLockerModalBtn = document.getElementById("close-locker-modal-btn");
-    const cancelLockerBtn = document.getElementById("cancel-locker-btn");
-    const saveLockerBtn = document.getElementById("save-locker-btn");
-
-    if (editLockerBtn) {
-        editLockerBtn.addEventListener("click", () => {
-            if (window.LockerManager) {
-                window.LockerManager.openModal(loggedInUser, MEMBERS);
-            } else {
-                console.error("LockerManager module not loaded");
-            }
-        });
-    }
-    
-    if (closeLockerModalBtn) {
-        closeLockerModalBtn.addEventListener("click", () => {
-            if (window.LockerManager) window.LockerManager.closeModal();
-        });
-    }
-    
-    if (cancelLockerBtn) {
-        cancelLockerBtn.addEventListener("click", () => {
-            if (window.LockerManager) window.LockerManager.closeModal();
-        });
-    }
-    
-    if (saveLockerBtn) {
-        saveLockerBtn.addEventListener("click", () => {
-            if (window.LockerManager) {
-                window.LockerManager.saveInfo(loggedInUser, MEMBERS, (updatedUser) => {
-                    displayMemberInfo(updatedUser);
-                });
-            }
-        });
-    }
-
-    // Lucide Icons 초기화
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
-
-    // --- DOM 요소 최신화 (Global Variables Update) ---
-    viewLogin = document.getElementById("view-login");
-    viewMain = document.getElementById("view-main");
-    viewPayment = document.getElementById("view-payment");
-    loginForm = document.getElementById("login-form");
-    userIdInput = document.getElementById("userId");
-    passwordInput = document.getElementById("password");
-    loginButton = document.getElementById("login-button");
-    logoutBtn = document.getElementById("logout-btn");
-    testAccountFillBtn = document.getElementById("test-account-fill-btn");
-    cancelPaymentBtn = document.getElementById("cancel-payment-btn");
-
-    memberNameElem = document.getElementById("member-name");
-    memberIdElem = document.getElementById("member-id");
-    memberContactElem = document.getElementById("member-contact");
-    memberEmailElem = document.getElementById("member-email");
-
-    expireDateDisplayElem = document.getElementById("expire-date-display");
-    daysRemainingTextElem = document.getElementById("days-remaining-text");
-
-    lockerNumberDisplayElem = document.getElementById("locker-number-display");
-    lockerPasswordDigit1Elem = document.getElementById("locker-password-digit-1");
-    lockerPasswordDigit2Elem = document.getElementById("locker-password-digit-2");
-    lockerPasswordDigit3Elem = document.getElementById("locker-password-digit-3");
-    lockerPasswordDigit4Elem = document.getElementById("locker-password-digit-4");
-
-    monthSelect = document.getElementById("month-select");
-    baseMonthDisplay = document.getElementById("base-month-display");
-    basePriceDisplay = document.getElementById("base-price-display");
-    discountRow = document.getElementById("discount-row");
-    discountCountElem = document.getElementById("discount-count");
-    discountAmountElem = document.getElementById("discount-amount");
-    couponRow = document.getElementById("coupon-row");
-    couponRateDisplay = document.getElementById("coupon-rate-display");
-    couponAmountElem = document.getElementById("coupon-amount");
-    totalPriceDisplay = document.getElementById("total-price-display");
-    couponInput = document.getElementById("coupon-input");
-    applyCouponBtn = document.getElementById("apply-coupon-btn");
-    appliedCouponsContainer = document.getElementById("applied-coupons-container");
-    confirmPaymentBtn = document.getElementById("confirm-payment-btn");
-    // ---------------------------------------------------
-
-    // 로그인 버튼 클릭 이벤트
-    if (loginButton) {
-        // Clone to remove old listeners
-        const newLoginBtn = loginButton.cloneNode(true);
-        loginButton.parentNode.replaceChild(newLoginBtn, loginButton);
-        loginButton = newLoginBtn; // Update global ref
-
-        loginButton.addEventListener("click", (e) => {
-            e.preventDefault(); 
-            const id = userIdInput.value;
-            const pw = passwordInput.value;
-            login(id, pw);
-        });
-    }
-
-    // 로그아웃 버튼 클릭 이벤트
-    if (logoutBtn) {
-        const newLogoutBtn = logoutBtn.cloneNode(true);
-        logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
-        logoutBtn = newLogoutBtn;
-
-        logoutBtn.addEventListener("click", logout);
-    }
-
-    // 테스트 계정 자동 채우기 버튼 이벤트
-    if (testAccountFillBtn) {
-        const newTestBtn = testAccountFillBtn.cloneNode(true);
-        testAccountFillBtn.parentNode.replaceChild(newTestBtn, testAccountFillBtn);
-        testAccountFillBtn = newTestBtn;
-
-        testAccountFillBtn.addEventListener("click", () => {
-            userIdInput.value = "user123";
-            passwordInput.value = "1234";
-        });
-    }
-
-    // 결제 화면 이동 버튼 이벤트
-    const toPaymentBtns = document.querySelectorAll(".to-payment-btn");
-    toPaymentBtns.forEach(btn => {
-        // Note: Cloning node removes listeners but for class-based selection 
-        // we are iterating. Since these elements are newly created by router,
-        // we don't strictly need to remove old listeners (they are gone with old DOM).
-        // Just adding new ones is fine.
-        btn.addEventListener("click", () => {
-            showView("payment");
-        });
-    });
-
-    // 결제 취소 버튼 이벤트
-    if (cancelPaymentBtn) {
-        const newCancelBtn = cancelPaymentBtn.cloneNode(true);
-        cancelPaymentBtn.parentNode.replaceChild(newCancelBtn, cancelPaymentBtn);
-        cancelPaymentBtn = newCancelBtn;
-
-        cancelPaymentBtn.addEventListener("click", () => {
-            showView("main");
-        });
-    }
-
-    // 개월 수 변경 이벤트
-    if (monthSelect) {
-        const newMonthSelect = monthSelect.cloneNode(true);
-        monthSelect.parentNode.replaceChild(newMonthSelect, monthSelect);
-        monthSelect = newMonthSelect;
-
-        monthSelect.addEventListener("change", calculateTotal);
-    }
-
-    // 쿠폰 적용 버튼 이벤트
-    if (applyCouponBtn) {
-        const newApplyBtn = applyCouponBtn.cloneNode(true);
-        applyCouponBtn.parentNode.replaceChild(newApplyBtn, applyCouponBtn);
-        applyCouponBtn = newApplyBtn;
-
-        applyCouponBtn.addEventListener("click", () => {
-            const code = couponInput.value.trim();
-            if (!code) {
-                alert("쿠폰 코드를 입력해주세요.");
-                return;
-            }
-
-            // 이미 적용된 쿠폰인지 확인
-            if (appliedCoupons.some(c => c.code === code)) {
-                alert("이미 적용된 쿠폰입니다.");
-                couponInput.value = "";
-                return;
-            }
-
-            const coupon = COUPONS.find(c => c.code === code);
-            
-            if (coupon) {
-                appliedCoupons.push(coupon);
-                renderAppliedCoupons();
-                calculateTotal();
-                couponInput.value = ""; 
-            } else {
-                alert("유효하지 않은 쿠폰입니다.");
-            }
-        });
-    }
-
-    // 결제 완료 버튼 이벤트
-    if (confirmPaymentBtn) {
-        const newConfirmBtn = confirmPaymentBtn.cloneNode(true);
-        confirmPaymentBtn.parentNode.replaceChild(newConfirmBtn, confirmPaymentBtn);
-        confirmPaymentBtn = newConfirmBtn;
-
-        newConfirmBtn.addEventListener("click", () => {
-            if (!loggedInUser) return;
-            
-            const monthsToAdd = parseInt(monthSelect.value);
-            
-            // 현재 만료일과 오늘 날짜 비교
-            let currentExpireDate = new Date(loggedInUser.membershipExpireDate);
+        // 1. Membership
+        const expireEl = document.getElementById('expire-date-display');
+        if (data.membershipExpire) {
             const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            currentExpireDate.setHours(0, 0, 0, 0);
-
-            // 만료되었으면 오늘부터 시작, 아니면 기존 만료일부터 연장
-            let newBaseDate = currentExpireDate < today ? today : currentExpireDate;
-            
-            // 개월 수 더하기
-            let newExpireDate = new Date(newBaseDate);
-            newExpireDate.setMonth(newExpireDate.getMonth() + monthsToAdd);
-            
-            // YYYY-MM-DD 형식으로 변환
-            const year = newExpireDate.getFullYear();
-            const month = String(newExpireDate.getMonth() + 1).padStart(2, '0');
-            const day = String(newExpireDate.getDate()).padStart(2, '0');
-            const newExpireDateString = `${year}-${month}-${day}`;
-
-            // 데이터 갱신
-            loggedInUser.membershipExpireDate = newExpireDateString;
-            localStorage.setItem('user', JSON.stringify(loggedInUser)); 
-            
-            // UI 갱신
-            displayMemberInfo(loggedInUser);
-
-            const total = totalPriceDisplay.textContent;
-            alert(`${monthsToAdd}개월 회원권 (${total}) 결제가 완료되었습니다!\n회원권이 ${newExpireDateString}까지 연장되었습니다.`);
-            showView("main");
-        });
-    }
-
-    // 초기 화면 상태 결정: 항상 localStorage를 기준으로 상태 동기화
-    const storedUser = localStorage.getItem('user');
-    loggedInUser = storedUser ? JSON.parse(storedUser) : null;
-    
-    // console.log("Initial State - User:", loggedInUser); // Debug log
-
-    if (loggedInUser) {
-        // 로그인 상태
-        displayMemberInfo(loggedInUser);
-        
-        if (sessionStorage.getItem('pendingPayment') === 'true') {
-            checkPendingPayment();
+            const expire = new Date(data.membershipExpire);
+            if (expire >= today) {
+                expireEl.textContent = `${data.membershipExpire} 까지`;
+                expireEl.style.color = 'var(--toss-blue)';
+            } else {
+                expireEl.textContent = '만료됨';
+                expireEl.style.color = '#F04452';
+            }
         } else {
-            showView('main');
+            expireEl.textContent = '이용권 없음';
+            expireEl.style.color = '#F04452';
         }
-    } else {
-        // 비로그인 상태
-        showView('login');
+
+        // 2. PT Count
+        document.getElementById('pt-count-display').textContent = data.ptCount;
+
+        // 3. Locker Info
+        if (data.lockerNumber) {
+            lockerNumberDisplay.textContent = `${data.lockerNumber}번`;
+            if (data.lockerPassword) {
+                lockerPasswordDigits.forEach((digitEl, index) => {
+                    digitEl.textContent = data.lockerPassword[index] || '-';
+                });
+            } else {
+                lockerPasswordDigits.forEach(digitEl => digitEl.textContent = '-');
+            }
+        } else {
+            lockerNumberDisplay.textContent = '-';
+            lockerPasswordDigits.forEach(digitEl => digitEl.textContent = '-');
+        }
+
+        // 4. Reservations
+        const resListContainer = document.getElementById('reservation-list-container');
+        if (data.reservations.length === 0) {
+            resListContainer.innerHTML = '<p style="color: var(--grey-500); text-align: center; padding: 2rem;">예약된 일정이 없습니다.</p>';
+        } else {
+            resListContainer.innerHTML = '';
+            // Sort by date
+            const sortedRes = data.reservations.sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time));
+            
+            sortedRes.forEach(res => {
+                const item = document.createElement('div');
+                item.className = 'reservation-item';
+                item.innerHTML = `
+                    <div class="reservation-info">
+                        <div class="reservation-date">
+                            <i data-lucide="calendar" style="width: 1rem; height: 1rem; color: var(--toss-blue);"></i>
+                            ${res.date} <span style="color: var(--grey-300);">|</span> ${res.time}
+                        </div>
+                        <div class="reservation-trainer">
+                            <i data-lucide="user" style="width: 0.9rem; height: 0.9rem;"></i>
+                            ${res.trainer} 트레이너
+                        </div>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="cancelReservation(${res.id})" 
+                        style="color: #F04452; border-color: rgba(240, 68, 82, 0.3); background-color: rgba(240, 68, 82, 0.05);">
+                        취소
+                    </button>
+                `;
+                resListContainer.appendChild(item);
+            });
+        }
+        
+        // Load Lucide icons
+        if(window.lucide) lucide.createIcons();
     }
-};
-// End of initMyPage (Do not call it automatically here, let the router handle it)
+
+    // Global scope for inline onclick
+    window.cancelReservation = (id) => {
+        if (!confirm('예약을 취소하시겠습니까?\n(취소 시 횟수가 복구됩니다)')) return; 
+        
+        const data = getGymData();
+        const targetRes = data.reservations.find(r => r.id === id);
+        
+        if (targetRes) {
+            data.reservations = data.reservations.filter(r => r.id !== id);
+            data.ptCount += 1; // Refund ticket
+            saveGymData(data);
+            alert('예약이 취소되었습니다.');
+            renderDashboard();
+        }
+    };
+
+    // --- Payment Logic ---
+    
+    const membershipOptions = [
+        { label: '1개월', value: 1, price: 70000 },
+        { label: '3개월', value: 3, price: 190000 }, // Discounted
+        { label: '6개월', value: 6, price: 360000 },
+        { label: '12개월', value: 12, price: 600000 }
+    ];
+
+    const ptOptions = [
+        { label: '10회', value: 10, price: 600000 }, // 60k per session
+        { label: '20회', value: 20, price: 1100000 }, // 55k per session (Discount)
+        { label: '30회', value: 30, price: 1500000 }  // 50k per session
+    ];
+
+    function updatePaymentOptions() {
+        paymentSelect.innerHTML = '';
+        const options = currentPaymentType === 'membership' ? membershipOptions : ptOptions;
+        paymentSelectLabel.textContent = currentPaymentType === 'membership' ? '이용 기간' : '횟수 선택';
+
+        options.forEach((opt, index) => {
+            const el = document.createElement('option');
+            el.value = index; // Use index to lookup
+            el.textContent = `${opt.label} (${opt.price.toLocaleString()}원)`;
+            paymentSelect.appendChild(el);
+        });
+        calculatePrice();
+    }
+
+    function calculatePrice() {
+        const index = paymentSelect.value;
+        const options = currentPaymentType === 'membership' ? membershipOptions : ptOptions;
+        const selected = options[index];
+
+        if (!selected) return;
+
+        // Fake base price for comparison (showing discount)
+        let basePrice = 0;
+        if (currentPaymentType === 'membership') {
+            basePrice = selected.value * 70000; // Assume 70k base
+        } else {
+            basePrice = selected.value * 70000; // Assume 70k base per PT
+        }
+
+        const finalPrice = selected.price;
+        const discount = basePrice - finalPrice;
+
+        basePriceDisplay.textContent = `${basePrice.toLocaleString()}원`;
+        
+        if (discount > 0) {
+            discountRow.style.display = 'flex';
+            discountAmount.textContent = `-${discount.toLocaleString()}원`;
+        } else {
+            discountRow.style.display = 'none';
+        }
+
+        totalPriceDisplay.textContent = `${finalPrice.toLocaleString()}원`;
+    }
+
+    // --- Event Listeners ---
+
+    loginForm.onsubmit = (e) => {
+        e.preventDefault();
+        const id = document.getElementById('userId').value;
+        localStorage.setItem(userKey, id);
+        
+        // Initialize data if empty
+        if (!localStorage.getItem(dataKey)) {
+            saveGymData({ membershipExpire: null, ptCount: 0, reservations: [] });
+        }
+        showMain();
+    };
+
+    testAccountBtn.onclick = () => {
+        document.getElementById('userId').value = 'user123';
+        document.getElementById('password').value = '1234';
+    };
+
+    logoutBtn.onclick = () => {
+        localStorage.removeItem(userKey);
+        showLogin();
+    };
+
+    toPaymentBtns.forEach(btn => btn.onclick = showPayment);
+    cancelPaymentBtn.onclick = showMain;
+
+    paymentTabs.forEach(tab => {
+        tab.onclick = () => {
+            paymentTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentPaymentType = tab.dataset.type;
+            updatePaymentOptions();
+        };
+    });
+
+    paymentSelect.onchange = calculatePrice;
+
+    confirmPaymentBtn.onclick = () => {
+        const index = paymentSelect.value;
+        const data = getGymData();
+        
+        if (currentPaymentType === 'membership') {
+            const selected = membershipOptions[index];
+            const months = selected.value;
+            
+            // Calculate new expiry
+            let newExpire;
+            const today = new Date();
+            if (data.membershipExpire && new Date(data.membershipExpire) > today) {
+                // Extend
+                newExpire = new Date(data.membershipExpire);
+            } else {
+                // New
+                newExpire = new Date();
+            }
+            newExpire.setMonth(newExpire.getMonth() + months);
+            data.membershipExpire = newExpire.toISOString().split('T')[0];
+            
+            alert(`${selected.label} 회원권이 등록되었습니다.`);
+        } else {
+            const selected = ptOptions[index];
+            data.ptCount += selected.value;
+            alert(`PT ${selected.label}가 충전되었습니다.`);
+        }
+
+        saveGymData(data);
+        showMain();
+    };
+
+    // --- Locker Management Integration ---
+    if (window.LockerManager) {
+        editLockerBtn.onclick = () => {
+            const data = getGymData();
+            // LockerManager expects user object with locker info, and allMembers (mocked for now)
+            const currentUserData = { 
+                id: getCurrentUserId(), 
+                lockerNumber: data.lockerNumber, 
+                lockerPassword: data.lockerPassword 
+            };
+            // For simplicity in this demo, allMembers check only against current user
+            // In a real app, this would query a backend for all occupied lockers
+            LockerManager.openModal(currentUserData, [currentUserData]); 
+        };
+
+        cancelLockerBtn.onclick = LockerManager.closeModal;
+
+        saveLockerBtn.onclick = () => {
+            const data = getGymData();
+            const currentUserData = { 
+                id: getCurrentUserId(), 
+                lockerNumber: data.lockerNumber, 
+                lockerPassword: data.lockerPassword 
+            };
+
+            LockerManager.saveInfo(currentUserData, [currentUserData], (updatedUser) => {
+                // Update local storage gym_data with new locker info
+                data.lockerNumber = updatedUser.lockerNumber;
+                data.lockerPassword = updatedUser.lockerPassword;
+                saveGymData(data);
+                renderDashboard(); // Re-render dashboard to show updated locker info
+            });
+        };
+    } else {
+        console.error('LockerManager not found. Make sure mypage/modules/locker.js is loaded.');
+    }
+}

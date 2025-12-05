@@ -29,7 +29,7 @@ const routes = {
     '/mypage': {
         template: 'mypage/index.html',
         style: 'mypage/style.css',
-        script: 'mypage/script.js',
+        script: ['mypage/modules/locker.js', 'mypage/script.js'],
         init: 'initMyPage'
     },
     '/notice': {

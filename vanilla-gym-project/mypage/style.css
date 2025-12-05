@@ -202,6 +202,55 @@
   font-size: 1.1rem;
 }
 
+/* Reservation List Styles */
+.reservation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reservation-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem;
+  background-color: var(--grey-50);
+  border-radius: 16px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.reservation-item:hover {
+  background-color: var(--white);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-color: var(--toss-blue-light);
+  transform: translateY(-2px);
+}
+
+.reservation-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.reservation-date {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--grey-900);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reservation-trainer {
+  font-size: 0.9rem;
+  color: var(--grey-600);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: 1.5rem;
+}
+
 /* Locker Styles */
 .mypage-locker-password {
   display: flex;
@@ -245,7 +294,30 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* Payment View */
+/* Payment Tabs */
+.payment-tabs {
+    background-color: var(--grey-100);
+    padding: 0.4rem;
+    border-radius: 16px;
+}
+
+.payment-tab {
+    background: transparent;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 12px;
+    font-weight: 700;
+    color: var(--grey-500);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.payment-tab.active {
+    background-color: var(--white);
+    color: var(--toss-blue);
+    box-shadow: var(--shadow-sm);
+}
+
 .mypage-payment-container {
   max-width: 640px;
   margin: 0 auto;
@@ -398,50 +470,73 @@
 
 .locker-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 0.5rem;
-  padding: 1.5rem;
-  border: 1px solid var(--grey-200);
-  border-radius: 16px;
-  background-color: var(--grey-50);
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 0.75rem;
+  padding: 2rem;
+  border: 1px solid var(--grey-100);
+  border-radius: 24px;
+  background-color: var(--white);
 }
 
 .locker-item {
   aspect-ratio: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  background-color: var(--white);
-  border: 1px solid var(--grey-200);
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--grey-700);
+  border-radius: 14px;
+  background-color: var(--grey-50);
+  border: 2px solid transparent;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--grey-600);
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .locker-item:hover:not(.disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transform: translateY(-3px) scale(1.05);
+  background-color: var(--white);
   border-color: var(--toss-blue);
   color: var(--toss-blue);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  z-index: 1;
 }
 
 .locker-item.selected {
   background-color: var(--toss-blue);
   color: var(--white);
   border-color: var(--toss-blue);
-  box-shadow: 0 4px 12px rgba(0, 100, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+  transform: scale(1.1);
+  z-index: 2;
 }
 
 .locker-item.disabled {
   background-color: var(--grey-100);
-  color: var(--grey-400);
-  border-color: transparent;
-  box-shadow: none;
+  color: var(--grey-300);
   cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Dot indicator */
+.locker-item::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background-color: var(--grey-300);
+  border-radius: 50%;
+  margin-top: 4px;
+  transition: background-color 0.2s;
+}
+
+.locker-item.selected::after {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.locker-item.disabled::after {
+  display: none;
 }
 
 .modal-footer {
@@ -453,6 +548,11 @@
 .modal-footer button {
   height: 52px;
   font-size: 1rem;
+}
+
+.modal-input-group-horizontal {
+  display: flex;
+  gap: 2rem;
 }
 
 /* Coupon Tags */

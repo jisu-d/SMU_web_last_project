@@ -1,4 +1,43 @@
 function initReservation() {
+    // --- State Management (Local Storage) ---
+    const userKey = 'gym_user';
+    const dataKey = 'gym_data';
+
+    // Helper to get data
+    function getGymData() {
+        const defaultData = {
+            membershipExpire: null, 
+            ptCount: 0,
+            reservations: [] 
+        };
+        const stored = localStorage.getItem(dataKey);
+        return stored ? JSON.parse(stored) : defaultData;
+    }
+
+    function saveGymData(data) {
+        localStorage.setItem(dataKey, JSON.stringify(data));
+    }
+
+    // --- Access Control ---
+    const currentUser = localStorage.getItem(userKey);
+    if (!currentUser) {
+        alert('로그인이 필요한 서비스입니다.');
+        window.location.hash = '#/mypage'; // Redirect to login
+        return; // Stop initialization
+    }
+
+    const currentData = getGymData();
+    if (currentData.ptCount <= 0) {
+        alert('PT 이용권이 없습니다.\n이용권 구매 페이지로 이동합니다.');
+        // Force MyPage to show payment view (need a way to signal this)
+        // Simple hack: set a temp flag or just route. 
+        // Since router reloads script, we can't pass params easily without URL search params support in router.
+        // We will rely on user navigating or just alert.
+        // Better: Since we are SPA, just route to mypage. 
+        window.location.hash = '#/mypage';
+        return; 
+    }
+
     // --- Data ---
     const trainers = [
         { id: 1, name: '엄희수', role: '소프트웨어', img: 'img/1.png' },
@@ -18,7 +57,7 @@ function initReservation() {
         selectedTrainer: null,
         selectedDate: null,
         selectedTime: null,
-        viewMonthIndex: 0 // 0: Current Month, 1: Next Month, 2: Month after next
+        viewMonthIndex: 0
     };
 
     // --- DOM Elements ---
@@ -36,7 +75,6 @@ function initReservation() {
 
     // --- Render Functions ---
 
-    // 1. Render Trainers
     function renderTrainers() {
         trainerListEl.innerHTML = '';
         trainers.forEach(trainer => {
@@ -54,7 +92,6 @@ function initReservation() {
         });
     }
 
-    // 2. Render Month Tabs (Current + 2 Months)
     function renderMonthTabs() {
         monthTabsEl.innerHTML = '';
         const today = new Date();
@@ -68,47 +105,38 @@ function initReservation() {
             tab.textContent = `${monthNum}월`;
             tab.onclick = () => {
                 state.viewMonthIndex = i;
-                renderMonthTabs(); // Update active state
-                renderDates(); // Update date list
+                renderMonthTabs();
+                renderDates();
             };
             monthTabsEl.appendChild(tab);
         }
     }
 
-    // 3. Render Dates for Selected Month
     function renderDates() {
         dateListEl.innerHTML = '';
         const today = new Date();
         const days = ['일', '월', '화', '수', '목', '금', '토'];
 
-        // Determine start and end date for the view
         let startDate = new Date();
         if (state.viewMonthIndex === 0) {
-            // Current Month: Start from Today
             startDate = today;
         } else {
-            // Future Month: Start from 1st
             startDate = new Date(today.getFullYear(), today.getMonth() + state.viewMonthIndex, 1);
         }
 
-        // End date is the last day of the target month
         const targetMonth = new Date(today.getFullYear(), today.getMonth() + state.viewMonthIndex, 1);
         const lastDay = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 0).getDate();
         
-        // Loop from start date to end of month
-        let currentDay = startDate.getDate();
-        // Correctly handle month rollover logic if startDate is in the middle of month
-        // Actually simple loop:
-        
         const year = startDate.getFullYear();
-        const month = startDate.getMonth(); // 0-based
+        const month = startDate.getMonth();
+
+        let currentDay = startDate.getDate();
 
         for (let d = currentDay; d <= lastDay; d++) {
             const dateObj = new Date(year, month, d);
             const dayName = days[dateObj.getDay()];
             const dateNum = d;
             
-            // Format YYYY-MM-DD
             const mStr = String(month + 1).padStart(2, '0');
             const dStr = String(d).padStart(2, '0');
             const fullDate = `${year}-${mStr}-${dStr}`;
@@ -124,16 +152,33 @@ function initReservation() {
         }
     }
 
-    // 4. Render Time Slots
     function renderTimes() {
         timeListEl.innerHTML = '';
         if (!state.selectedTrainer || !state.selectedDate) return;
 
+        // Check Real Reservations from LocalStorage
+        const data = getGymData();
+        // Filter reservations for this trainer and date
+        const bookedTimes = data.reservations
+            .filter(r => r.trainer === state.selectedTrainer.name && r.date === state.selectedDate)
+            .map(r => r.time);
+
+        // Also keep pseudo-random for demo filler (optional, remove if you want clean slate)
+        // Let's use ONLY real data + simple random for 'other users' simulation
+        // Simulation: Booked if hash matches AND not me. 
+        // For simplified logic: let's trust localStorage as the source of truth for 'My' bookings
+        // and generate some random 'Others' bookings.
+        
         const seed = state.selectedTrainer.id + state.selectedDate.replace(/-/g, '');
         let rng = parseInt(seed.substring(seed.length - 3)) || 123;
 
         timeSlots.forEach((time, index) => {
-            const isBooked = ((rng + index * 7) % 10) < 3;
+            // 1. Check random 'other user' booking
+            let isBooked = ((rng + index * 7) % 10) < 2; // 20% chance occupied by others
+            
+            // 2. Check MY real booking
+            if (bookedTimes.includes(time)) isBooked = true;
+
             const slot = document.createElement('div');
             slot.className = `time-slot ${isBooked ? 'booked' : ''} ${state.selectedTime === time ? 'selected' : ''}`;
             slot.textContent = time;
@@ -149,12 +194,11 @@ function initReservation() {
 
     function selectTrainer(trainer) {
         state.selectedTrainer = trainer;
-        // Keep dates but reset time
         state.selectedDate = null;
         state.selectedTime = null;
         
         renderTrainers();
-        renderMonthTabs(); // Ensure tabs are rendered
+        renderMonthTabs(); 
         renderDates(); 
         
         dateSection.style.opacity = '1';
@@ -199,7 +243,6 @@ function initReservation() {
             summaryText.innerHTML = `<span style="color:var(--toss-blue)">${selectedTrainer.name}</span>님과 <span style="color:var(--toss-blue)">${selectedTime}</span>에 운동해요`;
             confirmBtn.disabled = false;
         } else if (selectedTrainer && selectedDate) {
-            // Parse date to show pretty string e.g. "12월 25일"
             const [y, m, d] = selectedDate.split('-');
             summaryText.innerHTML = `<span style="color:var(--toss-blue)">${m}월 ${d}일</span> 시간을 선택해주세요`;
             confirmBtn.disabled = true;
@@ -220,10 +263,43 @@ function initReservation() {
     // --- Event Listeners ---
     confirmBtn.onclick = () => {
         if (confirmBtn.disabled) return;
+
+        // Double Check Ticket Count
+        const data = getGymData();
+        if (data.ptCount <= 0) {
+            alert('PT 이용권이 부족합니다.');
+            return;
+        }
+
+        // Double Check Duplicate (Client side race condition possible but ok for local)
+        const isDuplicate = data.reservations.some(r => 
+            r.trainer === state.selectedTrainer.name && 
+            r.date === state.selectedDate && 
+            r.time === state.selectedTime
+        );
+
+        if (isDuplicate) {
+            alert('이미 예약된 시간입니다.');
+            renderTimes(); // Refresh
+            return;
+        }
         
+        // Process Booking
+        data.ptCount -= 1;
+        data.reservations.push({
+            id: Date.now(),
+            trainer: state.selectedTrainer.name,
+            date: state.selectedDate,
+            time: state.selectedTime,
+            createdAt: new Date().toISOString()
+        });
+        saveGymData(data);
+        
+        // Fill Modal Data
         document.getElementById('modal-trainer').textContent = state.selectedTrainer.name;
         document.getElementById('modal-datetime').textContent = `${state.selectedDate} ${state.selectedTime}`;
         
+        // Show Modal
         const modal = document.getElementById('res-modal');
         modal.style.display = 'flex';
         
