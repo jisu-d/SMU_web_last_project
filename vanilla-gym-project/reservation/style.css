@@ -117,68 +117,106 @@
     box-shadow: 0 4px 10px rgba(0, 100, 255, 0.3);
 }
 
-/* Date Picker */
+/* Date Picker (Calendar Grid) */
 .res-date-picker {
-    overflow-x: auto;
-    margin: 0 -1.5rem;
-    padding: 0 1.5rem 0.5rem;
-    /* scrollbar-width: none; /* Firefox */
-    /* -ms-overflow-style: none;  /* IE and Edge */
-    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+    width: 90%;
+    margin: 0 auto;
+    padding: 0 0.5rem;
 }
 
-.res-date-picker::-webkit-scrollbar {
-    /* display: none; /* Hide scrollbar in Webkit browsers */
+.weekday-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
 }
 
-.date-scroll {
-    display: flex;
-    gap: 0.8rem;
-    width: max-content;
+.weekday-cell {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--grey-500);
+    padding: 0.5rem 0;
+}
+
+.weekday-cell.sunday {
+    color: #F04452; /* Red for Sunday header */
+}
+
+.weekday-cell.saturday {
+    color: var(--blue-600); /* Blue for Saturday header */
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    /* Fixed min-height to prevent layout shift (6 rows * 160px + 5 gaps * 0.5rem = 960 + 40 = 1000px) */
+    /* min-height: 1000px;  */
 }
 
 .date-card {
-    min-width: 70px;
-    height: 90px;
-    background: var(--grey-50);
-    border-radius: 16px;
+    height: 125px; /* Clearly vertical rectangular shape */
+    padding: 0.5rem;
+    background: var(--white);
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--grey-400);
-    border: 1px solid transparent;
+    color: var(--grey-900);
+    border: 1px solid var(--grey-200);
     transition: all 0.2s;
 }
 
-.date-card:hover {
-    background: var(--grey-100);
-    color: var(--grey-600);
+.date-card:hover:not(.disabled):not(.selected) { /* Added :not(.selected) */
+    background: var(--grey-50);
+    border-color: var(--toss-blue);
+    color: var(--toss-blue);
 }
 
 .date-card.disabled {
     pointer-events: none;
-    opacity: 0.4;
-    filter: grayscale(100%);
-    cursor: not-allowed;
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--grey-300);
+}
+
+/* Empty cells for padding start of month */
+.date-card.empty {
+    background: transparent;
+    border: none;
+    pointer-events: none;
+    cursor: default;
 }
 
 .date-card.selected {
     background: var(--toss-blue);
     color: var(--white);
+    border-color: var(--toss-blue);
     box-shadow: 0 4px 12px rgba(0, 100, 255, 0.3);
 }
 
-.date-day {
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 0.3rem;
+.date-card.sunday {
+    color: #F04452; /* Red text for Sundays */
+}
+
+.date-card.selected.sunday {
+    color: var(--white); /* White text if selected, even if Sunday */
+}
+
+.date-card.saturday {
+    color: var(--blue-600); /* Blue text for Saturdays */
+}
+
+.date-card.selected.saturday {
+    color: var(--white); /* White text if selected, even if Saturday */
 }
 
 .date-num {
-    font-size: 1.4rem;
-    font-weight: 800;
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 /* Time Grid */

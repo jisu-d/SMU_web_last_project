@@ -22,7 +22,7 @@ function initReservation() {
     const currentUser = localStorage.getItem(userKey);
     if (!currentUser) {
         alert('로그인이 필요한 서비스입니다.');
-        window.location.hash = '#/mypage'; // Redirect to login
+        // window.location.hash = '#/mypage'; // Redirect to login
         return; // Stop initialization
     }
 
@@ -34,11 +34,90 @@ function initReservation() {
         // Since router reloads script, we can't pass params easily without URL search params support in router.
         // We will rely on user navigating or just alert.
         // Better: Since we are SPA, just route to mypage. 
-        window.location.hash = '#/mypage';
+        // window.location.hash = '#/mypage';
         return; 
     }
 
     // --- Data ---
+    // Hierarchical Schedule Data: Weekly Patterns + Exceptions
+    const trainerSchedules = {
+        // 1. 엄희수 (성실형: 주 6일, 아침~저녁)
+        1: {
+            weekly: {
+                1: { start: '06:00', end: '15:00', break: ['12:00'] }, // 월
+                2: { start: '06:00', end: '15:00', break: ['12:00'] }, // 화
+                3: { start: '06:00', end: '15:00', break: ['12:00'] }, // 수
+                4: { start: '06:00', end: '15:00', break: ['12:00'] }, // 목
+                5: { start: '06:00', end: '15:00', break: ['12:00'] }, // 금
+                6: { start: '09:00', end: '13:00', break: [] },        // 토
+                0: null // 일 (휴무)
+            },
+            exceptions: {
+                '2024-12-25': null, // 크리스마스 휴무
+                '2024-12-31': { start: '09:00', end: '12:00', break: [] } // 단축 근무
+            }
+        },
+        // 2. 강건우 (직장인 타겟: 오후~밤)
+        2: {
+            weekly: {
+                1: { start: '13:00', end: '22:00', break: ['17:00'] },
+                2: { start: '13:00', end: '22:00', break: ['17:00'] },
+                3: { start: '13:00', end: '22:00', break: ['17:00'] },
+                4: { start: '13:00', end: '22:00', break: ['17:00'] },
+                5: { start: '13:00', end: '22:00', break: ['17:00'] },
+                6: null, // 토 (휴무)
+                0: { start: '10:00', end: '18:00', break: ['13:00'] } // 일 (주말 근무)
+            },
+            exceptions: {}
+        },
+        // 3. 최영우 (재활: 평일 집중)
+        3: {
+            weekly: {
+                1: { start: '09:00', end: '18:00', break: ['13:00'] },
+                2: { start: '09:00', end: '18:00', break: ['13:00'] },
+                3: { start: '09:00', end: '18:00', break: ['13:00'] },
+                4: { start: '09:00', end: '18:00', break: ['13:00'] },
+                5: { start: '09:00', end: '18:00', break: ['13:00'] },
+                6: { start: '10:00', end: '14:00', break: [] },
+                0: null
+            },
+            exceptions: {
+                '2024-12-25': null
+            }
+        },
+        // 4. 임지수 (파트타임)
+        4: {
+            weekly: {
+                1: { start: '18:00', end: '22:00', break: [] },
+                2: null,
+                3: { start: '18:00', end: '22:00', break: [] },
+                4: null,
+                5: { start: '18:00', end: '22:00', break: [] },
+                6: { start: '10:00', end: '18:00', break: ['13:00'] },
+                0: { start: '10:00', end: '18:00', break: ['13:00'] }
+            },
+            exceptions: {}
+        }
+    };
+
+    // [NEW] Hardcoded booked slots for demonstration/manual editing
+    const hardcodedBookedSlots = {
+        '1': { // 엄희수 트레이너
+            '2024-12-09': ['10:00', '14:00'], // 예시: 12월 9일 10시, 14시 예약됨
+            '2024-12-10': ['09:00', '11:00']
+        },
+        '2': { // 강건우 트레이너
+            '2024-12-15': ['13:00'],
+            '2024-12-16': ['17:00', '18:00']
+        },
+        '3': { // 최영우 트레이너
+            '2024-12-05': ['15:00']
+        },
+        '4': { // 임지수 트레이너
+            '2024-12-06': ['10:00']
+        }
+    };
+
     const trainers = [
         { id: 1, name: '엄희수', role: '소프트웨어', img: 'img/1.png' },
         { id: 2, name: '강건우', role: '다이어트', img: 'img/2.png' },
@@ -46,11 +125,41 @@ function initReservation() {
         { id: 4, name: '임지수', role: '소프트웨어', img: 'img/4.png' }
     ];
 
-    const timeSlots = [
-        '09:00', '10:00', '11:00', '13:00', 
-        '14:00', '15:00', '16:00', '17:00', 
-        '18:00', '19:00', '20:00', '21:00'
-    ];
+    // Helper: Generate slots based on schedule
+    function getAvailableSlots(trainerId, dateStr) {
+        const schedule = trainerSchedules[trainerId];
+        if (!schedule) return [];
+
+        const dateObj = new Date(dateStr);
+        const dayOfWeek = dateObj.getDay(); // 0:Sun ~ 6:Sat
+
+        // 1. Check Exceptions first
+        let dayConfig = null;
+        if (schedule.exceptions && schedule.exceptions[dateStr] !== undefined) {
+            dayConfig = schedule.exceptions[dateStr];
+        } else {
+            // 2. Fallback to Weekly
+            dayConfig = schedule.weekly[dayOfWeek];
+        }
+
+        if (!dayConfig) return []; // Off day
+
+        // Generate slots from start to end
+        const slots = [];
+        let current = parseInt(dayConfig.start.split(':')[0]);
+        const end = parseInt(dayConfig.end.split(':')[0]);
+
+        while (current < end) {
+            const timeStr = String(current).padStart(2, '0') + ':00';
+            // Exclude break times
+            if (!dayConfig.break.includes(timeStr)) {
+                slots.push(timeStr);
+            }
+            current++;
+        }
+
+        return slots;
+    }
 
     // --- State ---
     let state = {
@@ -76,19 +185,32 @@ function initReservation() {
     // --- Render Functions ---
 
     function renderTrainers() {
-        trainerListEl.innerHTML = '';
-        trainers.forEach(trainer => {
-            const card = document.createElement('div');
-            card.className = `res-trainer-card ${state.selectedTrainer?.id === trainer.id ? 'selected' : ''}`;
-            card.innerHTML = `
-                <img src="${trainer.img}" alt="${trainer.name}" class="res-trainer-img">
-                <div class="res-trainer-info">
-                    <div class="res-trainer-spec">${trainer.role}</div>
-                    <div class="res-trainer-name">${trainer.name}</div>
-                </div>
-            `;
-            card.onclick = () => selectTrainer(trainer);
-            trainerListEl.appendChild(card);
+        // If list is empty, build it first
+        if (trainerListEl.children.length === 0) {
+            trainers.forEach(trainer => {
+                const card = document.createElement('div');
+                card.className = 'res-trainer-card';
+                card.dataset.id = trainer.id; // Store ID for reference
+                card.innerHTML = `
+                    <img src="${trainer.img}" alt="${trainer.name}" class="res-trainer-img">
+                    <div class="res-trainer-info">
+                        <div class="res-trainer-spec">${trainer.role}</div>
+                        <div class="res-trainer-name">${trainer.name}</div>
+                    </div>
+                `;
+                card.onclick = () => selectTrainer(trainer);
+                trainerListEl.appendChild(card);
+            });
+        }
+
+        // Just update classes to avoid re-rendering DOM (prevents image blink)
+        Array.from(trainerListEl.children).forEach(card => {
+            const cardId = parseInt(card.dataset.id);
+            if (state.selectedTrainer && state.selectedTrainer.id === cardId) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
         });
     }
 
@@ -115,43 +237,78 @@ function initReservation() {
     function renderDates() {
         dateListEl.innerHTML = '';
         const today = new Date();
-        const days = ['일', '월', '화', '수', '목', '금', '토'];
-
+        
+        // Calculate Start Date for the selected view month
         let startDate = new Date();
         if (state.viewMonthIndex === 0) {
-            startDate = today;
+            // For current month, we still want to show the full calendar grid starting from day 1,
+            // even if today is the 15th.
+            startDate = new Date(today.getFullYear(), today.getMonth(), 1);
         } else {
             startDate = new Date(today.getFullYear(), today.getMonth() + state.viewMonthIndex, 1);
         }
 
-        const targetMonth = new Date(today.getFullYear(), today.getMonth() + state.viewMonthIndex, 1);
-        const lastDay = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 0).getDate();
-        
         const year = startDate.getFullYear();
-        const month = startDate.getMonth();
+        const month = startDate.getMonth(); // 0-indexed
 
-        let currentDay = startDate.getDate();
+        // First day of the month (0=Sun, 1=Mon, ...)
+        const firstDayObj = new Date(year, month, 1);
+        const startDayOfWeek = firstDayObj.getDay();
 
-        for (let d = currentDay; d <= lastDay; d++) {
+        // Last day of the month
+        const lastDay = new Date(year, month + 1, 0).getDate();
+
+        // 1. Add Empty Slots for days before the 1st
+        for (let i = 0; i < startDayOfWeek; i++) {
+            const emptySlot = document.createElement('div');
+            emptySlot.className = 'date-card empty';
+            dateListEl.appendChild(emptySlot);
+        }
+
+        // 2. Add Date Cards
+        for (let d = 1; d <= lastDay; d++) {
             const dateObj = new Date(year, month, d);
             const dayIdx = dateObj.getDay(); // 0: Sun, 6: Sat
-            const dayName = days[dayIdx];
-            const dateNum = d;
             
             const mStr = String(month + 1).padStart(2, '0');
             const dStr = String(d).padStart(2, '0');
             const fullDate = `${year}-${mStr}-${dStr}`;
 
             const isSunday = (dayIdx === 0);
+            const isSaturday = (dayIdx === 6);
+            
+            // Check if date is in the past relative to REAL today
+            // (Only for the current month view)
+            let isPast = false;
+            if (dateObj < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+                isPast = true;
+            }
+
+            // Check Trainer Availability (Is it a working day?)
+            let isWorkingDay = true;
+            if (state.selectedTrainer) {
+                const slots = getAvailableSlots(state.selectedTrainer.id, fullDate);
+                if (slots.length === 0) isWorkingDay = false;
+            }
 
             const card = document.createElement('div');
-            card.className = `date-card ${state.selectedDate === fullDate ? 'selected' : ''} ${isSunday ? 'disabled' : ''}`;
-            card.innerHTML = `
-                <span class="date-day">${dayName}</span>
-                <span class="date-num">${dateNum}</span>
-            `;
+            // Base classes
+            let classString = 'date-card';
             
-            if (!isSunday) {
+            if (state.selectedDate === fullDate) classString += ' selected';
+            if (isSunday) classString += ' sunday';
+            if (isSaturday) classString += ' saturday';
+            
+            // Disable logic: Past dates OR Non-working days
+            if (isPast || !isWorkingDay) {
+                classString += ' disabled';
+            }
+
+            card.className = classString;
+            card.innerHTML = `<span class="date-num">${d}</span>`;
+            
+            // Allow selection if not disabled
+            if (!card.classList.contains('disabled')) {
                 card.onclick = () => selectDate(fullDate);
             }
             
@@ -163,50 +320,38 @@ function initReservation() {
         timeListEl.innerHTML = '';
         if (!state.selectedTrainer || !state.selectedDate) return;
 
-        // Determine Day of Week for selected date
-        const selDateObj = new Date(state.selectedDate);
-        const dayIdx = selDateObj.getDay(); // 0: Sun, 6: Sat
-        
-        // Define Available Slots based on Day
-        // Weekday: 09:00 ~ 21:00 (All slots)
-        // Saturday: 09:00 ~ 18:00 (Limit)
-        // Sunday: None (Should not be selectable, but safe guard)
-        
-        let availableSlots = timeSlots; // Default all
-        
-        if (dayIdx === 6) { // Saturday
-            // 09:00 to 18:00 only. (last slot starts at 17:00? "09:00 - 18:00" usually means close at 18:00)
-            // If operation is until 18:00, the last 1-hour PT slot starts at 17:00.
-            availableSlots = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
-        } else if (dayIdx === 0) { // Sunday
-            availableSlots = [];
+        // 1. Get Base Available Slots from Hierarchy
+        const availableSlots = getAvailableSlots(state.selectedTrainer.id, state.selectedDate);
+
+        if (availableSlots.length === 0) {
+            timeListEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:2rem; color:var(--grey-500);">예약 가능한 시간이 없습니다.</div>';
+            return;
         }
 
-        // Check Real Reservations from LocalStorage
-        const data = getGymData();
-        // Filter reservations for this trainer and date
-        const bookedTimes = data.reservations
-            .filter(r => r.trainer === state.selectedTrainer.name && r.date === state.selectedDate)
-            .map(r => r.time);
-
-        // Also keep pseudo-random for demo filler
-        const seed = state.selectedTrainer.id + state.selectedDate.replace(/-/g, '');
-        let rng = parseInt(seed.substring(seed.length - 3)) || 123;
-
-        // --- Validation for Past Time ---
-        const now = new Date();
-        const currentDateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-        const isToday = (state.selectedDate === currentDateStr);
-        const currentHour = now.getHours();
-
-        availableSlots.forEach((time, index) => {
-            // 1. Check random 'other user' booking
-            let isBooked = ((rng + index * 7) % 10) < 2; // 20% chance occupied by others
-            
-            // 2. Check MY real booking
-            if (bookedTimes.includes(time)) isBooked = true;
-
-            // 3. Check Past Time (Real-time update)
+                    // 2. Check Real Reservations from LocalStorage (MY Booking)
+                    const data = getGymData();
+                    const bookedTimesFromLocalStorage = data.reservations
+                        .filter(r => r.trainer === state.selectedTrainer.name && r.date === state.selectedDate)
+                        .map(r => r.time);
+        
+                    // 3. Check hardcoded booked slots (manually added by user)
+                    const hardcodedBookedList = hardcodedBookedSlots[state.selectedTrainer.id]?.[state.selectedDate] || [];
+        
+                    // --- Validation for Past Time ---
+                    const now = new Date();
+                    const currentDateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                    const isToday = (state.selectedDate === currentDateStr);
+                    const currentHour = now.getHours();
+        
+                    availableSlots.forEach((time) => {
+                        let isBooked = false;
+        
+                        // Check MY real booking (User managed)
+                        if (bookedTimesFromLocalStorage.includes(time)) isBooked = true;
+        
+                        // Check Hardcoded booked slots
+                        if (hardcodedBookedList.includes(time)) isBooked = true;
+            // Check Past Time (Real-time update)
             if (isToday) {
                 const slotHour = parseInt(time.split(':')[0]);
                 if (slotHour <= currentHour) {
