@@ -22,7 +22,7 @@ function initReservation() {
     const currentUser = localStorage.getItem(userKey);
     if (!currentUser) {
         alert('로그인이 필요한 서비스입니다.');
-        // window.location.hash = '#/mypage'; // Redirect to login
+        window.location.hash = '#/mypage'; // Redirect to login
         return; // Stop initialization
     }
 
@@ -34,7 +34,7 @@ function initReservation() {
         // Since router reloads script, we can't pass params easily without URL search params support in router.
         // We will rely on user navigating or just alert.
         // Better: Since we are SPA, just route to mypage. 
-        // window.location.hash = '#/mypage';
+        window.location.hash = '#/mypage';
         return; 
     }
 
