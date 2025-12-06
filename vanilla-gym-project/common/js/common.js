@@ -1,3 +1,27 @@
+// --- Mock Database (Data Simulation) ---
+
+const COUPON_TYPES = {
+    'WELCOME': { name: '신규 가입 환영 쿠폰', type: 'percent', value: 10, description: '10% 할인' },
+    'SUMMER': { name: '여름 맞이 이벤트', type: 'fixed', value: 50000, description: '5만원 즉시 할인' },
+    'PT_PROMO': { name: 'PT 패키지 할인', type: 'percent', value: 15, description: '15% 할인 (PT 전용)', target: 'pt' },
+    'FRIENDS': { name: '지인 추천 쿠폰', type: 'fixed', value: 30000, description: '3만원 할인' },
+    'X-mas': { name: '크리스마스 특별 할인', type: 'percent', value: 20, description: '20% 할인' }
+};
+
+const MEMBERS = {
+    'user123': {
+        name: '홍길동',
+        password: '1234',
+        contact: '010-1234-5678',
+        coupons: ['WELCOME', 'FRIENDS', 'X-mas'], // User owns these coupons
+        points: 2000,
+        membershipExpire: null,
+        ptCount: 0,
+        locker: { number: 23, password: '4589' },
+        reservations: []
+    }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   // Load Header
   const headerElement = document.querySelector('header');
