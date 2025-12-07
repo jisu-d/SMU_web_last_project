@@ -29,6 +29,12 @@
                     <p>ID: <span class="mypage-test-highlight">user123</span></p>
                     <p>PW: <span class="mypage-test-highlight">1234</span></p>
                 </div>
+
+                <div style="margin-top: 1rem; text-align: center;">
+                    <button id="clear-local-storage-btn" class="btn btn-ghost" style="font-size: 0.8rem; color: var(--grey-500); padding: 0.25rem 0.5rem;" onclick="if(confirm('모든 로컬 저장소 데이터를 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.')){localStorage.clear(); alert('로컬 저장소 데이터가 초기화되었습니다. 페이지를 새로고침합니다.'); location.reload();}">
+                        LocalStorage 초기화
+                    </button>
+                </div>
             </div>
         </div>
     </div>
