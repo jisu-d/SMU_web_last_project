@@ -233,12 +233,15 @@ window.initMyPage = function() {
         if (expireEl) {
             if (data.membershipExpire) {
                 const today = new Date();
-                const expire = new Date(data.membershipExpire);
-                today.setHours(0,0,0,0); expire.setHours(0,0,0,0);
+                const expireAt = new Date(data.membershipExpire);
+                
+                today.setHours(0,0,0,0); 
+                expireAt.setHours(0,0,0,0);
 
-                if (expire >= today) {
-                    const diffTime = expire - today;
+                if (expireAt >= today) {
+                    const diffTime = expireAt - today;
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
                     expireEl.textContent = `${diffDays}일 남았습니다.`; 
                     expireEl.style.color = 'var(--toss-blue)';
                 } else {

@@ -29,11 +29,6 @@ function initReservation() {
     const currentData = getGymData();
     if (currentData.ptCount <= 0) {
         alert('PT 이용권이 없습니다.\n이용권 구매 페이지로 이동합니다.');
-        // Force MyPage to show payment view (need a way to signal this)
-        // Simple hack: set a temp flag or just route. 
-        // Since router reloads script, we can't pass params easily without URL search params support in router.
-        // We will rely on user navigating or just alert.
-        // Better: Since we are SPA, just route to mypage. 
         window.location.hash = '#/mypage';
         return; 
     }
@@ -100,7 +95,7 @@ function initReservation() {
         }
     };
 
-    // [NEW] Hardcoded booked slots for demonstration/manual editing
+    // Hardcoded booked slots
     const hardcodedBookedSlots = {
         '1': { // 엄희수 트레이너
             '2024-12-09': ['10:00', '14:00'], // 예시: 12월 9일 10시, 14시 예약됨
