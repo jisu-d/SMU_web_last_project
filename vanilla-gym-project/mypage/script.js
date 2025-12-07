@@ -13,7 +13,7 @@ window.initMyPage = function() {
     let appliedCoupons = [];
     let selectedOptionIndex = 0;
     let lastRenderedPaymentType = null;
-    let isPaymentOptionsExpanded = false; // New: Collapsed by default
+    let isPaymentOptionsExpanded = false;
 
     // --- Helpers ---
     function getMemberData(memberId = CURRENT_USER_ID) {
@@ -70,7 +70,6 @@ window.initMyPage = function() {
     
     const toPaymentBtns = document.querySelectorAll('.to-payment-btn');
     
-    // Buttons in Bar
     const cancelPaymentBtn = document.getElementById('cancel-payment-btn');
     const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
     
@@ -83,16 +82,16 @@ window.initMyPage = function() {
     const paymentOptionsContainer = document.getElementById('payment-options-container');
     const paymentSelectLabel = document.getElementById('payment-select-label');
     
-    // Elements for Calculation (Hidden or used for Receipt)
-    // We don't strictly need the old inline price displays if we use the receipt, 
-    // but I'll keep calculating for the floating bar.
+    const basePriceDisplay = document.getElementById('base-price-display');
+    const discountRow = document.getElementById('discount-row');
+    const discountAmount = document.getElementById('discount-amount');
+    const individualCouponDiscounts = document.getElementById('individual-coupon-discounts');
+    const totalPriceDisplay = document.getElementById('total-price-display');
 
-    // Floating Bottom Bar Elements
     const mypageBottomBar = document.getElementById('mypage-bottom-bar');
     const mypageSummaryText = document.getElementById('mypage-summary-text');
     const mypageSummaryPrice = document.getElementById('mypage-summary-price');
 
-    // Receipt Modal Elements
     const receiptModal = document.getElementById('receipt-modal');
     const receiptItemName = document.getElementById('receipt-item-name');
     const receiptBasePrice = document.getElementById('receipt-base-price');
@@ -102,6 +101,10 @@ window.initMyPage = function() {
     const receiptFinalPrice = document.getElementById('receipt-final-price');
     const cancelReceiptBtn = document.getElementById('cancel-receipt-btn');
     const finalPayBtn = document.getElementById('final-pay-btn');
+
+    // History Elements
+    const viewResHistoryBtn = document.getElementById('view-res-history-btn');
+    const resHistoryList = document.getElementById('reservation-history-list');
 
     // Locker Elements
     const editLockerBtn = document.getElementById('edit-locker-btn');
@@ -158,17 +161,14 @@ window.initMyPage = function() {
             tab.classList.add('active');
             currentPaymentType = tab.dataset.type;
             selectedOptionIndex = 0;
-            isPaymentOptionsExpanded = false; // Reset expansion
+            isPaymentOptionsExpanded = false; 
             updatePaymentOptions();
         };
     });
 
     if (applyCouponBtn) applyCouponBtn.onclick = applyCoupon;
     
-    // Step 1: Open Receipt Modal
     if (confirmPaymentBtn) confirmPaymentBtn.onclick = showReceiptModal;
-    
-    // Step 2: Final Pay
     if (finalPayBtn) finalPayBtn.onclick = processActualPayment;
     if (cancelReceiptBtn) cancelReceiptBtn.onclick = () => {
         if(receiptModal) receiptModal.style.display = 'none';
@@ -215,7 +215,7 @@ window.initMyPage = function() {
         if (couponMessage) couponMessage.textContent = '';
         appliedCoupons = []; 
         selectedOptionIndex = 0;
-        isPaymentOptionsExpanded = false; // Default collapsed
+        isPaymentOptionsExpanded = false;
 
         if (pendingPayment && pendingCoupon) {
             sessionStorage.removeItem('pendingPayment');
@@ -230,6 +230,42 @@ window.initMyPage = function() {
         if (cashRadio) cashRadio.checked = true;
         
         updatePaymentOptions();
+    }
+
+    function createResItem(res, isHistory) {
+        const item = document.createElement('div');
+        item.className = 'reservation-item';
+        if (isHistory) {
+            item.style.backgroundColor = '#f9fafb';
+            item.style.opacity = '0.8';
+        }
+        
+        let actionBtn = '';
+        if (!isHistory) {
+            actionBtn = `
+                <button class="btn btn-outline btn-sm" onclick="cancelReservation(${res.id})" 
+                    style="color: #F04452; border-color: rgba(240, 68, 82, 0.3); background-color: rgba(240, 68, 82, 0.05);">
+                    취소
+                </button>
+            `;
+        } else {
+            actionBtn = `<span style="font-size: 0.85rem; color: var(--grey-500);">이용 완료</span>`;
+        }
+
+        item.innerHTML = `
+            <div class="reservation-info">
+                <div class="reservation-date">
+                    <i data-lucide="calendar" style="width: 1rem; height: 1rem; color: ${isHistory ? 'var(--grey-400)' : 'var(--brand-blue)'};"></i>
+                    ${res.date} <span style="color: var(--grey-300);">|</span> ${res.time}
+                </div>
+                <div class="reservation-trainer">
+                    <i data-lucide="user" style="width: 0.9rem; height: 0.9rem;"></i>
+                    ${res.trainer} 트레이너
+                </div>
+            </div>
+            ${actionBtn}
+        `;
+        return item;
     }
 
     function renderDashboard() {
@@ -275,34 +311,73 @@ window.initMyPage = function() {
             }
         }
 
+        // Reservations Logic (Split History)
         const resListContainer = document.getElementById('reservation-list-container');
+        const resHistoryListEl = document.getElementById('reservation-history-list'); 
+        const viewHistoryBtn = document.getElementById('view-res-history-btn');
+
         if (resListContainer) {
             resListContainer.innerHTML = '';
+            if (resHistoryListEl) resHistoryListEl.innerHTML = '';
+
             if (!data.reservations || data.reservations.length === 0) {
                 resListContainer.innerHTML = '<p style="color: var(--grey-500); text-align: center; padding: 2rem;">예약된 일정이 없습니다.</p>';
+                if(viewHistoryBtn) viewHistoryBtn.style.display = 'none';
             } else {
-                const sortedRes = [...data.reservations].sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time));
-                sortedRes.forEach(res => {
-                    const item = document.createElement('div');
-                    item.className = 'reservation-item';
-                    item.innerHTML = `
-                        <div class="reservation-info">
-                            <div class="reservation-date">
-                                <i data-lucide="calendar" style="width: 1rem; height: 1rem; color: var(--brand-blue);"></i>
-                                ${res.date} <span style="color: var(--grey-300);">|</span> ${res.time}
-                            </div>
-                            <div class="reservation-trainer">
-                                <i data-lucide="user" style="width: 0.9rem; height: 0.9rem;"></i>
-                                ${res.trainer} 트레이너
-                            </div>
-                        </div>
-                        <button class="btn btn-outline btn-sm" onclick="cancelReservation(${res.id})" 
-                            style="color: #F04452; border-color: rgba(240, 68, 82, 0.3); background-color: rgba(240, 68, 82, 0.05);">
-                            취소
-                        </button>
-                    `;
-                    resListContainer.appendChild(item);
+                const now = new Date();
+                const upcoming = [];
+                const past = [];
+
+                data.reservations.forEach(res => {
+                    // Simple date compare. Format YYYY-MM-DD HH:MM
+                    const resDate = new Date(`${res.date}T${res.time}`);
+                    if (resDate < now) past.push(res);
+                    else upcoming.push(res);
                 });
+
+                // Render Upcoming
+                if (upcoming.length === 0) {
+                    resListContainer.innerHTML = '<p style="color: var(--grey-500); text-align: center; padding: 2rem;">예정된 일정이 없습니다.</p>';
+                    resListContainer.classList.remove('reservation-list--scrollable'); // Ensure class is removed if no items
+                } else {
+                    // Sort ascending
+                    upcoming.sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
+                    upcoming.forEach(res => {
+                        resListContainer.appendChild(createResItem(res, false));
+                    });
+
+                    // Add scrollable class if more than 2 upcoming reservations
+                    if (upcoming.length > 2) {
+                        resListContainer.classList.add('reservation-list--scrollable');
+                    } else {
+                        resListContainer.classList.remove('reservation-list--scrollable');
+                    }
+                }
+
+                // Render Past
+                if (past.length > 0 && resHistoryListEl) {
+                    if(viewHistoryBtn) {
+                        viewHistoryBtn.style.display = 'flex';
+                        // Ensure event listener isn't added multiple times or just replace it
+                        viewHistoryBtn.onclick = () => {
+                            const isHidden = resHistoryListEl.style.display === 'none';
+                            resHistoryListEl.style.display = isHidden ? 'flex' : 'none';
+                            resHistoryListEl.style.flexDirection = 'column';
+                            resHistoryListEl.style.gap = '0.75rem';
+                            
+                            const icon = viewHistoryBtn.querySelector('svg');
+                            if(icon) icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+                            if(icon) icon.style.transition = 'transform 0.2s';
+                        };
+                    }
+                    // Sort descending
+                    past.sort((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
+                    past.forEach(res => {
+                        resHistoryListEl.appendChild(createResItem(res, true));
+                    });
+                } else {
+                    if(viewHistoryBtn) viewHistoryBtn.style.display = 'none';
+                }
             }
         }
         if(window.lucide) lucide.createIcons();
@@ -318,36 +393,31 @@ window.initMyPage = function() {
 
     function updatePaymentOptions() {
         if (!paymentOptionsContainer) return;
-        paymentOptionsContainer.innerHTML = ''; // Always rebuild to handle toggle state correctly
+        paymentOptionsContainer.innerHTML = ''; 
         
         const isMembership = currentPaymentType === 'membership';
         const options = isMembership ? membershipOptions : ptOptions;
         
         if (paymentSelectLabel) paymentSelectLabel.textContent = isMembership ? '기간 선택' : '횟수 선택';
 
-        // Apply container styling based on state
         if (isPaymentOptionsExpanded) {
             paymentOptionsContainer.classList.remove('collapsed');
-            paymentOptionsContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            paymentOptionsContainer.style.gridTemplateColumns = '1fr';
         } else {
             paymentOptionsContainer.classList.add('collapsed');
             paymentOptionsContainer.style.gridTemplateColumns = '1fr 48px';
         }
 
-        // Render Logic
         if (isPaymentOptionsExpanded) {
-            // Render ALL options
             options.forEach((opt, index) => {
                 const card = createOptionCard(opt, index, isMembership);
                 paymentOptionsContainer.appendChild(card);
             });
         } else {
-            // Render SELECTED option only + Toggle Button
             const selectedOpt = options[selectedOptionIndex];
             const card = createOptionCard(selectedOpt, selectedOptionIndex, isMembership);
             paymentOptionsContainer.appendChild(card);
 
-            // Toggle Button
             const toggleBtn = document.createElement('div');
             toggleBtn.className = 'payment-toggle-btn';
             toggleBtn.innerHTML = '<i data-lucide="chevron-down"></i>';
@@ -383,11 +453,9 @@ window.initMyPage = function() {
         card.onclick = () => {
             selectedOptionIndex = index;
             if (isPaymentOptionsExpanded) {
-                // If expanded, select and collapse
                 isPaymentOptionsExpanded = false;
                 updatePaymentOptions();
             } else {
-                // If already collapsed (clicking selected), expand
                 isPaymentOptionsExpanded = true;
                 updatePaymentOptions();
             }
@@ -494,7 +562,6 @@ window.initMyPage = function() {
             return;
         }
 
-        // Update Floating Bar
         const typeName = currentPaymentType === 'membership' ? '헬스' : 'PT';
         if (mypageSummaryText) mypageSummaryText.textContent = `${typeName} ${data.selected.label}`;
         if (mypageSummaryPrice) {
@@ -512,7 +579,6 @@ window.initMyPage = function() {
 
         const typeName = currentPaymentType === 'membership' ? '헬스' : 'PT';
         
-        // Fill Receipt Data
         if (receiptItemName) receiptItemName.textContent = `${typeName} ${data.selected.label}`;
         if (receiptBasePrice) receiptBasePrice.textContent = `${data.basePrice.toLocaleString()}원`;
         

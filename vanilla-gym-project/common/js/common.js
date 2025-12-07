@@ -18,7 +18,23 @@ const MEMBERS = {
         membershipExpire: null,
         ptCount: 0,
         locker: { number: 23, password: '4589' },
-        reservations: []
+        reservations: [
+            // Past reservation for testing
+            { id: 1, trainer: '엄희수', date: '2025-11-01', time: '10:00', createdAt: '2023-12-01T00:00:00.000Z' }
+        ]
+    },
+    'djagmltn': {
+        name: '엄희수',
+        password: '1234',
+        contact: '010-4334-4628',
+        coupons: ['WELCOME', 'FRIENDS', 'X-mas'], // User owns these coupons
+        points: 2000,
+        membershipExpire: null,
+        ptCount: 10,
+        reservations: [
+            // Past reservation for testing
+            { id: 1, trainer: '엄희수', date: '2025-11-01', time: '10:00', createdAt: '2023-12-01T00:00:00.000Z' }
+        ]
     }
 };
 

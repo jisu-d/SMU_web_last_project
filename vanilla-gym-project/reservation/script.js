@@ -34,6 +34,18 @@ function initReservation() {
     }
 
     // --- Data ---
+    
+    // Global Holidays (2024-2025 Example)
+    const HOLIDAYS = [
+        '2024-01-01', '2024-02-09', '2024-02-10', '2024-02-11', '2024-02-12', 
+        '2024-03-01', '2024-04-10', '2024-05-05', '2024-05-15', '2024-06-06', 
+        '2024-08-15', '2024-09-16', '2024-09-17', '2024-09-18', '2024-10-03', 
+        '2024-10-09', '2024-12-25',
+        '2025-01-01', '2025-01-28', '2025-01-29', '2025-01-30', '2025-03-01',
+        '2025-05-05', '2025-05-06', '2025-06-06', '2025-08-15', '2025-10-03',
+        '2025-10-05', '2025-10-06', '2025-10-07', '2025-10-08', '2025-10-09', '2025-12-25'
+    ];
+
     // Hierarchical Schedule Data: Weekly Patterns + Exceptions
     const trainerSchedules = {
         // 1. 엄희수 (성실형: 주 6일, 아침~저녁)
@@ -61,7 +73,7 @@ function initReservation() {
                 4: { start: '13:00', end: '22:00', break: ['17:00'] },
                 5: { start: '13:00', end: '22:00', break: ['17:00'] },
                 6: null, // 토 (휴무)
-                0: { start: '10:00', end: '18:00', break: ['13:00'] } // 일 (주말 근무)
+                0: null // 일 (휴무 - 변경됨)
             },
             exceptions: {}
         },
@@ -74,7 +86,7 @@ function initReservation() {
                 4: { start: '09:00', end: '18:00', break: ['13:00'] },
                 5: { start: '09:00', end: '18:00', break: ['13:00'] },
                 6: { start: '10:00', end: '14:00', break: [] },
-                0: null
+                0: null // 일 (휴무)
             },
             exceptions: {
                 '2024-12-25': null
@@ -89,7 +101,7 @@ function initReservation() {
                 4: null,
                 5: { start: '18:00', end: '22:00', break: [] },
                 6: { start: '10:00', end: '18:00', break: ['13:00'] },
-                0: { start: '10:00', end: '18:00', break: ['13:00'] }
+                0: null // 일 (휴무 - 변경됨)
             },
             exceptions: {}
         }
@@ -122,6 +134,9 @@ function initReservation() {
 
     // Helper: Generate slots based on schedule
     function getAvailableSlots(trainerId, dateStr) {
+        // 0. Global Holiday Check
+        if (HOLIDAYS.includes(dateStr)) return [];
+
         const schedule = trainerSchedules[trainerId];
         if (!schedule) return [];
 
@@ -137,7 +152,7 @@ function initReservation() {
             dayConfig = schedule.weekly[dayOfWeek];
         }
 
-        if (!dayConfig) return []; // Off day
+        if (!dayConfig) return []; // Off day (including Sunday if set to null)
 
         // Generate slots from start to end
         const slots = [];

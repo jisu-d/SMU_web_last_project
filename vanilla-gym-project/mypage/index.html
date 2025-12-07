@@ -126,6 +126,16 @@
                     <div id="reservation-list-container" class="reservation-list">
                         <p style="color: var(--grey-500); text-align: center; padding: 2rem;">예약된 일정이 없습니다.</p>
                     </div>
+                    
+                    <!-- Past Reservations History -->
+                    <div class="reservation-history-section" style="margin-top: 1rem; padding-top: 0.5rem;">
+                        <button id="view-res-history-btn" class="btn btn-ghost" style="width: 100%; font-size: 0.9rem; color: var(--grey-500); display: flex; align-items: center; justify-content: center; gap: 0.25rem;">
+                            <span>지난 예약 내역 보기</span> <i data-lucide="chevron-down" style="width: 1rem; height: 1rem;"></i>
+                        </button>
+                        <div id="reservation-history-list" class="reservation-list" style="display: none; margin-top: 1rem; opacity: 0.6;">
+                            <!-- Past items injected by JS -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
