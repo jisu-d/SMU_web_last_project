@@ -33,4 +33,24 @@ window.initHome = function() {
         };
         document.head.appendChild(script);
     }
+
+    // --- Scroll Reveal Animation (Ported from About) ---
+    const observerOptions = {
+        threshold: 0.1, // Trigger when 10% is visible
+        rootMargin: "0px 0px -30px 0px"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements with .scroll-reveal class
+    setTimeout(() => {
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        revealElements.forEach(el => observer.observe(el));
+    }, 100); // Slight delay to ensure DOM is ready
 };
