@@ -1,0 +1,560 @@
+.mypage-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+}
+
+/* View Switching */
+.view-section {
+  display: none;
+}
+
+.view-section.active {
+  display: block;
+}
+
+.mypage-login-container {
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.mypage-login-card {
+  padding: 2rem;
+  background-color: var(--card);
+  border-radius: 0.75rem; /* rounded-xl approx */
+  border: 1px solid var(--border);
+  color: var(--card-foreground);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+}
+
+.mypage-login-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.mypage-login-icon {
+  width: 4rem;
+  height: 4rem;
+  background-color: #dbeafe;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mypage-login-icon svg {
+  width: 2rem;
+  height: 2rem;
+  color: #2563eb;
+}
+
+.mypage-login-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.mypage-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.mypage-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mypage-test-account {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.mypage-test-account p {
+  margin-bottom: 0.25rem;
+}
+
+.mypage-test-account p:first-child {
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.mypage-test-highlight {
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.mypage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.mypage-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.mypage-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .mypage-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.mypage-card {
+  padding: 1.5rem;
+  background-color: var(--card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  color: var(--card-foreground);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.mypage-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.mypage-card-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #2563eb;
+}
+
+.mypage-card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.mypage-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mypage-info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.mypage-info-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.mypage-info-value {
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+.mypage-days-remaining {
+  background-color: #eff6ff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.mypage-days-text {
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.mypage-locker-password {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.mypage-password-digit {
+  width: 3rem;
+  height: 3rem;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.mypage-warning {
+  background-color: #fef3c7;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.mypage-warning-text {
+  font-size: 0.875rem;
+  color: #92400e;
+  font-weight: 500;
+}
+
+.mypage-no-locker {
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.mypage-cta-card {
+  padding: 1.5rem;
+  background: linear-gradient(to bottom right, #eff6ff, white);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+}
+
+.mypage-payment-container {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.mypage-payment-card {
+  padding: 2rem;
+  background-color: var(--card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.mypage-payment-title {
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.mypage-payment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.mypage-price-box {
+  background-color: #f9fafb;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 1px solid #e5e7eb;
+}
+
+.mypage-price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.mypage-price-discount {
+  color: #059669;
+}
+
+.mypage-price-coupon {
+  color: #dc2626;
+}
+
+.mypage-price-total {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.75rem;
+  margin-top: 0.5rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.mypage-price-total-value {
+  color: #2563eb;
+  font-size: 1.2rem;
+}
+
+.mypage-coupon-input {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mypage-coupon-applied {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  background-color: #d1fae5;
+  color: #059669;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.mypage-payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mypage-payment-method {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mypage-payment-method:hover {
+  background-color: #f9fafb;
+}
+
+.mypage-payment-method-label {
+  flex: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.mypage-payment-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.mypage-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.mypage-btn {
+  flex: 1;
+}
+
+/* Applied Coupon Tags */
+.mypage-applied-coupons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.mypage-coupon-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #eff6ff; /* blue-50 */
+  border: 1px solid #bfdbfe; /* blue-200 */
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  color: #1e40af; /* blue-800 */
+  font-weight: 500;
+}
+
+.remove-coupon-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #9ca3af; /* gray-400 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.remove-coupon-btn:hover {
+  color: #dc2626; /* red-600 */
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex; /* Controlled by JS display:none/flex */
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  width: 90%;
+  max-width: 60vw; 
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: center; /* Center the title since close button is gone */
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* close-btn style removed */
+
+.modal-body {
+  margin-bottom: 1.5rem;
+}
+
+/* New style for horizontal arrangement in modal */
+.modal-input-group-horizontal {
+  display: flex;
+  gap: 1.5rem; /* Space between the two sections */
+  flex-direction: column;
+}
+
+.modal-input-group-horizontal > .mypage-form-group {
+  flex: 1; /* Distribute space equally */
+  min-width: 200px; /* Minimum width to prevent squishing */
+}
+
+
+.modal-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  margin-top: 0.25rem;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 1rem; /* Space between buttons */
+}
+
+.modal-footer button {
+    flex: 1; /* Make buttons equal width */
+    padding: 0.75rem; /* Consistent padding */
+    font-size: 1rem;
+    justify-content: center;
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: #4b5563;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 0.375rem;
+}
+
+.btn-ghost:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+/* Locker Grid Styles */
+.locker-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); /* 10 cols */
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  /* Removed max-height and overflow-y for full view */
+  padding: 0.5rem; /* Increased padding */
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: #f9fafb; /* Light background for the grid container */
+}
+
+.locker-item {
+  aspect-ratio: 1;
+  min-width: 2.5rem; /* Ensure minimum size */
+  min-height: 2.5rem; /* Ensure minimum size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: white;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem; /* Larger font size */
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow */
+}
+
+.locker-item:hover:not(.disabled) {
+  background-color: #e0e7ff; /* Lighter blue on hover for available */
+  border-color: #93c5fd; /* blue-300 */
+}
+
+.locker-item.selected {
+  background-color: #2563eb; /* Darker blue background */
+  border-color: #1e40af; /* Even darker blue */
+  color: white; /* White text for contrast */
+  font-weight: bold;
+  box-shadow: 0 0 0 2px #bfdbfe; /* Accent ring */
+}
+
+.locker-item.disabled {
+  background-color: #e5e7eb; /* Grey background for disabled */
+  color: #6b7280; /* Darker grey text */
+  cursor: not-allowed;
+  border-color: #d1d5db;
+  pointer-events: none; /* Prevent clicks */
+  box-shadow: none;
+}
+
+.locker-item {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: white;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.locker-item:hover:not(.disabled) {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.locker-item.selected {
+  background-color: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+  font-weight: bold;
+  box-shadow: 0 0 0 2px #bfdbfe;
+}
+
+.locker-item.disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border-color: #e5e7eb;
+  pointer-events: none; /* Prevent clicks */
+}

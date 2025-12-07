@@ -10,6 +10,7 @@ const HeaderHTML = `
       <a href="#/about" class="header-nav-link">소개</a>
       <a href="#/notice" class="header-nav-link">공지사항</a>
       <a href="#/equipment" class="header-nav-link">운동안내</a>
+      <a href="#/reservation" class="header-nav-link">PT 예약</a>
       <a href="#/customer-service" class="header-nav-link">고객센터</a>
     </nav>
   </div>

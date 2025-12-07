@@ -1,0 +1,260 @@
+<div class="mypage-container">
+    <!-- Login View -->
+    <div id="view-login" class="view-section active">
+        <div class="mypage-login-container">
+            <div class="mypage-login-card">
+                <div class="mypage-login-icon-wrapper">
+                    <div class="mypage-login-icon">
+                        <i data-lucide="user"></i>
+                    </div>
+                </div>
+                <h2 class="mypage-login-title">로그인</h2>
+
+                <form id="login-form" class="mypage-form">
+                    <div class="mypage-form-group">
+                        <label for="userId">아이디</label>
+                        <input type="text" id="userId" placeholder="아이디를 입력하세요" required>
+                    </div>
+
+                    <div class="mypage-form-group">
+                        <label for="password">비밀번호</label>
+                        <input type="password" id="password" placeholder="비밀번호를 입력하세요" required>
+                    </div>
+
+                    <button type="submit" id="login-button" class="btn btn-primary" style="width: 100%;">로그인</button>
+                </form>
+
+                <div id="test-account-fill-btn" class="mypage-test-account" style="cursor: pointer;">
+                    <p>테스트 계정</p>
+                    <p>ID: <span class="mypage-test-highlight">user123</span></p>
+                    <p>PW: <span class="mypage-test-highlight">1234</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard View -->
+    <div id="view-main" class="view-section">
+        <div style="max-width: 64rem; margin: 0 auto;">
+            <div class="mypage-header">
+                <h1 class="mypage-title">마이페이지</h1>
+                <button id="logout-btn" class="btn btn-outline">로그아웃</button>
+            </div>
+
+            <div class="mypage-grid">
+                <!-- 개인 정보 -->
+                <div class="mypage-card">
+                    <div class="mypage-card-header">
+                        <i data-lucide="user" class="mypage-card-icon"></i>
+                        <h2 class="mypage-card-title">개인 정보</h2>
+                    </div>
+                    <div class="mypage-info-list">
+                        <div class="mypage-info-item">
+                            <p class="mypage-info-label">이름</p>
+                            <p id="member-name" class="mypage-info-value">홍길동</p>
+                        </div>
+                        <div class="mypage-info-item">
+                            <p class="mypage-info-label">아이디</p>
+                            <p id="member-id" class="mypage-info-value">user123</p>
+                        </div>
+                        <div class="mypage-info-item">
+                            <p class="mypage-info-label">연락처</p>
+                            <p id="member-contact" class="mypage-info-value">010-1234-5678</p>
+                        </div>
+                        <div class="mypage-info-item">
+                            <p class="mypage-info-label">이메일</p>
+                            <p id="member-email" class="mypage-info-value">hong@example.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 등록 현황 -->
+                <div class="mypage-card">
+                    <div class="mypage-card-header">
+                        <i data-lucide="calendar" class="mypage-card-icon"></i>
+                        <h2 class="mypage-card-title">등록 현황</h2>
+                    </div>
+                    <div class="mypage-info-list">
+                        <div class="mypage-info-item">
+                            <p class="mypage-info-label">회원권 만료일</p>
+                            <p class="mypage-info-value" id="expire-date-display">2024. 12. 31.</p>
+                        </div>
+                        <div class="mypage-days-remaining">
+                            <p id="days-remaining-text" class="mypage-days-text">회원권이 6일 남았습니다.</p>
+                        </div>
+                        <button class="btn btn-outline to-payment-btn" style="width: 100%;">
+                            <i data-lucide="credit-card" style="width: 1rem; height: 1rem; margin-right: 0.5rem;"></i>
+                            회원권 연장하기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 사물함 -->
+                <div class="mypage-card">
+                    <div class="mypage-card-header" style="justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i data-lucide="key" class="mypage-card-icon"></i>
+                            <h2 class="mypage-card-title">사물함 정보</h2>
+                        </div>
+                        <button id="edit-locker-btn" class="btn btn-ghost" style="padding: 0.5rem;" title="사물함 정보 수정">
+                            <i data-lucide="edit-3" style="width: 1.25rem; height: 1.25rem;"></i>
+                        </button>
+                    </div>
+                    <div class="mypage-info-list">
+                        <div class="mypage-info-item">
+                            <p class="mypage-info-label">사물함 번호</p>
+                            <p id="locker-number-display" class="mypage-info-value" style="font-size: 1.5rem;">42번</p>
+                        </div>
+                        <div class="mypage-info-item">
+                            <p class="mypage-info-label">사물함 비밀번호</p>
+                            <div class="mypage-locker-password">
+                                <div id="locker-password-digit-1" class="mypage-password-digit">1</div>
+                                <div id="locker-password-digit-2" class="mypage-password-digit">3</div>
+                                <div id="locker-password-digit-3" class="mypage-password-digit">5</div>
+                                <div id="locker-password-digit-4" class="mypage-password-digit">7</div>
+                            </div>
+                        </div>
+                        <div class="mypage-warning">
+                            <p class="mypage-warning-text">비밀번호는 타인에게 노출되지 않도록 주의하세요.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 결제 바로가기 -->
+                <div class="mypage-cta-card">
+                    <div class="mypage-card-header">
+                        <i data-lucide="credit-card" class="mypage-card-icon"></i>
+                        <h2 class="mypage-card-title">온라인 결제</h2>
+                    </div>
+                    <p style="color: #6b7280; margin-bottom: 1.5rem;">
+                        편리한 온라인 결제로 회원권을 등록하세요. 3개월 이상 결제 시 할인 혜택이 제공됩니다.
+                    </p>
+                    <button class="btn btn-primary to-payment-btn" style="width: 100%;">결제하기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Locker Edit Modal -->
+        <div id="locker-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">사물함 정보 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-input-group-horizontal">
+                        <div class="mypage-form-group" style="flex: 1;">
+                            <label style="margin-bottom: 0.5rem; display: block;">사물함 선택</label>
+                            <div id="modal-locker-grid" class="locker-grid">
+                                <!-- 1~50 will be populated by JS -->
+                            </div>
+                            <input type="hidden" id="modal-locker-select"> <!-- ID kept for compatibility/easier refactoring -->
+                        </div>
+                        <div class="mypage-form-group" style="flex: 1;">
+                            <label for="modal-locker-pw">비밀번호 (4자리 숫자)</label>
+                            <input type="password" id="modal-locker-pw" class="modal-input" maxlength="4" placeholder="숫자 4자리">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel-locker-btn" class="btn btn-outline">취소</button>
+                    <button id="save-locker-btn" class="btn btn-primary">저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment View -->
+    <div id="view-payment" class="view-section">
+        <div class="mypage-payment-container">
+            <div class="mypage-payment-card">
+                <h2 class="mypage-payment-title">회원권 결제</h2>
+
+                <div class="mypage-payment-form">
+                    <!-- 개월 선택 -->
+                    <div>
+                        <label style="margin-bottom: 0.5rem; display: block;">이용 기간 선택</label>
+                        <select id="month-select">
+                            <option value="1">1개월</option>
+                            <option value="2">2개월</option>
+                            <option value="3">3개월</option>
+                            <option value="4">4개월</option>
+                            <option value="5">5개월</option>
+                            <option value="6">6개월</option>
+                            <option value="7">7개월</option>
+                            <option value="8">8개월</option>
+                            <option value="9">9개월</option>
+                            <option value="10">10개월</option>
+                            <option value="11">11개월</option>
+                            <option value="12">12개월</option>
+                        </select>
+                    </div>
+
+                    
+                    <!-- 쿠폰 입력 -->
+                    <div>
+                        <label for="coupon-input" style="margin-bottom: 0.5rem; display: block;">쿠폰 코드</label>
+                        <div class="mypage-coupon-input">
+                            <input type="text" id="coupon-input" placeholder="쿠폰 코드 입력">
+                            <button id="apply-coupon-btn" class="btn btn-outline" type="button" style="white-space: nowrap; padding: 0.5rem 1rem;">적용하기</button>
+                        </div>
+                        <!-- 적용된 쿠폰 목록 표시 영역 -->
+                        <div id="applied-coupons-container" class="mypage-applied-coupons" style="display: none; margin-top: 0.5rem; gap: 0.5rem; flex-wrap: wrap;">
+                            <!-- 쿠폰 태그가 여기에 동적으로 추가됩니다 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 결제 방법 -->
+                    <div>
+                        <label style="margin-bottom: 0.5rem; display: block;">결제 방법</label>
+                        <div class="mypage-payment-methods">
+                            <div class="mypage-payment-method">
+                                <input type="radio" name="payment" id="pay-card" value="card" checked style="width: auto; margin-right: 0.5rem; margin-bottom: 0;">
+                                <label for="pay-card" class="mypage-payment-method-label" style="margin-bottom: 0;">
+                                    <i data-lucide="credit-card" class="mypage-payment-icon"></i>
+                                    신용카드
+                                </label>
+                            </div>
+                            <div class="mypage-payment-method">
+                                <input type="radio" name="payment" id="pay-cash" value="cash" style="width: auto; margin-right: 0.5rem; margin-bottom: 0;">
+                                <label for="pay-cash" class="mypage-payment-method-label" style="margin-bottom: 0;">
+                                    <i data-lucide="credit-card" class="mypage-payment-icon"></i>
+                                    현금
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 가격 표시 -->
+                    <div class="mypage-price-box">
+                        <div class="mypage-price-row">
+                            <span>기본 금액 (<span id="base-month-display">1</span>개월)</span>
+                            <span id="base-price-display">10,000원</span>
+                        </div>
+
+                        <div id="discount-row" class="mypage-price-row mypage-price-discount" style="display: none;">
+                            <span>기간 할인 (<span id="discount-count">0</span>회 적용)</span>
+                            <span id="discount-amount">-0원</span>
+                        </div>
+
+                        <div id="coupon-row" class="mypage-price-row mypage-price-coupon" style="display: none;">
+                            <span>쿠폰 할인 (<span id="coupon-rate-display">0</span>%)</span>
+                            <span id="coupon-amount">-0원</span>
+                        </div>
+
+                        <div class="mypage-price-row mypage-price-total">
+                            <span>최종 결제 금액</span>
+                            <span id="total-price-display" class="mypage-price-total-value">10,000원</span>
+                        </div>
+                    </div>
+
+                    <!-- 버튼 -->
+                    <div class="mypage-buttons">
+                        <button id="cancel-payment-btn" class="btn btn-outline mypage-btn">취소</button>
+                        <button id="confirm-payment-btn" class="btn btn-primary mypage-btn">결제하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -29,7 +29,7 @@ const routes = {
     '/mypage': {
         template: 'mypage/index.html',
         style: 'mypage/style.css',
-        script: 'mypage/script.js',
+        script: ['mypage/modules/locker.js', 'mypage/script.js'],
         init: 'initMyPage'
     },
     '/notice': {
@@ -37,6 +37,12 @@ const routes = {
         style: 'notice/style.css',
         script: 'notice/script.js',
         init: 'initNotice'
+    },
+    '/reservation': {
+        template: 'reservation/index.html',
+        style: 'reservation/style.css',
+        script: 'reservation/script.js',
+        init: 'initReservation'
     }
 };
 
