@@ -14,7 +14,7 @@
 
 .full-width-bg.bg-gray {
     background-color: var(--grey-100);
-    padding: 3rem 0;
+    padding: 5rem 0;
 }
 
 .full-width-bg .dev-section {
@@ -151,13 +151,13 @@
 .dev-section {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 7rem 1.5rem; /* Increased top padding slightly */
+    padding: 5rem 1.5rem; /* Adjusted padding */
 }
 
 .dev-section-title {
     font-size: 2rem;
     font-weight: 800;
-    margin-bottom: 3.5rem; /* Increased margin to separate title from cards */
+    margin-bottom: 2rem; /* Adjusted margin */
     color: var(--grey-900);
 }
 
@@ -236,7 +236,8 @@
 .dev-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 4rem;
+    gap: 3rem;
+    align-items: center;
 }
 
 .text-group {
@@ -246,8 +247,8 @@
 
 .dev-section-desc {
     margin-bottom: 2rem;
-    color: var(--grey-600);
-    font-size: 1.1rem;
+    color: var(--grey-700);
+    font-size: 1.2rem;
 }
 
 .btn-kakao {
