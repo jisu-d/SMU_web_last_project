@@ -31,8 +31,14 @@
                     </div>
                     <div class="trainer-text">
                         <div class="trainer-role">소프트웨어 전문</div>
-                        <h3 class="trainer-name">엄희수 트레이너</h3>
+                        <div class="trainer-header">
+                            <h3 class="trainer-name">엄희수 트레이너</h3>
+                            <button class="trainer-contact-btn" onclick="toggleTrainerPhone(this)">
+                                <i data-lucide="phone"></i>
+                            </button>
+                        </div>
                         <p class="trainer-exp">202520912</p>
+                        <p class="trainer-phone" style="display: none;">010-4615-3285</p>
                     </div>
                 </div>
                 <!-- Trainer 2 -->
@@ -42,8 +48,14 @@
                     </div>
                     <div class="trainer-text">
                         <div class="trainer-role">다이어트 전문</div>
-                        <h3 class="trainer-name">강건우 트레이너</h3>
+                        <div class="trainer-header">
+                            <h3 class="trainer-name">강건우 트레이너</h3>
+                            <button class="trainer-contact-btn" onclick="toggleTrainerPhone(this)">
+                                <i data-lucide="phone"></i>
+                            </button>
+                        </div>
                         <p class="trainer-exp">경력 8년</p>
+                        <p class="trainer-phone" style="display: none;">010-5375-8992</p>
                     </div>
                 </div>
                 <!-- Trainer 3 -->
@@ -53,8 +65,14 @@
                     </div>
                     <div class="trainer-text">
                         <div class="trainer-role">재활 운동 전문</div>
-                        <h3 class="trainer-name">최영우 트레이너</h3>
+                        <div class="trainer-header">
+                            <h3 class="trainer-name">최영우 트레이너</h3>
+                            <button class="trainer-contact-btn" onclick="toggleTrainerPhone(this)">
+                                <i data-lucide="phone"></i>
+                            </button>
+                        </div>
                         <p class="trainer-exp">경력 12년</p>
+                        <p class="trainer-phone" style="display: none;">010-3964-7753</p>
                     </div>
                 </div>
                 <!-- Trainer 4 -->
@@ -64,8 +82,14 @@
                     </div>
                     <div class="trainer-text">
                         <div class="trainer-role">소프트웨어 전문</div>
-                        <h3 class="trainer-name">임지수 트레이너</h3>
+                        <div class="trainer-header">
+                            <h3 class="trainer-name">임지수 트레이너</h3>
+                            <button class="trainer-contact-btn" onclick="toggleTrainerPhone(this)">
+                                <i data-lucide="phone"></i>
+                            </button>
+                        </div>
                         <p class="trainer-exp">202520923</p>
+                        <p class="trainer-phone" style="display: none;">010-8742-4589</p>
                     </div>
                 </div>
             </div>
@@ -96,16 +120,27 @@
         </div>
     </section>
 
-    <!-- Info Section (Map, Time, Contact) -->
+    <!-- Info Section (Map, Time, Calendar, Contact) -->
     <section class="brand-section info-section">
         <div class="info-grid-layout">
-            <!-- Left: Map & Address -->
-            <div class="brand-card map-container-card scroll-reveal">
-                <div class="card-top">
-                    <h3>오시는 길</h3>
-                    <p>충청남도 천안시 동남구 상명대길 31 상명스포츠센터</p>
+            <!-- Left: Map & Address + Contact -->
+            <div class="left-col">
+                <div class="brand-card map-container-card scroll-reveal">
+                    <div class="card-top">
+                        <h3>오시는 길</h3>
+                        <p>충청남도 천안시 동남구 상명대길 31 상명스포츠센터</p>
+                    </div>
+                    <div id="kakao-map" class="brand-map-view"></div>
                 </div>
-                <div id="kakao-map" class="brand-map-view"></div>
+
+                <div class="brand-card contact-card-new scroll-reveal delay-200">
+                    <h3>문의하기</h3>
+                    <p class="contact-phone">041-550-5114</p>
+                    <div class="contact-links">
+                        <a href="https://open.kakao.com/o/gPaB2N4h" class="contact-btn"><i data-lucide="message-circle"></i> 카카오톡</a>
+                        <a href="https://www.instagram.com/sangmyung_univ/" class="contact-btn"><i data-lucide="instagram"></i> 인스타그램</a>
+                    </div>
+                </div>
             </div>
 
             <!-- Right: Operation Info -->
@@ -127,13 +162,10 @@
                         </li>
                     </ul>
                 </div>
-                <div class="brand-card contact-card-new scroll-reveal delay-200">
-                    <h3>문의하기</h3>
-                    <p class="contact-phone">041-550-5114</p>
-                    <div class="contact-links">
-                        <a href="https://open.kakao.com/o/gPaB2N4h" class="contact-btn"><i data-lucide="message-circle"></i> 카카오톡</a>
-                        <a href="https://www.instagram.com/sangmyung_univ/" class="contact-btn"><i data-lucide="instagram"></i> 인스타그램</a>
-                    </div>
+
+                <!-- Calendar Widget Integrated -->
+                <div class="calendar-wrapper scroll-reveal delay-150" id="calendar-wrapper">
+                    <!-- Calendar injected by JS -->
                 </div>
             </div>
         </div>

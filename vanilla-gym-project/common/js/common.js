@@ -261,3 +261,67 @@ window.updateHeaderState = function() {
     lucide.createIcons();
   }
 };
+
+// --- Global Utilities ---
+window.GymUtils = {
+    getHolidays: function(year) {
+        const fixedHolidays = [
+            { m: 0, d: 1, name: '신정' },
+            { m: 2, d: 1, name: '삼일절' },
+            { m: 4, d: 5, name: '어린이날' },
+            { m: 5, d: 6, name: '현충일' },
+            { m: 7, d: 15, name: '광복절' },
+            { m: 9, d: 3, name: '개천절' },
+            { m: 9, d: 9, name: '한글날' },
+            { m: 11, d: 1, name: '개교기념일' }, // Dec 1st
+            { m: 11, d: 25, name: '성탄절' }
+        ];
+
+        let variableHolidays = [];
+
+        if (year === 2024) {
+            variableHolidays = [
+                { m: 1, d: 9, name: '설날 연휴' }, { m: 1, d: 10, name: '설날' }, { m: 1, d: 11, name: '설날 연휴' }, { m: 1, d: 12, name: '대체공휴일(설날)' },
+                { m: 3, d: 10, name: '국회의원 선거일' }, // Election day 2024
+                { m: 4, d: 6, name: '대체공휴일(어린이날)' }, // May 5 is Sun -> May 6
+                { m: 4, d: 15, name: '부처님 오신 날' },
+                { m: 8, d: 16, name: '추석 연휴' }, { m: 8, d: 17, name: '추석' }, { m: 8, d: 18, name: '추석 연휴' }
+            ];
+        } else if (year === 2025) {
+            variableHolidays = [
+                { m: 0, d: 27, name: '임시공휴일' }, // Potential bridge? Let's stick to official
+                { m: 0, d: 28, name: '설날 연휴' }, { m: 0, d: 29, name: '설날' }, { m: 0, d: 30, name: '설날 연휴' },
+                { m: 2, d: 3, name: '대체공휴일(삼일절)' }, // Mar 1 is Sat -> Mar 3 Mon? (If applicable)
+                { m: 4, d: 6, name: '대체공휴일(부처님오신날)' }, // Buddha (5/5) overlaps Children(5/5)
+                { m: 9, d: 5, name: '추석 연휴' }, { m: 9, d: 6, name: '추석' }, { m: 9, d: 7, name: '추석 연휴' }, { m: 9, d: 8, name: '대체공휴일(추석)' }
+            ];
+        } else if (year === 2026) {
+            variableHolidays = [
+                { m: 1, d: 16, name: '설날 연휴' }, { m: 1, d: 17, name: '설날' }, { m: 1, d: 18, name: '설날 연휴' },
+                { m: 4, d: 24, name: '부처님 오신 날' },
+                { m: 8, d: 25, name: '추석 연휴' }, { m: 8, d: 26, name: '추석' }, { m: 8, d: 27, name: '추석 연휴' }
+            ];
+        }
+
+        return [...fixedHolidays, ...variableHolidays];
+    },
+
+    isClosedDay: function(year, month, day) {
+        const date = new Date(year, month, day);
+        const dayOfWeek = date.getDay();
+        
+        // Sunday
+        if (dayOfWeek === 0) return true;
+
+        // Holidays
+        const holidays = this.getHolidays(year);
+        const found = holidays.find(h => h.m === month && h.d === day);
+        return !!found; // Return true if found
+    },
+    
+    getHolidayName: function(year, month, day) {
+        const holidays = this.getHolidays(year);
+        const found = holidays.find(h => h.m === month && h.d === day);
+        return found ? found.name : null;
+    }
+};
