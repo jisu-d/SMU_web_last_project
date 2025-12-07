@@ -118,6 +118,12 @@
   color: var(--grey-900);
 }
 
+.mypage-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--grey-900);
+}
+
 .mypage-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));

@@ -3,7 +3,7 @@
 .reservation-container {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 2rem 1.5rem 8rem; /* Increased bottom padding to clear floating bar */
+    padding: 3rem 1.5rem 8rem; /* Rollback side padding to 1.5rem */
 }
 
 .res-section {
