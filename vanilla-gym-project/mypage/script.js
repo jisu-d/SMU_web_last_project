@@ -13,6 +13,7 @@ window.initMyPage = function() {
     let appliedCoupons = [];
     let selectedOptionIndex = 0;
     let lastRenderedPaymentType = null;
+    let isPaymentOptionsExpanded = false; // New: Collapsed by default
 
     // --- Helpers ---
     function getMemberData(memberId = CURRENT_USER_ID) {
@@ -69,7 +70,7 @@ window.initMyPage = function() {
     
     const toPaymentBtns = document.querySelectorAll('.to-payment-btn');
     
-    // Buttons now in the bar (or mapped to bar buttons)
+    // Buttons in Bar
     const cancelPaymentBtn = document.getElementById('cancel-payment-btn');
     const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
     
@@ -82,16 +83,25 @@ window.initMyPage = function() {
     const paymentOptionsContainer = document.getElementById('payment-options-container');
     const paymentSelectLabel = document.getElementById('payment-select-label');
     
-    const basePriceDisplay = document.getElementById('base-price-display');
-    const discountRow = document.getElementById('discount-row');
-    const discountAmount = document.getElementById('discount-amount');
-    const individualCouponDiscounts = document.getElementById('individual-coupon-discounts');
-    const totalPriceDisplay = document.getElementById('total-price-display');
+    // Elements for Calculation (Hidden or used for Receipt)
+    // We don't strictly need the old inline price displays if we use the receipt, 
+    // but I'll keep calculating for the floating bar.
 
     // Floating Bottom Bar Elements
     const mypageBottomBar = document.getElementById('mypage-bottom-bar');
     const mypageSummaryText = document.getElementById('mypage-summary-text');
     const mypageSummaryPrice = document.getElementById('mypage-summary-price');
+
+    // Receipt Modal Elements
+    const receiptModal = document.getElementById('receipt-modal');
+    const receiptItemName = document.getElementById('receipt-item-name');
+    const receiptBasePrice = document.getElementById('receipt-base-price');
+    const receiptDiscountRow = document.getElementById('receipt-discount-row');
+    const receiptDiscountAmount = document.getElementById('receipt-discount-amount');
+    const receiptCouponsList = document.getElementById('receipt-coupons-list');
+    const receiptFinalPrice = document.getElementById('receipt-final-price');
+    const cancelReceiptBtn = document.getElementById('cancel-receipt-btn');
+    const finalPayBtn = document.getElementById('final-pay-btn');
 
     // Locker Elements
     const editLockerBtn = document.getElementById('edit-locker-btn');
@@ -140,8 +150,6 @@ window.initMyPage = function() {
     }
 
     toPaymentBtns.forEach(btn => btn.onclick = showPayment);
-    
-    // Updated: Cancel button logic now handles the bar button
     if (cancelPaymentBtn) cancelPaymentBtn.onclick = showMain;
 
     paymentTabs.forEach(tab => {
@@ -150,12 +158,21 @@ window.initMyPage = function() {
             tab.classList.add('active');
             currentPaymentType = tab.dataset.type;
             selectedOptionIndex = 0;
+            isPaymentOptionsExpanded = false; // Reset expansion
             updatePaymentOptions();
         };
     });
 
     if (applyCouponBtn) applyCouponBtn.onclick = applyCoupon;
-    if (confirmPaymentBtn) confirmPaymentBtn.onclick = processPayment;
+    
+    // Step 1: Open Receipt Modal
+    if (confirmPaymentBtn) confirmPaymentBtn.onclick = showReceiptModal;
+    
+    // Step 2: Final Pay
+    if (finalPayBtn) finalPayBtn.onclick = processActualPayment;
+    if (cancelReceiptBtn) cancelReceiptBtn.onclick = () => {
+        if(receiptModal) receiptModal.style.display = 'none';
+    };
 
     setupLockerEvents();
 
@@ -182,13 +199,14 @@ window.initMyPage = function() {
         viewMain.classList.add('active');
         viewPayment.classList.remove('active');
         if(mypageBottomBar) mypageBottomBar.style.display = 'none';
+        if(receiptModal) receiptModal.style.display = 'none';
         renderDashboard();
     }
 
     function showPayment() {
         viewMain.classList.remove('active');
         viewPayment.classList.add('active');
-        if(mypageBottomBar) mypageBottomBar.style.display = 'flex'; // Show bar
+        if(mypageBottomBar) mypageBottomBar.style.display = 'flex';
         
         const pendingPayment = sessionStorage.getItem('pendingPayment');
         const pendingCoupon = sessionStorage.getItem('pendingCoupon');
@@ -197,6 +215,7 @@ window.initMyPage = function() {
         if (couponMessage) couponMessage.textContent = '';
         appliedCoupons = []; 
         selectedOptionIndex = 0;
+        isPaymentOptionsExpanded = false; // Default collapsed
 
         if (pendingPayment && pendingCoupon) {
             sessionStorage.removeItem('pendingPayment');
@@ -299,55 +318,81 @@ window.initMyPage = function() {
 
     function updatePaymentOptions() {
         if (!paymentOptionsContainer) return;
+        paymentOptionsContainer.innerHTML = ''; // Always rebuild to handle toggle state correctly
         
         const isMembership = currentPaymentType === 'membership';
         const options = isMembership ? membershipOptions : ptOptions;
         
         if (paymentSelectLabel) paymentSelectLabel.textContent = isMembership ? '기간 선택' : '횟수 선택';
 
-        // Optimization: Only rebuild if type changed
-        if (currentPaymentType !== lastRenderedPaymentType) {
-            paymentOptionsContainer.innerHTML = ''; 
-            lastRenderedPaymentType = currentPaymentType;
+        // Apply container styling based on state
+        if (isPaymentOptionsExpanded) {
+            paymentOptionsContainer.classList.remove('collapsed');
+            paymentOptionsContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        } else {
+            paymentOptionsContainer.classList.add('collapsed');
+            paymentOptionsContainer.style.gridTemplateColumns = '1fr 48px';
+        }
 
+        // Render Logic
+        if (isPaymentOptionsExpanded) {
+            // Render ALL options
             options.forEach((opt, index) => {
-                const card = document.createElement('div');
-                card.className = `payment-option-card ${selectedOptionIndex === index ? 'selected' : ''}`;
-                
-                let displayPrice = 0;
-                if (isMembership) {
-                    const base = opt.value * 10000;
-                    const discount = Math.floor(opt.value / 3) * 1000;
-                    displayPrice = base - discount;
-                } else {
-                    displayPrice = opt.price;
-                }
-
-                card.innerHTML = `
-                    <div class="payment-option-label">${opt.label}</div>
-                    <div class="payment-option-price">${displayPrice.toLocaleString()}원</div>
-                `;
-
-                card.onclick = () => {
-                    selectedOptionIndex = index;
-                    updatePaymentOptions(); // Will now just toggle classes
-                    calculatePrice();
-                };
-
+                const card = createOptionCard(opt, index, isMembership);
                 paymentOptionsContainer.appendChild(card);
             });
         } else {
-            // Just toggle classes to preserve scroll
-            const cards = paymentOptionsContainer.children;
-            for (let i = 0; i < cards.length; i++) {
-                if (i === selectedOptionIndex) {
-                    cards[i].classList.add('selected');
-                } else {
-                    cards[i].classList.remove('selected');
-                }
-            }
+            // Render SELECTED option only + Toggle Button
+            const selectedOpt = options[selectedOptionIndex];
+            const card = createOptionCard(selectedOpt, selectedOptionIndex, isMembership);
+            paymentOptionsContainer.appendChild(card);
+
+            // Toggle Button
+            const toggleBtn = document.createElement('div');
+            toggleBtn.className = 'payment-toggle-btn';
+            toggleBtn.innerHTML = '<i data-lucide="chevron-down"></i>';
+            toggleBtn.onclick = () => {
+                isPaymentOptionsExpanded = true;
+                updatePaymentOptions();
+            };
+            paymentOptionsContainer.appendChild(toggleBtn);
         }
+
         calculatePrice();
+        if(window.lucide) lucide.createIcons();
+    }
+
+    function createOptionCard(opt, index, isMembership) {
+        const card = document.createElement('div');
+        card.className = `payment-option-card ${selectedOptionIndex === index ? 'selected' : ''}`;
+        
+        let displayPrice = 0;
+        if (isMembership) {
+            const base = opt.value * 10000;
+            const discount = Math.floor(opt.value / 3) * 1000;
+            displayPrice = base - discount;
+        } else {
+            displayPrice = opt.price;
+        }
+
+        card.innerHTML = `
+            <div class="payment-option-label">${opt.label}</div>
+            <div class="payment-option-price">${displayPrice.toLocaleString()}원</div>
+        `;
+
+        card.onclick = () => {
+            selectedOptionIndex = index;
+            if (isPaymentOptionsExpanded) {
+                // If expanded, select and collapse
+                isPaymentOptionsExpanded = false;
+                updatePaymentOptions();
+            } else {
+                // If already collapsed (clicking selected), expand
+                isPaymentOptionsExpanded = true;
+                updatePaymentOptions();
+            }
+        };
+        return card;
     }
 
     function applyCoupon() {
@@ -394,20 +439,13 @@ window.initMyPage = function() {
         if(window.lucide) lucide.createIcons();
     }
 
-    function calculatePrice() {
+    function calculateData() {
         const isMembership = currentPaymentType === 'membership';
         const options = isMembership ? membershipOptions : ptOptions;
-        
-        // Validation: Check if valid selection
-        if (selectedOptionIndex < 0 || selectedOptionIndex >= options.length) {
-            if (confirmPaymentBtn) confirmPaymentBtn.disabled = true;
-            if (mypageSummaryText) mypageSummaryText.textContent = '상품을 선택해주세요';
-            if (mypageSummaryPrice) mypageSummaryPrice.style.display = 'none';
-            return 0;
-        }
-
         const selected = options[selectedOptionIndex];
         
+        if (!selected) return null;
+
         let basePrice = 0;
         let finalPrice = 0;
         let bundleDiscount = 0;
@@ -422,7 +460,7 @@ window.initMyPage = function() {
         }
 
         let totalCouponDiscount = 0;
-        let discountDetailsHtml = '';
+        let couponDiscounts = [];
 
         appliedCoupons.forEach(code => {
             const coupon = COUPON_TYPES[code];
@@ -433,49 +471,87 @@ window.initMyPage = function() {
                 discount = finalPrice * (coupon.value / 100);
             }
             totalCouponDiscount += discount;
-            discountDetailsHtml += `
-                <div class="mypage-price-row mypage-price-coupon" style="display: flex; margin-bottom: 0.25rem; justify-content: space-between; font-size: 0.95rem;">
-                    <span>${coupon.name}</span>
-                    <span>-${Math.floor(discount).toLocaleString()}원</span>
-                </div>
-            `;
+            couponDiscounts.push({ name: coupon.name, amount: discount });
         });
 
         const priceAfterCoupons = Math.max(0, finalPrice - totalCouponDiscount);
 
-        if (basePriceDisplay) basePriceDisplay.textContent = `${basePrice.toLocaleString()}원`;
-        if (discountRow) {
-            discountRow.style.display = bundleDiscount > 0 ? 'flex' : 'none';
-            if (discountAmount) discountAmount.textContent = `-${bundleDiscount.toLocaleString()}원`;
+        return {
+            selected,
+            basePrice,
+            bundleDiscount,
+            couponDiscounts,
+            finalPrice: priceAfterCoupons
+        };
+    }
+
+    function calculatePrice() {
+        const data = calculateData();
+        if (!data) {
+            if (confirmPaymentBtn) confirmPaymentBtn.disabled = true;
+            if (mypageSummaryText) mypageSummaryText.textContent = '상품을 선택해주세요';
+            if (mypageSummaryPrice) mypageSummaryPrice.style.display = 'none';
+            return;
         }
-        if (individualCouponDiscounts) individualCouponDiscounts.innerHTML = discountDetailsHtml;
-        if (totalPriceDisplay) totalPriceDisplay.textContent = `${Math.floor(priceAfterCoupons).toLocaleString()}원`;
 
         // Update Floating Bar
-        if (mypageSummaryText) mypageSummaryText.textContent = isMembership ? `헬스 ${selected.label}` : `PT ${selected.label}`;
+        const typeName = currentPaymentType === 'membership' ? '헬스' : 'PT';
+        if (mypageSummaryText) mypageSummaryText.textContent = `${typeName} ${data.selected.label}`;
         if (mypageSummaryPrice) {
-            mypageSummaryPrice.textContent = `${Math.floor(priceAfterCoupons).toLocaleString()}원`;
+            mypageSummaryPrice.textContent = `${Math.floor(data.finalPrice).toLocaleString()}원`;
             mypageSummaryPrice.style.display = 'inline';
         }
         if (confirmPaymentBtn) confirmPaymentBtn.disabled = false;
-
-        return Math.floor(priceAfterCoupons);
     }
 
-    function processPayment() {
+    function showReceiptModal() {
         if (confirmPaymentBtn && confirmPaymentBtn.disabled) return;
 
+        const data = calculateData();
+        if (!data) return;
+
+        const typeName = currentPaymentType === 'membership' ? '헬스' : 'PT';
+        
+        // Fill Receipt Data
+        if (receiptItemName) receiptItemName.textContent = `${typeName} ${data.selected.label}`;
+        if (receiptBasePrice) receiptBasePrice.textContent = `${data.basePrice.toLocaleString()}원`;
+        
+        if (receiptDiscountRow) {
+            if (data.bundleDiscount > 0) {
+                receiptDiscountRow.style.display = 'flex';
+                if (receiptDiscountAmount) receiptDiscountAmount.textContent = `-${data.bundleDiscount.toLocaleString()}원`;
+            } else {
+                receiptDiscountRow.style.display = 'none';
+            }
+        }
+
+        if (receiptCouponsList) {
+            receiptCouponsList.innerHTML = '';
+            data.couponDiscounts.forEach(c => {
+                const row = document.createElement('div');
+                row.style.cssText = 'display: flex; justify-content: space-between; color: #F04452; font-size: 0.95rem;';
+                row.innerHTML = `<span>${c.name}</span><span>-${Math.floor(c.amount).toLocaleString()}원</span>`;
+                receiptCouponsList.appendChild(row);
+            });
+        }
+
+        if (receiptFinalPrice) receiptFinalPrice.textContent = `${Math.floor(data.finalPrice).toLocaleString()}원`;
+
+        if (receiptModal) receiptModal.style.display = 'flex';
+    }
+
+    function processActualPayment() {
         const selectedMethod = document.querySelector('input[name="payment-method"]:checked');
         if (!selectedMethod) {
             alert('결제 방법을 선택해주세요.');
             return;
         }
 
-        const finalPrice = calculatePrice();
+        const data = calculateData();
         const userData = getMemberData();
 
         if (currentPaymentType === 'membership') {
-            const selected = membershipOptions[selectedOptionIndex];
+            const selected = data.selected;
             let newExpire = new Date();
             if (userData.membershipExpire) {
                 const currentExpire = new Date(userData.membershipExpire);
@@ -483,22 +559,22 @@ window.initMyPage = function() {
             }
             newExpire.setMonth(newExpire.getMonth() + selected.value);
             saveMemberData(CURRENT_USER_ID, { membershipExpire: newExpire.toISOString().split('T')[0] });
-            alert(`${selected.label} 회원권 등록 완료!\n(결제금액: ${finalPrice.toLocaleString()}원)`);
         } else {
-            const selected = ptOptions[selectedOptionIndex];
+            const selected = data.selected;
             saveMemberData(CURRENT_USER_ID, { ptCount: userData.ptCount + selected.value });
-            alert(`PT ${selected.label} 충전 완료!\n(결제금액: ${finalPrice.toLocaleString()}원)`);
         }
 
         // Remove used coupons
         const remainingCoupons = userData.coupons.filter(c => !appliedCoupons.includes(c));
         saveMemberData(CURRENT_USER_ID, { coupons: remainingCoupons });
 
+        alert('결제가 완료되었습니다.');
+        if (receiptModal) receiptModal.style.display = 'none';
         showMain();
     }
 
     function setupLockerEvents() {
-        if (!window.LockerManager) return; 
+        if (!window.LockerManager) return;
         
         if (editLockerBtn) {
             editLockerBtn.onclick = () => {
@@ -551,7 +627,7 @@ window.initMyPage = function() {
     const storedUser = localStorage.getItem('gym_user');
     if (storedUser && MEMBERS[storedUser]) {
         CURRENT_USER_ID = storedUser;
-        syncFromLocalStorage(CURRENT_USER_ID); // Fetch latest data (reservations, etc.)
+        syncFromLocalStorage(CURRENT_USER_ID);
         if (window.updateHeaderState) window.updateHeaderState();
         showMain();
     } else {

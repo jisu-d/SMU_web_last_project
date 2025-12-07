@@ -106,12 +106,6 @@
   margin-bottom: 3rem;
 }
 
-.mypage-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--grey-900);
-}
-
 .mypage-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -605,11 +599,12 @@
 /* Payment Options Grid */
 .payment-options-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr; /* Display one item per row vertically */
     gap: 0.75rem;
-    max-height: 240px; /* Limit height for scrolling if many options */
+    max-height: 240px;
     overflow-y: auto;
-    padding: 0.25rem; /* Space for outline/shadow */
+    padding: 0.25rem;
+    transition: all 0.3s ease;
 }
 
 /* Custom Scrollbar */
@@ -673,6 +668,34 @@
 
 .payment-option-card.selected .payment-option-price {
     color: var(--brand-blue);
+}
+
+/* Payment Options Toggle (Collapsed State) */
+.payment-options-container.collapsed {
+    grid-template-columns: 1fr 48px; /* Option + Toggle Btn */
+    gap: 0.5rem;
+    max-height: 100px;
+    overflow: hidden;
+}
+
+.payment-toggle-btn {
+    border: 1px solid var(--grey-200);
+    background: var(--white);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--grey-600);
+    transition: all 0.2s;
+    height: 100%;
+    min-height: 80px;
+}
+
+.payment-toggle-btn:hover {
+    background: var(--grey-50);
+    color: var(--brand-blue);
+    border-color: var(--brand-blue);
 }
 
 /* Payment Bottom Bar */
