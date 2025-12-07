@@ -96,7 +96,9 @@
                             <i data-lucide="edit-3" style="width: 1.25rem; height: 1.25rem;"></i>
                         </button>
                     </div>
-                    <div class="mypage-info-list">
+                    
+                    <!-- Active Locker Info -->
+                    <div id="locker-info-section" class="mypage-info-list">
                         <div class="mypage-info-item">
                             <p class="mypage-info-label">사물함 번호</p>
                             <p id="locker-number-display" class="mypage-info-value" style="font-size: 1.5rem;">-</p>
@@ -113,6 +115,17 @@
                         <div class="mypage-warning">
                             <p class="mypage-warning-text">비밀번호는 타인에게 노출되지 않도록 주의하세요.</p>
                         </div>
+                    </div>
+
+                    <!-- Locker Registration (No Locker) -->
+                    <div id="locker-register-section" style="display: none; text-align: center; padding: 1rem 0;">
+                        <p style="color: var(--grey-600); margin-bottom: 1.5rem; font-size: 1rem;">
+                            현재 이용 중인 사물함이 없습니다.<br>
+                            버튼을 눌러 즉시 배정받으세요.
+                        </p>
+                        <button id="register-locker-btn" class="btn btn-primary" style="width: 100%; height: 52px; font-size: 1.1rem;">
+                            사물함 배정받기
+                        </button>
                     </div>
                 </div>
 

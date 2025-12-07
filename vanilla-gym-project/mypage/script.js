@@ -300,14 +300,45 @@ window.initMyPage = function() {
         const ptCountEl = document.getElementById('pt-count-display');
         if (ptCountEl) ptCountEl.textContent = data.ptCount;
 
-        if (lockerNumberDisplay) {
+        // Locker Logic (New Registration Feature)
+        const lockerInfoSection = document.getElementById('locker-info-section');
+        const lockerRegisterSection = document.getElementById('locker-register-section');
+        const editLockerBtn = document.getElementById('edit-locker-btn');
+        const registerLockerBtn = document.getElementById('register-locker-btn');
+
+        if (lockerInfoSection && lockerRegisterSection) {
             if (data.locker && data.locker.number) {
-                lockerNumberDisplay.textContent = `${data.locker.number}번`;
-                const pw = data.locker.password || '';
-                lockerPasswordDigits.forEach((el, i) => { if(el) el.textContent = pw[i] || '-'; });
+                // Has Locker -> Show Info
+                lockerInfoSection.style.display = 'flex';
+                lockerRegisterSection.style.display = 'none';
+                if (editLockerBtn) editLockerBtn.style.display = 'flex';
+
+                // Update Display
+                if (lockerNumberDisplay) {
+                    lockerNumberDisplay.textContent = `${data.locker.number}번`;
+                    const pw = data.locker.password || '';
+                    lockerPasswordDigits.forEach((el, i) => { if(el) el.textContent = pw[i] || '-'; });
+                }
             } else {
-                lockerNumberDisplay.textContent = '-';
-                lockerPasswordDigits.forEach(el => { if(el) el.textContent = '-'; });
+                // No Locker -> Show Register Button
+                lockerInfoSection.style.display = 'none';
+                lockerRegisterSection.style.display = 'block';
+                if (editLockerBtn) editLockerBtn.style.display = 'none';
+
+                // Bind Click Event
+                if (registerLockerBtn) {
+                    registerLockerBtn.onclick = () => {
+                        const randLocker = Math.floor(Math.random() * 50) + 1;
+                        const defaultPw = '0000';
+                        
+                        saveMemberData(CURRENT_USER_ID, { 
+                            locker: { number: randLocker, password: defaultPw } 
+                        });
+                        
+                        alert(`🎉 사물함 ${randLocker}번이 배정되었습니다.\n초기 비밀번호: ${defaultPw}`);
+                        renderDashboard(); // Refresh UI
+                    };
+                }
             }
         }
 
