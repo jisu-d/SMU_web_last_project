@@ -10,7 +10,9 @@ window.initMyPage = function() {
 
     // --- Global State Management ---
     let CURRENT_USER_ID = null;
-    let appliedCoupons = []; 
+    let appliedCoupons = [];
+    let selectedOptionIndex = 0;
+    let lastRenderedPaymentType = null;
 
     // --- Helpers ---
     function getMemberData(memberId = CURRENT_USER_ID) {
@@ -18,22 +20,15 @@ window.initMyPage = function() {
         return MEMBERS[memberId];
     }
 
-    // Helper to save current member's data to global MEMBERS object and sync to localStorage
     function saveMemberData(memberId, data) {
         if (!memberId || !MEMBERS[memberId]) return;
         MEMBERS[memberId] = { ...MEMBERS[memberId], ...data };
-        
-        // Sync to 'gym_data' for reservation page compatibility
-        if (memberId === CURRENT_USER_ID) {
-            syncToLocalStorage(memberId);
-        }
+        if (memberId === CURRENT_USER_ID) syncToLocalStorage(memberId);
     }
 
     function syncToLocalStorage(memberId) {
         const userData = MEMBERS[memberId];
         if (!userData) return;
-
-        // Map MEMBERS structure to gym_data structure used by reservation.js
         const gymData = {
             membershipExpire: userData.membershipExpire,
             ptCount: userData.ptCount,
@@ -44,19 +39,13 @@ window.initMyPage = function() {
         localStorage.setItem('gym_data', JSON.stringify(gymData));
     }
 
-    // New: Sync FROM localStorage to update MEMBERS with external changes (e.g. made in reservation page)
     function syncFromLocalStorage(memberId) {
         const storedData = localStorage.getItem('gym_data');
         if (!storedData || !MEMBERS[memberId]) return;
-
         const gymData = JSON.parse(storedData);
-        
-        // Update MEMBERS with latest data from localStorage
         MEMBERS[memberId].ptCount = gymData.ptCount;
         MEMBERS[memberId].reservations = gymData.reservations || [];
         MEMBERS[memberId].membershipExpire = gymData.membershipExpire;
-        
-        // Update locker if present
         if (gymData.lockerNumber) {
             MEMBERS[memberId].locker = {
                 number: gymData.lockerNumber,
@@ -65,7 +54,6 @@ window.initMyPage = function() {
         }
     }
 
-    // Helper to get user ID
     function getCurrentUserId() {
         return CURRENT_USER_ID;
     }
@@ -80,6 +68,8 @@ window.initMyPage = function() {
     const logoutBtn = document.getElementById('logout-btn');
     
     const toPaymentBtns = document.querySelectorAll('.to-payment-btn');
+    
+    // Buttons now in the bar (or mapped to bar buttons)
     const cancelPaymentBtn = document.getElementById('cancel-payment-btn');
     const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
     
@@ -89,7 +79,7 @@ window.initMyPage = function() {
     const couponMessage = document.getElementById('coupon-message');
 
     const paymentTabs = document.querySelectorAll('.payment-tab');
-    const paymentSelect = document.getElementById('payment-select');
+    const paymentOptionsContainer = document.getElementById('payment-options-container');
     const paymentSelectLabel = document.getElementById('payment-select-label');
     
     const basePriceDisplay = document.getElementById('base-price-display');
@@ -97,6 +87,11 @@ window.initMyPage = function() {
     const discountAmount = document.getElementById('discount-amount');
     const individualCouponDiscounts = document.getElementById('individual-coupon-discounts');
     const totalPriceDisplay = document.getElementById('total-price-display');
+
+    // Floating Bottom Bar Elements
+    const mypageBottomBar = document.getElementById('mypage-bottom-bar');
+    const mypageSummaryText = document.getElementById('mypage-summary-text');
+    const mypageSummaryPrice = document.getElementById('mypage-summary-price');
 
     // Locker Elements
     const editLockerBtn = document.getElementById('edit-locker-btn');
@@ -110,17 +105,15 @@ window.initMyPage = function() {
         document.getElementById('locker-password-digit-4')
     ];
 
-    let currentPaymentType = 'membership'; // 'membership' or 'pt'
+    let currentPaymentType = 'membership';
 
-    // --- Event Listeners Setup ---
+    // --- Event Listeners ---
 
-    // Login
     if (loginForm) {
         loginForm.onsubmit = (e) => {
             e.preventDefault();
             const id = document.getElementById('userId')?.value;
             const password = document.getElementById('password')?.value;
-            
             if (MEMBERS[id] && MEMBERS[id].password === password) {
                 loginSuccess(id);
             } else {
@@ -131,87 +124,89 @@ window.initMyPage = function() {
 
     if (testAccountBtn) {
         testAccountBtn.onclick = () => {
-            const idInput = document.getElementById('userId');
-            const pwInput = document.getElementById('password');
-            if (idInput) idInput.value = 'user123';
-            if (pwInput) pwInput.value = '1234';
+            document.getElementById('userId').value = 'user123';
+            document.getElementById('password').value = '1234';
         };
     }
 
     if (logoutBtn) {
         logoutBtn.onclick = () => {
             CURRENT_USER_ID = null;
-            localStorage.removeItem('gym_user'); // Clear persistent login
+            localStorage.removeItem('gym_user');
             appliedCoupons = [];
-            if (window.updateHeaderState) window.updateHeaderState(); // common.js function
+            if (window.updateHeaderState) window.updateHeaderState();
             showLogin();
         };
     }
 
-    // Navigation
     toPaymentBtns.forEach(btn => btn.onclick = showPayment);
+    
+    // Updated: Cancel button logic now handles the bar button
     if (cancelPaymentBtn) cancelPaymentBtn.onclick = showMain;
 
-    // Payment
     paymentTabs.forEach(tab => {
         tab.onclick = () => {
             paymentTabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
             currentPaymentType = tab.dataset.type;
+            selectedOptionIndex = 0;
             updatePaymentOptions();
         };
     });
 
-    if (paymentSelect) paymentSelect.onchange = calculatePrice;
-    
-    // Coupon
-    if (applyCouponBtn) {
-        applyCouponBtn.onclick = applyCoupon;
-    }
+    if (applyCouponBtn) applyCouponBtn.onclick = applyCoupon;
+    if (confirmPaymentBtn) confirmPaymentBtn.onclick = processPayment;
 
-    // Payment Confirm
-    if (confirmPaymentBtn) {
-        confirmPaymentBtn.onclick = processPayment;
-    }
-
-    // Locker
     setupLockerEvents();
 
     // --- Core Functions ---
 
     function loginSuccess(id) {
         CURRENT_USER_ID = id;
-        localStorage.setItem('gym_user', id); // Persist login
-        syncToLocalStorage(id); // Sync data for other pages
+        localStorage.setItem('gym_user', id);
+        syncToLocalStorage(id);
         appliedCoupons = [];
-        
         if (window.updateHeaderState) window.updateHeaderState();
         showMain();
     }
 
     function showLogin() {
-        if (viewLogin) viewLogin.classList.add('active');
-        if (viewMain) viewMain.classList.remove('active');
-        if (viewPayment) viewPayment.classList.remove('active');
+        viewLogin.classList.add('active');
+        viewMain.classList.remove('active');
+        viewPayment.classList.remove('active');
+        if(mypageBottomBar) mypageBottomBar.style.display = 'none';
     }
 
     function showMain() {
-        if (viewLogin) viewLogin.classList.remove('active');
-        if (viewMain) viewMain.classList.add('active');
-        if (viewPayment) viewPayment.classList.remove('active');
+        viewLogin.classList.remove('active');
+        viewMain.classList.add('active');
+        viewPayment.classList.remove('active');
+        if(mypageBottomBar) mypageBottomBar.style.display = 'none';
         renderDashboard();
     }
 
     function showPayment() {
-        if (viewMain) viewMain.classList.remove('active');
-        if (viewPayment) viewPayment.classList.add('active');
+        viewMain.classList.remove('active');
+        viewPayment.classList.add('active');
+        if(mypageBottomBar) mypageBottomBar.style.display = 'flex'; // Show bar
         
-        // Reset UI
+        const pendingPayment = sessionStorage.getItem('pendingPayment');
+        const pendingCoupon = sessionStorage.getItem('pendingCoupon');
+
         if (couponInput) couponInput.value = '';
         if (couponMessage) couponMessage.textContent = '';
         appliedCoupons = []; 
-        renderAppliedCoupons();
+        selectedOptionIndex = 0;
 
+        if (pendingPayment && pendingCoupon) {
+            sessionStorage.removeItem('pendingPayment');
+            sessionStorage.removeItem('pendingCoupon');
+            if (couponInput) couponInput.value = pendingCoupon;
+            applyCoupon();
+        }
+
+        renderAppliedCoupons();
+        
         const cashRadio = document.querySelector('input[name="payment-method"][value="cash"]');
         if (cashRadio) cashRadio.checked = true;
         
@@ -222,26 +217,19 @@ window.initMyPage = function() {
         const data = getMemberData();
         if (!data) return;
 
-        // User Info
         const nameEl = document.getElementById('member-name');
         const contactEl = document.getElementById('member-contact');
         if (nameEl) nameEl.textContent = data.name;
         if (contactEl) contactEl.textContent = data.contact;
 
-        // Membership
         const expireEl = document.getElementById('expire-date-display');
         if (expireEl) {
             if (data.membershipExpire) {
                 const today = new Date();
                 const expireAt = new Date(data.membershipExpire);
-                
-                today.setHours(0,0,0,0); 
-                expireAt.setHours(0,0,0,0);
-
+                today.setHours(0,0,0,0); expireAt.setHours(0,0,0,0);
                 if (expireAt >= today) {
-                    const diffTime = expireAt - today;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    
+                    const diffDays = Math.ceil((expireAt - today) / (1000 * 60 * 60 * 24));
                     expireEl.textContent = `${diffDays}일 남았습니다.`; 
                     expireEl.style.color = 'var(--brand-blue)';
                 } else {
@@ -254,11 +242,9 @@ window.initMyPage = function() {
             }
         }
 
-        // PT
         const ptCountEl = document.getElementById('pt-count-display');
         if (ptCountEl) ptCountEl.textContent = data.ptCount;
 
-        // Locker
         if (lockerNumberDisplay) {
             if (data.locker && data.locker.number) {
                 lockerNumberDisplay.textContent = `${data.locker.number}번`;
@@ -270,7 +256,6 @@ window.initMyPage = function() {
             }
         }
 
-        // Reservations
         const resListContainer = document.getElementById('reservation-list-container');
         if (resListContainer) {
             resListContainer.innerHTML = '';
@@ -304,7 +289,7 @@ window.initMyPage = function() {
         if(window.lucide) lucide.createIcons();
     }
 
-    // --- Data Definitions for Payment ---
+    // --- Data ---
     const membershipOptions = Array.from({length: 12}, (_, i) => ({ label: `${i+1}개월`, value: i+1 }));
     const ptOptions = [
         { label: '10회', value: 10, price: 600000 },
@@ -313,55 +298,70 @@ window.initMyPage = function() {
     ];
 
     function updatePaymentOptions() {
-        if (!paymentSelect) return;
-        paymentSelect.innerHTML = '';
+        if (!paymentOptionsContainer) return;
         
         const isMembership = currentPaymentType === 'membership';
         const options = isMembership ? membershipOptions : ptOptions;
         
         if (paymentSelectLabel) paymentSelectLabel.textContent = isMembership ? '기간 선택' : '횟수 선택';
 
-        options.forEach((opt, index) => {
-            const el = document.createElement('option');
-            el.value = index;
-            let displayPrice = 0;
-            if (isMembership) {
-                displayPrice = (opt.value * 10000) - (Math.floor(opt.value / 3) * 1000);
-            } else {
-                displayPrice = opt.price;
+        // Optimization: Only rebuild if type changed
+        if (currentPaymentType !== lastRenderedPaymentType) {
+            paymentOptionsContainer.innerHTML = ''; 
+            lastRenderedPaymentType = currentPaymentType;
+
+            options.forEach((opt, index) => {
+                const card = document.createElement('div');
+                card.className = `payment-option-card ${selectedOptionIndex === index ? 'selected' : ''}`;
+                
+                let displayPrice = 0;
+                if (isMembership) {
+                    const base = opt.value * 10000;
+                    const discount = Math.floor(opt.value / 3) * 1000;
+                    displayPrice = base - discount;
+                } else {
+                    displayPrice = opt.price;
+                }
+
+                card.innerHTML = `
+                    <div class="payment-option-label">${opt.label}</div>
+                    <div class="payment-option-price">${displayPrice.toLocaleString()}원</div>
+                `;
+
+                card.onclick = () => {
+                    selectedOptionIndex = index;
+                    updatePaymentOptions(); // Will now just toggle classes
+                    calculatePrice();
+                };
+
+                paymentOptionsContainer.appendChild(card);
+            });
+        } else {
+            // Just toggle classes to preserve scroll
+            const cards = paymentOptionsContainer.children;
+            for (let i = 0; i < cards.length; i++) {
+                if (i === selectedOptionIndex) {
+                    cards[i].classList.add('selected');
+                } else {
+                    cards[i].classList.remove('selected');
+                }
             }
-            el.textContent = `${opt.label} (${displayPrice.toLocaleString()}원)`;
-            paymentSelect.appendChild(el);
-        });
+        }
         calculatePrice();
     }
 
     function applyCoupon() {
         const code = couponInput.value.trim();
         if (!code) return;
-
-        if (!COUPON_TYPES[code]) {
-            setMessage('존재하지 않는 쿠폰 코드입니다.', '#F04452');
-            return;
-        }
-
+        if (!COUPON_TYPES[code]) { setMessage('존재하지 않는 쿠폰 코드입니다.', '#F04452'); return; }
         const userData = getMemberData();
-        if (!userData.coupons.includes(code)) {
-            setMessage('보유하고 있지 않은 쿠폰입니다.', '#F04452');
-            return;
-        }
-
-        if (appliedCoupons.includes(code)) {
-            setMessage('이미 적용된 쿠폰입니다.', '#F04452');
-            return;
-        }
-
+        if (!userData.coupons.includes(code)) { setMessage('보유하고 있지 않은 쿠폰입니다.', '#F04452'); return; }
+        if (appliedCoupons.includes(code)) { setMessage('이미 적용된 쿠폰입니다.', '#F04452'); return; }
         const couponInfo = COUPON_TYPES[code];
         if (couponInfo.target && couponInfo.target !== currentPaymentType) {
             setMessage(`이 쿠폰은 ${couponInfo.target === 'pt' ? 'PT' : '회원권'} 결제에만 사용할 수 있습니다.`, '#F04452');
             return;
         }
-
         appliedCoupons.push(code);
         setMessage('쿠폰이 적용되었습니다.', '#059669');
         couponInput.value = '';
@@ -395,13 +395,19 @@ window.initMyPage = function() {
     }
 
     function calculatePrice() {
-        if (!paymentSelect) return 0;
-        const index = paymentSelect.value;
         const isMembership = currentPaymentType === 'membership';
         const options = isMembership ? membershipOptions : ptOptions;
-        const selected = options[index];
-        if (!selected) return 0;
+        
+        // Validation: Check if valid selection
+        if (selectedOptionIndex < 0 || selectedOptionIndex >= options.length) {
+            if (confirmPaymentBtn) confirmPaymentBtn.disabled = true;
+            if (mypageSummaryText) mypageSummaryText.textContent = '상품을 선택해주세요';
+            if (mypageSummaryPrice) mypageSummaryPrice.style.display = 'none';
+            return 0;
+        }
 
+        const selected = options[selectedOptionIndex];
+        
         let basePrice = 0;
         let finalPrice = 0;
         let bundleDiscount = 0;
@@ -445,10 +451,20 @@ window.initMyPage = function() {
         if (individualCouponDiscounts) individualCouponDiscounts.innerHTML = discountDetailsHtml;
         if (totalPriceDisplay) totalPriceDisplay.textContent = `${Math.floor(priceAfterCoupons).toLocaleString()}원`;
 
+        // Update Floating Bar
+        if (mypageSummaryText) mypageSummaryText.textContent = isMembership ? `헬스 ${selected.label}` : `PT ${selected.label}`;
+        if (mypageSummaryPrice) {
+            mypageSummaryPrice.textContent = `${Math.floor(priceAfterCoupons).toLocaleString()}원`;
+            mypageSummaryPrice.style.display = 'inline';
+        }
+        if (confirmPaymentBtn) confirmPaymentBtn.disabled = false;
+
         return Math.floor(priceAfterCoupons);
     }
 
     function processPayment() {
+        if (confirmPaymentBtn && confirmPaymentBtn.disabled) return;
+
         const selectedMethod = document.querySelector('input[name="payment-method"]:checked');
         if (!selectedMethod) {
             alert('결제 방법을 선택해주세요.');
@@ -456,11 +472,10 @@ window.initMyPage = function() {
         }
 
         const finalPrice = calculatePrice();
-        const index = paymentSelect.value;
         const userData = getMemberData();
 
         if (currentPaymentType === 'membership') {
-            const selected = membershipOptions[index];
+            const selected = membershipOptions[selectedOptionIndex];
             let newExpire = new Date();
             if (userData.membershipExpire) {
                 const currentExpire = new Date(userData.membershipExpire);
@@ -470,7 +485,7 @@ window.initMyPage = function() {
             saveMemberData(CURRENT_USER_ID, { membershipExpire: newExpire.toISOString().split('T')[0] });
             alert(`${selected.label} 회원권 등록 완료!\n(결제금액: ${finalPrice.toLocaleString()}원)`);
         } else {
-            const selected = ptOptions[index];
+            const selected = ptOptions[selectedOptionIndex];
             saveMemberData(CURRENT_USER_ID, { ptCount: userData.ptCount + selected.value });
             alert(`PT ${selected.label} 충전 완료!\n(결제금액: ${finalPrice.toLocaleString()}원)`);
         }
@@ -515,7 +530,7 @@ window.initMyPage = function() {
         }
     }
 
-    // --- Global Exports for HTML Event Handlers ---
+    // --- Global Exports ---
     window.removeCoupon = (code) => {
         appliedCoupons = appliedCoupons.filter(c => c !== code);
         renderAppliedCoupons();
@@ -527,16 +542,12 @@ window.initMyPage = function() {
         if (!confirm('예약을 취소하시겠습니까?')) return; 
         const data = getMemberData();
         const newRes = data.reservations.filter(r => r.id !== id);
-        saveMemberData(CURRENT_USER_ID, { 
-            reservations: newRes,
-            ptCount: data.ptCount + 1 
-        });
+        saveMemberData(CURRENT_USER_ID, { reservations: newRes, ptCount: data.ptCount + 1 });
         alert('예약 취소됨 (PT 1회 복구)');
         renderDashboard();
     };
 
-    // --- Initialization Logic ---
-    // Check for persistent login session
+    // --- Init ---
     const storedUser = localStorage.getItem('gym_user');
     if (storedUser && MEMBERS[storedUser]) {
         CURRENT_USER_ID = storedUser;
