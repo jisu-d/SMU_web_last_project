@@ -1,4 +1,4 @@
-/* Reservation Page - Toss Design */
+/* Reservation Page - Brand Design */
 
 .reservation-container {
     max-width: 1000px;
@@ -54,8 +54,8 @@
 }
 
 .res-trainer-card.selected {
-    border-color: var(--toss-blue);
-    background-color: #E8F3FF; /* Very light blue */
+    border-color: var(--brand-blue);
+    background-color: var(--brand-blue-light); /* Very light blue */
 }
 
 .res-trainer-img {
@@ -112,7 +112,7 @@
 }
 
 .res-month-tab.active {
-    background-color: var(--toss-blue);
+    background-color: var(--brand-blue);
     color: var(--white);
     box-shadow: 0 4px 10px rgba(0, 100, 255, 0.3);
 }
@@ -151,8 +151,6 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 0.5rem;
-    /* Fixed min-height to prevent layout shift (6 rows * 160px + 5 gaps * 0.5rem = 960 + 40 = 1000px) */
-    /* min-height: 1000px;  */
 }
 
 .date-card {
@@ -172,8 +170,8 @@
 
 .date-card:hover:not(.disabled):not(.selected) { /* Added :not(.selected) */
     background: var(--grey-50);
-    border-color: var(--toss-blue);
-    color: var(--toss-blue);
+    border-color: var(--brand-blue);
+    color: var(--brand-blue);
 }
 
 .date-card.disabled {
@@ -192,9 +190,9 @@
 }
 
 .date-card.selected {
-    background: var(--toss-blue);
+    background: var(--brand-blue);
     color: var(--white);
-    border-color: var(--toss-blue);
+    border-color: var(--brand-blue);
     box-shadow: 0 4px 12px rgba(0, 100, 255, 0.3);
 }
 
@@ -246,9 +244,9 @@
 }
 
 .time-slot.selected {
-    background-color: var(--toss-blue);
+    background-color: var(--brand-blue);
     color: var(--white);
-    border-color: var(--toss-blue);
+    border-color: var(--brand-blue);
     box-shadow: 0 4px 12px rgba(0, 100, 255, 0.3);
 }
 
@@ -281,7 +279,7 @@
 }
 
 .dot.available { background-color: var(--white); border: 1px solid var(--grey-300); }
-.dot.selected { background-color: var(--toss-blue); }
+.dot.selected { background-color: var(--brand-blue); }
 .dot.booked { background-color: var(--grey-200); }
 
 /* Bottom Bar */

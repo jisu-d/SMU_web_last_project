@@ -1,4 +1,4 @@
-/* My Page - Toss Design System */
+/* My Page - Brand Design System */
 
 .mypage-container {
   max-width: 1200px;
@@ -31,7 +31,7 @@
   padding: 3rem;
   background-color: var(--white);
   border-radius: 32px;
-  box-shadow: var(--shadow-toss);
+  box-shadow: var(--shadow-brand);
   border: 1px solid var(--grey-100);
 }
 
@@ -44,12 +44,12 @@
 .mypage-login-icon {
   width: 64px;
   height: 64px;
-  background-color: var(--toss-blue-light);
+  background-color: var(--brand-blue-light);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--toss-blue);
+  color: var(--brand-blue);
 }
 
 .mypage-login-icon svg {
@@ -100,7 +100,7 @@
 }
 
 .mypage-test-highlight {
-  color: var(--toss-blue);
+  color: var(--brand-blue);
   font-weight: 700;
 }
 
@@ -132,11 +132,6 @@
   box-shadow: var(--shadow-sm);
   transition: all 0.2s ease;
 }
-/* 
-.mypage-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-toss);
-} */
 
 .mypage-card-header {
   display: flex;
@@ -148,7 +143,7 @@
 .mypage-card-icon {
   width: 28px;
   height: 28px;
-  color: var(--toss-blue);
+  color: var(--brand-blue);
 }
 
 .mypage-card-title {
@@ -189,7 +184,7 @@
 }
 
 .mypage-days-remaining {
-  background-color: var(--toss-blue-light);
+  background-color: var(--brand-blue-light);
   padding: 1.5rem;
   border-radius: 16px;
   margin-bottom: 1rem;
@@ -197,7 +192,7 @@
 }
 
 .mypage-days-text {
-  color: var(--toss-blue);
+  color: var(--brand-blue);
   font-weight: 700;
   font-size: 1.1rem;
 }
@@ -223,7 +218,7 @@
 .reservation-item:hover {
   background-color: var(--white);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  border-color: var(--toss-blue-light);
+  border-color: var(--brand-blue-light);
   transform: translateY(-2px);
 }
 
@@ -288,7 +283,7 @@
   padding: 2.5rem;
   background: linear-gradient(135deg, #E8F3FF 0%, #FFFFFF 100%);
   border-radius: 24px;
-  border: 1px solid var(--toss-blue-light);
+  border: 1px solid var(--brand-blue-light);
   box-shadow: var(--shadow-sm);
 }
 
@@ -312,7 +307,7 @@
 
 .payment-tab.active {
     background-color: var(--white);
-    color: var(--toss-blue);
+    color: var(--brand-blue);
     box-shadow: var(--shadow-sm);
 }
 
@@ -325,7 +320,7 @@
   padding: 3rem;
   background-color: var(--white);
   border-radius: 32px;
-  box-shadow: var(--shadow-toss);
+  box-shadow: var(--shadow-brand);
   border: 1px solid var(--grey-100);
 }
 
@@ -374,7 +369,7 @@
 }
 
 .mypage-price-total-value {
-  color: var(--toss-blue);
+  color: var(--brand-blue);
   font-size: 1.6rem;
 }
 
@@ -444,7 +439,7 @@
   border-radius: 28px;
   width: 90%;
   max-width: 1200px; /* Increased from 800px to make it larger */
-  box-shadow: var(--shadow-toss);
+  box-shadow: var(--shadow-brand);
   max-height: 95vh; /* Increased from 90vh, allowing more height */
   overflow-y: auto; /* Changed back to auto to ensure accessibility if content overflows */
   animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -466,7 +461,7 @@
   color: var(--grey-900);
 }
 
-/* Locker Styles - Updated based on mypage copy */
+/* Locker Styles */
 .locker-grid {
   display: grid;
   grid-template-columns: repeat(10, 1fr); /* 10 cols */
@@ -496,16 +491,16 @@
 }
 
 .locker-item:hover:not(.disabled):not(.selected) {
-  background-color: var(--toss-blue-light); /* Lighter blue on hover for available */
-  border-color: var(--toss-blue); /* blue-300 */
+  background-color: var(--brand-blue-light); /* Lighter blue on hover for available */
+  border-color: var(--brand-blue); /* blue-300 */
 }
 
 .locker-item.selected {
-  background-color: var(--toss-blue); /* Darker blue background */
-  border-color: var(--toss-blue-dark); /* Even darker blue */
+  background-color: var(--brand-blue); /* Darker blue background */
+  border-color: var(--brand-blue-dark); /* Even darker blue */
   color: var(--white); /* White text for contrast */
   font-weight: bold;
-  box-shadow: 0 0 0 2px var(--toss-blue-light); /* Accent ring */
+  box-shadow: 0 0 0 2px var(--brand-blue-light); /* Accent ring */
   transform: scale(1.05);
   z-index: 1;
 }
@@ -552,7 +547,7 @@
 }
 
 .password-toggle-btn:hover {
-  color: var(--toss-blue);
+  color: var(--brand-blue);
 }
 
 .password-toggle-btn svg {
@@ -599,12 +594,12 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: var(--toss-blue-light);
+  background-color: var(--brand-blue-light);
   border: 1px solid transparent;
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
   font-size: 0.9rem;
-  color: var(--toss-blue);
+  color: var(--brand-blue);
   font-weight: 600;
 }
 
@@ -613,7 +608,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  color: var(--toss-blue);
+  color: var(--brand-blue);
   opacity: 0.7;
   display: flex;
   align-items: center;

@@ -243,7 +243,7 @@ window.initMyPage = function() {
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                     
                     expireEl.textContent = `${diffDays}일 남았습니다.`; 
-                    expireEl.style.color = 'var(--toss-blue)';
+                    expireEl.style.color = 'var(--brand-blue)';
                 } else {
                     expireEl.textContent = '만료됨';
                     expireEl.style.color = '#F04452';
@@ -284,7 +284,7 @@ window.initMyPage = function() {
                     item.innerHTML = `
                         <div class="reservation-info">
                             <div class="reservation-date">
-                                <i data-lucide="calendar" style="width: 1rem; height: 1rem; color: var(--toss-blue);"></i>
+                                <i data-lucide="calendar" style="width: 1rem; height: 1rem; color: var(--brand-blue);"></i>
                                 ${res.date} <span style="color: var(--grey-300);">|</span> ${res.time}
                             </div>
                             <div class="reservation-trainer">
@@ -483,7 +483,7 @@ window.initMyPage = function() {
     }
 
     function setupLockerEvents() {
-        if (!window.LockerManager) return;
+        if (!window.LockerManager) return; 
         
         if (editLockerBtn) {
             editLockerBtn.onclick = () => {

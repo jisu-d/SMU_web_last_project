@@ -90,10 +90,10 @@
   --green-600: #059669;
   --purple-600: #9333ea;
 
-   /* Toss Color Palette */
-  --toss-blue: #0064FF;
-  --toss-blue-dark: #0050CC;
-  --toss-blue-light: #E8F3FF;
+   /* Brand Color Palette */
+  --brand-blue: #0064FF;
+  --brand-blue-dark: #0050CC;
+  --brand-blue-light: #E8F3FF;
   
   --grey-50: #F9FAFB;
   --grey-100: #F2F4F6;
@@ -110,19 +110,19 @@
   --black: #000000;
 
   /* Semantic Colors */
-  --primary: var(--toss-blue);
+  --primary: var(--brand-blue);
   --primary-foreground: var(--white);
   --secondary: var(--grey-100);
   --secondary-foreground: var(--grey-800);
-  --accent: var(--toss-blue-light);
-  --accent-foreground: var(--toss-blue);
+  --accent: var(--brand-blue-light);
+  --accent-foreground: var(--brand-blue);
   --background: var(--white);
   --foreground: var(--grey-900);
   --muted: var(--grey-100);
   --muted-foreground: var(--grey-600);
   --border: var(--grey-200);
   --input: var(--grey-200);
-  --ring: var(--toss-blue);
+  --ring: var(--brand-blue);
   
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -132,7 +132,7 @@
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-toss: 0 8px 30px rgba(0, 0, 0, 0.06);
+  --shadow-brand: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
 * {

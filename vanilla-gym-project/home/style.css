@@ -1,4 +1,4 @@
-/* Home Page Styles - Toss Design System */
+/* Home Page Styles - Brand Design System */
 
 .dev-container {
     width: 100%;
@@ -62,7 +62,7 @@
     left: 0;
     width: 100%;
     height: 8px;
-    background-color: var(--toss-blue);
+    background-color: var(--brand-blue);
     opacity: 0.3;
     z-index: -1;
 }
@@ -95,8 +95,8 @@
 }
 
 .tag:hover {
-    background-color: var(--toss-blue-light);
-    color: var(--toss-blue);
+    background-color: var(--brand-blue-light);
+    color: var(--brand-blue);
 }
 
 .dev-hero-image {
@@ -111,7 +111,7 @@
     width: 100%;
     max-width: 380px; /* Reduced from 480px */
     border-radius: 24px;
-    box-shadow: var(--shadow-toss);
+    box-shadow: var(--shadow-brand);
     transform: rotate(-2deg); /* Subtle tilt for dynamic feel */
     transition: transform 0.5s ease;
 }
@@ -139,7 +139,7 @@
 }
 
 .floating-card i {
-    color: var(--toss-blue);
+    color: var(--brand-blue);
     width: 24px;
     height: 24px;
 }
@@ -198,7 +198,7 @@
 
 .dev-card:hover {
     transform: translateY(-8px);
-    box-shadow: var(--shadow-toss);
+    box-shadow: var(--shadow-brand);
     border-color: transparent;
 }
 
@@ -215,7 +215,7 @@
 }
 
 .dev-card:hover .card-icon {
-    background-color: var(--toss-blue);
+    background-color: var(--brand-blue);
     color: var(--white);
 }
 
@@ -251,7 +251,7 @@
 }
 
 .btn-kakao {
-    background-color: var(--toss-blue);
+    background-color: var(--brand-blue);
     color: var(--white);
     border: none;
     padding: 1rem 2rem;
@@ -265,7 +265,7 @@
 }
 
 .btn-kakao:hover {
-    background-color: var(--toss-blue-dark);
+    background-color: var(--brand-blue-dark);
 }
 
 .community-list {
@@ -308,7 +308,7 @@
 }
 .comm-badge.event {
     background-color: #FFF1F4; /* Light Red/Pink */
-    color: #F04452; /* Toss Red */
+    color: #F04452; /* Destructive Red */
 }
 .comm-badge.announcement {
     background-color: #F2F4F6;
@@ -330,7 +330,7 @@
     color: var(--grey-500);
 }
 
-/* Static Promo Banner (Toss Gradient) */
+/* Static Promo Banner (Brand Gradient) */
 .promo-banner {
     background: linear-gradient(100deg, #0064FF, #3E8BFF);
     border-radius: 28px;
@@ -403,7 +403,7 @@
 
 .promo-btn {
     background: white;
-    color: var(--toss-blue);
+    color: var(--brand-blue);
     border: none;
     padding: 1rem 1.8rem;
     border-radius: 999px;

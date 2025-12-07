@@ -415,11 +415,11 @@ function initReservation() {
         const { selectedTrainer, selectedDate, selectedTime } = state;
 
         if (selectedTrainer && selectedDate && selectedTime) {
-            summaryText.innerHTML = `<span style="color:var(--toss-blue)">${selectedTrainer.name}</span>님과 <span style="color:var(--toss-blue)">${selectedTime}</span>에 운동해요`;
+            summaryText.innerHTML = `<span style="color:var(--brand-blue)">${selectedTrainer.name}</span>님과 <span style="color:var(--brand-blue)">${selectedTime}</span>에 운동해요`;
             confirmBtn.disabled = false;
         } else if (selectedTrainer && selectedDate) {
             const [y, m, d] = selectedDate.split('-');
-            summaryText.innerHTML = `<span style="color:var(--toss-blue)">${m}월 ${d}일</span> 시간을 선택해주세요`;
+            summaryText.innerHTML = `<span style="color:var(--brand-blue)">${m}월 ${d}일</span> 시간을 선택해주세요`;
             confirmBtn.disabled = true;
         } else if (selectedTrainer) {
             summaryText.textContent = '날짜를 선택해주세요';

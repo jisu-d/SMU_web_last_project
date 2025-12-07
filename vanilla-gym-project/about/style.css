@@ -16,7 +16,7 @@
 .delay-300 { transition-delay: 0.3s; }
 .delay-400 { transition-delay: 0.4s; }
 
-/* About Page - New Toss Design */
+/* About Page - Brand Design */
 
 .about-wrapper {
     width: 100%;
@@ -25,24 +25,24 @@
 }
 
 /* Common Utilities */
-.toss-section {
+.brand-section {
     max-width: 1200px;
     margin: 0 auto;
     padding: 6rem 1.5rem;
 }
 
-.toss-badge {
+.brand-badge {
     display: inline-block;
     padding: 0.5rem 1rem;
     background-color: rgba(0, 100, 255, 0.1);
-    color: var(--toss-blue);
+    color: var(--brand-blue);
     font-weight: 700;
     font-size: 0.95rem;
     border-radius: 100px;
     margin-bottom: 1.5rem;
 }
 
-.toss-section-title {
+.brand-section-title {
     font-size: 2.5rem;
     font-weight: 800;
     line-height: 1.3;
@@ -51,13 +51,13 @@
     letter-spacing: -0.02em;
 }
 
-.toss-section-desc {
+.brand-section-desc {
     font-size: 1.1rem;
     color: var(--grey-600);
     line-height: 1.6;
 }
 
-.toss-card {
+.brand-card {
     background: var(--white);
     border-radius: 24px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.04);
@@ -65,7 +65,7 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.toss-card:hover {
+.brand-card:hover {
     /* box-shadow: 0 15px 40px rgba(0,0,0,0.08); */
 }
 
@@ -76,7 +76,7 @@
     background: radial-gradient(circle at 50% 50%, #F9FAFB 0%, #FFFFFF 100%);
 }
 
-.toss-hero-title {
+.brand-hero-title {
     font-size: 3.5rem;
     font-weight: 900;
     line-height: 1.2;
@@ -87,19 +87,19 @@
 
 /* Responsive adjustments for hero title */
 @media (max-width: 1024px) {
-    .toss-hero-title {
+    .brand-hero-title {
         font-size: 3rem;
     }
 }
 
 @media (max-width: 768px) {
-    .toss-hero-title {
+    .brand-hero-title {
         font-size: 2.5rem;
     }
 }
 
 .text-highlight {
-    color: var(--toss-blue);
+    color: var(--brand-blue);
     position: relative;
     display: inline-block;
 }
@@ -116,7 +116,7 @@
     transform: rotate(-1deg);
 }
 
-.toss-hero-desc {
+.brand-hero-desc {
     font-size: 1.25rem;
     color: var(--grey-600);
     line-height: 1.6;
@@ -138,7 +138,7 @@
     text-align: left;
 }
 
-.toss-scroll-wrapper {
+.brand-scroll-wrapper {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1.5rem;
@@ -183,7 +183,7 @@
 .trainer-role {
     font-size: 0.85rem;
     font-weight: 700;
-    color: var(--toss-blue);
+    color: var(--brand-blue);
     margin-bottom: 0.5rem;
     text-transform: uppercase;
 }
@@ -229,12 +229,12 @@
 .facility-icon {
     width: 56px;
     height: 56px;
-    background-color: var(--toss-blue-light);
+    background-color: var(--brand-blue-light);
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--toss-blue);
+    color: var(--brand-blue);
     margin-bottom: 1.5rem;
 }
 
@@ -285,7 +285,7 @@
     color: var(--grey-600);
 }
 
-.toss-map-view {
+.brand-map-view {
     width: 100%;
     height: 100%;
     min-height: 320px;
@@ -338,7 +338,7 @@
 .contact-phone {
     font-size: 1.8rem;
     font-weight: 800;
-    color: var(--toss-blue);
+    color: var(--brand-blue);
     margin-bottom: 1.5rem;
 }
 
@@ -381,7 +381,7 @@
 }
 
 @media (max-width: 768px) {
-    .toss-hero-title {
+    .brand-hero-title {
         font-size: 2.5rem;
     }
     .trainer-list {
