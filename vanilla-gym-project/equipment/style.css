@@ -1,29 +1,19 @@
 .equipment-container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 3rem 1rem;
+  padding: 4rem 1.5rem;
 }
 
-.equipment-title {
-  text-align: center;
-  margin-bottom: 3rem;
-  font-size: 2.5rem;
-}
-
-.equipment-content {  
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  max-width: 72rem;
-  margin: 0 auto;
-}
-
+/* Tabs */
 .equipment-tabs {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
+  width: fit-content; /* Make the container fit its content */
+  margin-left: auto;   /* Center horizontally */
+  margin-right: auto;  /* Center horizontally */
 }
 
 .equipment-tab {
@@ -46,91 +36,96 @@
   color: white;
 }
 
+/* Grid Layout */
 .equipment-grid {
-  display: none; /* Hide by default */
+  display: none;
   grid-template-columns: 1fr;
   gap: 2rem;
-  opacity: 0; /* Start invisible */
-  transform: translateY(20px); /* Start slightly lower */
-  transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Transition for smooth effect */
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 .equipment-grid.active {
-  display: grid; /* Show only when active */
-  animation: slideUpFadeIn 0.6s ease-out forwards; /* Apply animation */
-}
-
-@keyframes slideUpFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  display: grid;
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @media (min-width: 1024px) {
-  .equipment-grid {
-    /* grid-template-columns: repeat(2, 1fr); This is now handled in the active state or combined */
-  }
   .equipment-grid.active {
-      grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr; /* 2 Column layout */
+    align-items: start;
   }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Left Column: Media */
 .equipment-media-section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  position: sticky;
+  top: 6rem; /* Sticky on desktop */
 }
 
 .equipment-image-container {
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--grey-100);
   overflow: hidden;
+  aspect-ratio: 4/3;
 }
 
 .equipment-image {
   width: 100%;
-  height: 20rem;
+  height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.equipment-image-container:hover .equipment-image {
+  transform: scale(1.05);
 }
 
 .equipment-video-container {
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--grey-100);
   overflow: hidden;
 }
 
 .equipment-video-header {
-  padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
-  background-color: #f9fafb;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--grey-100);
+  background-color: var(--grey-50);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .equipment-video-icon {
   width: 1.25rem;
   height: 1.25rem;
-  color: #2563eb;
+  color: var(--brand-blue);
+  fill: var(--brand-blue-light);
 }
 
 .equipment-video-title {
-  font-size: 1.125rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--grey-800);
 }
 
 .equipment-video-wrapper {
   aspect-ratio: 16 / 9;
 }
 
+/* Right Column: Info */
 .equipment-info-section {
   display: flex;
   flex-direction: column;
@@ -138,38 +133,56 @@
 }
 
 .equipment-info-card {
-  background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
-  padding: 1.5rem;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--grey-100);
+  padding: 2rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.equipment-info-card:hover {
+  /* transform: translateY(-2px); */
+  /* box-shadow: var(--shadow); */
+}
+
+/* Typography & Badges */
 .equipment-category-badge {
-  padding: 0.5rem 0.75rem;
-  background-color: #dbeafe;
-  color: #1e40af;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
+  padding: 0.4rem 0.8rem;
+  background-color: var(--brand-blue-light);
+  color: var(--brand-blue);
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
   display: inline-block;
   margin-bottom: 1rem;
 }
 
 .equipment-name {
   margin-bottom: 1rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--grey-900);
+  letter-spacing: -0.02em;
 }
 
 .equipment-description {
-  color: #374151;
-  line-height: 1.75;
+  color: var(--grey-600);
+  line-height: 1.7;
+  font-size: 1.05rem;
 }
 
 .equipment-subtitle {
-  margin-bottom: 1rem;
-  font-size: 1.125rem;
+  margin-bottom: 1.25rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--grey-900);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
+/* Muscles */
 .equipment-muscles {
   display: flex;
   flex-wrap: wrap;
@@ -178,133 +191,58 @@
 
 .equipment-muscle-tag {
   padding: 0.5rem 1rem;
-  background-color: #d1fae5;
-  color: #065f46;
-  border-radius: 9999px;
+  background-color: var(--grey-100);
+  color: var(--grey-700);
+  border-radius: 100px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s;
 }
 
-.equipment-usage-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.equipment-muscle-tag:hover {
+  background-color: var(--grey-200);
+  color: var(--grey-900);
 }
 
-.equipment-usage-item {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.equipment-usage-number {
-  flex-shrink: 0;
-  width: 1.5rem;
-  height: 1.5rem;
-  background-color: #2563eb;
-  color: white;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-}
-
-.equipment-usage-text {
-  color: #374151;
-  padding-top: 0.125rem;
-}
-
-.equipment-caution-title {
-  margin-bottom: 1rem;
-  color: #dc2626;
-  font-size: 1.125rem;
-}
-
-.equipment-caution-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.equipment-caution-item {
-  display: flex;
-  gap: 0.5rem;
-  color: #374151;
-}
-
-.equipment-caution-bullet {
-  color: #dc2626;
-}
-
-.equipment-inquiry {
-  margin-top: 3rem;
-  background-color: #eff6ff;
-  border-radius: 0.75rem;
-  padding: 2rem;
-  text-align: center;
-}
-
-.equipment-inquiry-title {
-  margin-bottom: 0.5rem;
-  font-size: 1.125rem;
-}
-
-.equipment-inquiry-text {
-  color: #374151;
-  margin-bottom: 1rem;
-}
-
-.equipment-inquiry-phone {
-  color: #2563eb;
-}
-
-/* Muscle Map & Markers */
+/* Muscle Map */
 .muscle-map-container {
   margin-top: 1.5rem;
-  background-color: white;
-  border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
-  /* padding: 2rem;  Removed to fit image to border */
+  background-color: var(--grey-50);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--grey-200);
+  padding: 1rem;
   display: flex;
-  justify-content: center; /* Center the wrapper horizontally */
+  justify-content: center;
   align-items: center;
-  overflow: hidden; /* Clip image to border radius */
 }
 
-/* Wrapper to tightly fit the image so markers are relative to the image itself */
 .muscle-map-wrapper {
     position: relative;
     width: 100%;
-    /* 6.png 비율: 가로 665 / 세로 368 → 약 1.8:1 */
-    aspect-ratio: 665 / 368;   /* 최신 브라우저용 */
-    overflow: hidden;          /* 혹시 넘치는 부분 잘라내기 */
+    max-width: 400px; /* Limit size */
+    aspect-ratio: 665 / 368;
 }
 
 .muscle-map-image {
     width: 100%;
     height: 100%;
-    object-fit: contain;       /* 이미지 전체가 틀 안에 보이게 */
+    object-fit: contain;
     display: block;
+    opacity: 0.9;
 }
 
 .muscle-marker {
   position: absolute;
-  width: 24px;
-  height: 24px;
-  background-color: #ef4444; /* Red-500 */
-  border: 3px solid rgba(255, 255, 255, 0.9);
+  width: 16px;
+  height: 16px;
+  background-color: var(--brand-blue);
+  border: 2px solid white;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Drop shadow */
-  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   z-index: 10;
 }
 
-/* Inner pulse ring */
 .muscle-marker::after {
   content: '';
   position: absolute;
@@ -312,20 +250,135 @@
   left: 50%;
   width: 100%;
   height: 100%;
-  background-color: rgba(239, 68, 68, 0.6);
+  background-color: var(--brand-blue);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  animation: markerPulse 2s infinite;
+  animation: pulseRing 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
   z-index: -1;
 }
 
-@keyframes markerPulse {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.8;
+@keyframes pulseRing {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+}
+
+/* Usage List */
+.equipment-usage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.equipment-usage-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.equipment-usage-number {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  background-color: var(--brand-blue);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+.equipment-usage-text {
+  color: var(--grey-700);
+  line-height: 1.6;
+  padding-top: 0.1rem;
+}
+
+/* Caution */
+.equipment-caution-title {
+  margin-bottom: 1rem;
+  color: #ef4444; /* Red-500 */
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.equipment-caution-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.equipment-caution-item {
+  display: flex;
+  gap: 0.75rem;
+  color: var(--grey-700);
+  font-size: 0.95rem;
+  padding: 0.75rem;
+  background-color: #fef2f2; /* Red-50 */
+  border-radius: var(--radius-md);
+  border: 1px solid #fee2e2; /* Red-100 */
+}
+
+.equipment-caution-bullet {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+/* Inquiry Section */
+.equipment-inquiry {
+  margin-top: 4rem;
+  background: linear-gradient(135deg, var(--grey-50) 0%, white 100%);
+  border-radius: 24px;
+  padding: 3rem;
+  text-align: center;
+  border: 1px solid var(--grey-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.equipment-inquiry-title {
+  margin-bottom: 0.75rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--grey-900);
+}
+
+.equipment-inquiry-text {
+  color: var(--grey-600);
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.equipment-inquiry-phone {
+  color: var(--brand-blue);
+  font-weight: 700;
+  font-size: 1.25rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--brand-blue-light);
+  border-radius: 100px;
+  display: inline-block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .equipment-container {
+    padding: 2rem 1rem;
   }
-  100% {
-    transform: translate(-50%, -50%) scale(3);
-    opacity: 0;
+  
+  .equipment-tabs {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .equipment-name {
+    font-size: 1.75rem;
+  }
+  
+  .equipment-image-container {
+    aspect-ratio: 16/9;
   }
 }
