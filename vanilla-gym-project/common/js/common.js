@@ -51,6 +51,26 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Initialize Header Search
     initHeaderSearch();
+    
+    // Header Link Reset Logic:
+    // If user clicks a link to the CURRENT page, force a re-render to reset state (e.g. back to list view)
+    const headerLinks = document.querySelectorAll('.header-logo, .header-nav-link, .header-mypage-btn');
+    headerLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const targetHref = link.getAttribute('href');
+            // Check if target is same as current hash (normalized)
+            // href might be "#/notice" or just "#/"
+            const currentHash = window.location.hash || '#/';
+            const targetHash = targetHref || '#/';
+            
+            if (currentHash === targetHash) {
+                e.preventDefault(); // Prevent default to avoid scroll jump if any
+                if (window.router && typeof window.router.handleLocation === 'function') {
+                    window.router.handleLocation();
+                }
+            }
+        });
+    });
   }
 
   // Load Footer
