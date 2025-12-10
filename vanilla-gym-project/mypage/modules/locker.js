@@ -149,13 +149,13 @@
     // 전역 객체에 할당하여 외부에서 접근 가능하게 함
     window.LockerManager = LockerManager;
 
-    // Helper to toggle password visibility
+    // 비밀번호 가시성 토글 헬퍼
     function setPasswordVisible(visible) {
         const input = document.getElementById('modal-locker-pw');
         const btn = document.getElementById('toggle-locker-pw');
         if (!input || !btn) return;
 
-        // Optimization: Don't update if already in desired state
+        // 최적화: 이미 원하는 상태라면 업데이트하지 않음
         const currentType = input.type;
         const targetType = visible ? 'text' : 'password';
         
@@ -166,23 +166,23 @@
         }
     }
 
-    // Event Delegation for dynamic content
-    // Handle Mouse Down (Show)
+    // 동적 콘텐츠를 위한 이벤트 위임
+    // 마우스 다운 처리 (보이기)
     document.addEventListener('mousedown', (e) => {
         if (e.target.closest('#toggle-locker-pw')) {
             setPasswordVisible(true);
         }
     });
 
-    // Handle Mouse Up (Hide) - Listen globally to handle dragging out
+    // 마우스 업 처리 (숨기기) - 드래그 아웃 처리를 위해 전역 리스닝
     document.addEventListener('mouseup', () => {
         setPasswordVisible(false);
     });
     
-    // Handle Touch events for mobile support
+    // 모바일 지원을 위한 터치 이벤트 처리
     document.addEventListener('touchstart', (e) => {
         if (e.target.closest('#toggle-locker-pw')) {
-            e.preventDefault(); // Prevent focus loss or other touch behaviors
+            e.preventDefault(); // 포커스 손실 또는 다른 터치 동작 방지
             setPasswordVisible(true);
         }
     }, { passive: false });

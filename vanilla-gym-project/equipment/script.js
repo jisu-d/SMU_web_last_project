@@ -4,14 +4,14 @@ window.initEquipment = function() {
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            // Deactivate all tabs and contents
+            // 모든 탭과 콘텐츠 비활성화
             tabs.forEach(t => t.classList.remove('active'));
             contents.forEach(c => c.classList.remove('active'));
 
-            // Activate clicked tab
+            // 클릭된 탭 활성화
             tab.classList.add('active');
 
-            // Show target content
+            // 타겟 콘텐츠 표시
             const targetId = tab.getAttribute('data-target');
             const targetContent = document.getElementById(targetId);
             if (targetContent) {
@@ -20,12 +20,12 @@ window.initEquipment = function() {
         });
     });
 
-    // Check for Deep Link from Global Search
+    // 전역 검색에서의 딥 링크 확인
     const targetEquipmentId = sessionStorage.getItem('targetEquipmentId');
     if (targetEquipmentId) {
         const targetTab = document.querySelector(`.equipment-tab[data-target="${targetEquipmentId}"]`);
         if (targetTab) {
-            // Small delay to ensure rendering stability if needed, but usually safe here
+            // 필요한 경우 렌더링 안정성을 보장하기 위한 약간의 지연 (여기서는 보통 안전함)
             setTimeout(() => targetTab.click(), 50);
         }
         sessionStorage.removeItem('targetEquipmentId');

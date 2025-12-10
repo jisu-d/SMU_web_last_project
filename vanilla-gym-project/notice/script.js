@@ -180,297 +180,139 @@ const notices = [
 ];
 
 window.findNoticeById = function(id) {
-
     return notices.find(notice => notice.id === id);
-
 };
 
-
-
-// Helper to get category class (Global)
-
+// 카테고리 클래스를 가져오는 헬퍼 (전역)
 function getCategoryClass(category) {
-
     switch (category) {
-
         case "모집": return "recruitment";
-
         case "이벤트": return "event";
-
         default: return "announcement";
-
     }
-
 }
 
-
-
-// Show Detail (made global for external calls)
-
+// 상세 정보 표시 (외부 호출을 위해 전역으로 설정)
 window.showNoticeDetail = function(notice) {
-
     const listView = document.getElementById('notice-list-view');
-
     const detailView = document.getElementById('notice-detail-view');
-
     
-
     if (!listView || !detailView) {
-
         console.error("Notice views not found for showNoticeDetail.");
-
         return;
-
     }
 
-
-
     document.getElementById('detail-title').textContent = notice.title;
-
     document.getElementById('detail-author').textContent = notice.author;
-
     document.getElementById('detail-date').textContent = notice.date;
-
     document.getElementById('detail-views').textContent = notice.views;
-
-    document.getElementById('detail-content').innerText = notice.content; // preserve newlines
-
-
+    document.getElementById('detail-content').innerText = notice.content; // 줄바꿈 보존
 
     const badge = document.getElementById('detail-category-badge');
-
     badge.textContent = notice.category;
-
     badge.className = `notice-badge ${getCategoryClass(notice.category)}`;
 
-
-
     listView.classList.remove('active');
-
     detailView.classList.add('active');
 
+    if (window.lucide) lucide.createIcons(); // 새로 표시된 콘텐츠를 위해 아이콘 재생성
+};
+    
+// 메인 페이지의 커뮤니티 섹션용 공지사항 렌더링
+window.renderCommunityUpdates = function(containerId, limit = 3) {
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.error(`Container with ID '${containerId}' not found for community updates.`);
+        return;
+    }
 
+    container.innerHTML = ''; // 기존 콘텐츠 지우기
 
-    if (window.lucide) lucide.createIcons(); // Re-create icons for newly shown content
+    notices.slice(0, limit).forEach(notice => {
+        const item = document.createElement('div');
+        item.className = 'comm-item';
+        item.innerHTML = `
+            <span class="comm-badge ${getCategoryClass(notice.category)}">${notice.category}</span>
+            <span class="comm-title">${notice.title}</span>
+            <span class="comm-date">${notice.date}</span>
+        `;
+        item.style.cursor = 'pointer'; // 클릭 가능함을 표시
 
+        item.addEventListener('click', () => {
+            sessionStorage.setItem('targetNoticeId', notice.id);
+            window.location.hash = '#/notice';
+        });
+        container.appendChild(item);
+    });
+
+    if (window.lucide) lucide.createIcons();
 };
 
-    
+window.initNotice = function() {
+    const listView = document.getElementById('notice-list-view');
+    const detailView = document.getElementById('notice-detail-view');
+    const listBody = document.getElementById('notice-list-body');
+    const backBtn = document.getElementById('back-to-list-btn');
 
-    // Render notices for community section on Home page
-
-    window.renderCommunityUpdates = function(containerId, limit = 3) {
-
-        const container = document.getElementById(containerId);
-
-        if (!container) {
-
-            console.error(`Container with ID '${containerId}' not found for community updates.`);
-
-            return;
-
-        }
-
-    
-
-        container.innerHTML = ''; // Clear existing content
-
-    
-
-        notices.slice(0, limit).forEach(notice => {
-
-            const item = document.createElement('div');
-
-            item.className = 'comm-item';
-
-            item.innerHTML = `
-
-                <span class="comm-badge ${getCategoryClass(notice.category)}">${notice.category}</span>
-
-                <span class="comm-title">${notice.title}</span>
-
-                <span class="comm-date">${notice.date}</span>
-
-            `;
-
-            item.style.cursor = 'pointer'; // Indicate it's clickable
-
-    
-
-            item.addEventListener('click', () => {
-
-                sessionStorage.setItem('targetNoticeId', notice.id);
-
-                window.location.hash = '#/notice';
-
-            });
-
-            container.appendChild(item);
-
-        });
-
-    
-
-        if (window.lucide) lucide.createIcons();
-
-    };
-
-    
-
-    
-
-    window.initNotice = function() {
-
-        const listView = document.getElementById('notice-list-view');
-
-        const detailView = document.getElementById('notice-detail-view');
-
-        const listBody = document.getElementById('notice-list-body');
-
-        const backBtn = document.getElementById('back-to-list-btn');
-
-    
-
-        // Check if there's a specific notice to show
-
-        const targetNoticeId = sessionStorage.getItem('targetNoticeId');
-
-        if (targetNoticeId) {
-
-            const notice = window.findNoticeById(parseInt(targetNoticeId));
-
-            if (notice) {
-
-                window.showNoticeDetail(notice);
-
-                // After showing, ensure list is rendered in background if user goes back
-
-                renderList();
-
-            } else {
-
-                console.error(`Notice with ID ${targetNoticeId} not found.`);
-
-                renderList(); // Fallback to list view if not found
-
-            }
-
-            sessionStorage.removeItem('targetNoticeId'); // Clear after use
-
-        } else {
-
-            // Default behavior: render the list
-
+    // 특정 공지사항을 표시해야 하는지 확인
+    const targetNoticeId = sessionStorage.getItem('targetNoticeId');
+    if (targetNoticeId) {
+        const notice = window.findNoticeById(parseInt(targetNoticeId));
+        if (notice) {
+            window.showNoticeDetail(notice);
+            // 표시 후, 사용자가 뒤로 갈 경우를 대비해 목록을 백그라운드에서 렌더링
             renderList();
-
+        } else {
+            console.error(`Notice with ID ${targetNoticeId} not found.`);
+            renderList(); // 찾을 수 없으면 목록 뷰로 폴백
         }
+        sessionStorage.removeItem('targetNoticeId'); // 사용 후 삭제
+    } else {
+        // 기본 동작: 목록 렌더링
+        renderList();
+    }
 
-    
+    // 목록으로 돌아가기
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            detailView.classList.remove('active');
+            listView.classList.add('active');
+            renderList(); // 필요한 경우 목록이 새로고침되도록 보장
+        });
+    }
 
-            // Back to List
-
-    
-
-            if (backBtn) {
-
-    
-
-                backBtn.addEventListener('click', () => {
-
-    
-
-                    detailView.classList.remove('active');
-
-    
-
-                    listView.classList.add('active');
-
-    
-
-                    renderList(); // Ensure list is refreshed if needed
-
-    
-
-                });
-
-    
-
-            }
-
-    
-
-        
-
-    
-
-            // Render List (local to initNotice, for main notice page)
-
-    
-
-            function renderList() {
-
-            if (!listBody) return;
-
-            listBody.innerHTML = '';
-
-            notices.forEach(notice => {
-
-                const item = document.createElement('button');
-
-                item.className = 'notice-item';
-
-                item.innerHTML = `
-
-                    <div class="notice-table-row">
-
-                        <div class="notice-table-cell center">
-
-                            <span class="notice-number">${notice.id}</span>
-
-                        </div>
-
-                        <div class="notice-table-cell">
-
-                            <span class="notice-badge ${getCategoryClass(notice.category)}">
-
-                                ${notice.category}
-
-                            </span>
-
-                        </div>
-
-                        <div class="notice-table-cell">${notice.title}</div>
-
-                        <div class="notice-table-cell">
-
-                            <span class="notice-date">${notice.date}</span>
-
-                        </div>
-
-                        <div class="notice-table-cell center">
-
-                            <span class="notice-views">
-
-                                <i data-lucide="eye" class="notice-view-icon"></i>
-
-                                ${notice.views}
-
-                            </span>
-
-                        </div>
-
+    // 목록 렌더링 (initNotice 로컬 함수, 메인 공지사항 페이지용)
+    function renderList() {
+        if (!listBody) return;
+        listBody.innerHTML = '';
+        notices.forEach(notice => {
+            const item = document.createElement('button');
+            item.className = 'notice-item';
+            item.innerHTML = `
+                <div class="notice-table-row">
+                    <div class="notice-table-cell center">
+                        <span class="notice-number">${notice.id}</span>
                     </div>
-
-                `;
-
-                item.addEventListener('click', () => window.showNoticeDetail(notice));
-
-                listBody.appendChild(item);
-
-            });
-
-            if (window.lucide) lucide.createIcons();
-
-        }
-
-    };
+                    <div class="notice-table-cell">
+                        <span class="notice-badge ${getCategoryClass(notice.category)}">
+                            ${notice.category}
+                        </span>
+                    </div>
+                    <div class="notice-table-cell">${notice.title}</div>
+                    <div class="notice-table-cell">
+                        <span class="notice-date">${notice.date}</span>
+                    </div>
+                    <div class="notice-table-cell center">
+                        <span class="notice-views">
+                            <i data-lucide="eye" class="notice-view-icon"></i>
+                            ${notice.views}
+                        </span>
+                    </div>
+                </div>
+            `;
+            item.addEventListener('click', () => window.showNoticeDetail(notice));
+            listBody.appendChild(item);
+        });
+        if (window.lucide) lucide.createIcons();
+    }
+};

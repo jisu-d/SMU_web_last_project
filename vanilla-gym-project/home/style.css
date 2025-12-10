@@ -1,4 +1,4 @@
-/* Home Page Styles - Brand Design System */
+/* 홈 페이지 스타일 - 브랜드 디자인 시스템 */
 
 .dev-container {
     width: 100%;
@@ -6,7 +6,7 @@
     color: var(--foreground);
 }
 
-/* Full Width Background Section */
+/* 전체 너비 배경 섹션 */
 .full-width-bg {
     width: 100%;
     padding: 6rem 0;
@@ -22,14 +22,14 @@
     padding-bottom: 0;
 }
 
-/* Hero Section */
+/* 히어로 섹션 */
 .dev-hero {
     display: flex;
     justify-content: space-between;
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 6rem 1.5rem 4rem; /* Adjusted top padding to 6rem */
+    padding: 6rem 1.5rem 4rem; /* 상단 패딩을 6rem으로 조정 */
     gap: 2rem;
 }
 
@@ -39,7 +39,7 @@
 }
 
 .dev-title {
-    font-size: 3rem; /* Reduced from 4rem */
+    font-size: 3rem; /* 4rem에서 축소 */
     font-weight: 800;
     line-height: 1.2;
     margin-bottom: 1rem;
@@ -48,12 +48,12 @@
 }
 
 .dev-title .highlight {
-    color: var(--grey-900); /* Changed to black */
+    color: var(--grey-900); /* 검정색으로 변경 */
     position: relative;
     z-index: 1;
 }
 
-/* Blue underline effect */
+/* 파란색 밑줄 효과 */
 .dev-title .highlight::after {
     content: '';
     display: block;
@@ -68,7 +68,7 @@
 }
 
 .dev-subtitle {
-    font-size: 1.1rem; /* Slightly smaller */
+    font-size: 1.1rem; /* 약간 작게 */
     color: var(--grey-600);
     line-height: 1.6;
     margin-bottom: 2rem;
@@ -109,10 +109,10 @@
 
 .dev-hero-image img {
     width: 100%;
-    max-width: 380px; /* Reduced from 480px */
+    max-width: 380px; /* 480px에서 축소 */
     border-radius: 24px;
     box-shadow: var(--shadow-brand);
-    transform: rotate(-2deg); /* Subtle tilt for dynamic feel */
+    transform: rotate(-2deg); /* 역동적인 느낌을 위한 미세한 기울기 */
     transition: transform 0.5s ease;
 }
 
@@ -147,17 +147,17 @@
 .card-1 { top: 15%; left: -20px; animation-delay: 0s; }
 .card-2 { bottom: 15%; right: -20px; animation-delay: 2s; }
 
-/* Section Styles */
+/* 섹션 스타일 */
 .dev-section {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 5rem 1.5rem; /* Adjusted padding */
+    padding: 5rem 1.5rem; /* 패딩 조정 */
 }
 
 .dev-section-title {
     font-size: 2rem;
     font-weight: 800;
-    margin-bottom: 2rem; /* Adjusted margin */
+    margin-bottom: 2rem; /* 여백 조정 */
     color: var(--grey-900);
 }
 
@@ -165,14 +165,14 @@
 
 .dev-card-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Force 4 columns side-by-side */
-    gap: 1rem; /* Reduce gap to give more width to cards */
+    grid-template-columns: repeat(4, 1fr); /* 4열 강제 */
+    gap: 1rem; /* 카드에 더 많은 너비를 주기 위해 간격 줄임 */
 }
 
 .dev-card {
     background: var(--white);
     border-radius: 24px;
-    padding: 1.5rem; /* Reduce padding to give more space for text */
+    padding: 1.5rem; /* 텍스트 공간 확보를 위해 패딩 줄임 */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
@@ -180,10 +180,10 @@
     text-decoration: none;
     color: inherit;
     box-shadow: 0 0 0 1px var(--grey-200); 
-    min-width: 0; /* Prevent flex items from overflowing */
+    min-width: 0; /* 플렉스 아이템 넘침 방지 */
 }
 
-/* Media query for responsiveness */
+/* 반응형 미디어 쿼리 */
 @media (max-width: 1024px) {
     .dev-card-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -232,7 +232,7 @@
     line-height: 1.6;
 }
 
-/* Community List */
+/* 커뮤니티 목록 */
 .dev-row {
     display: flex;
     flex-wrap: wrap;
@@ -302,14 +302,14 @@
     flex-shrink: 0;
 }
 
-/* Badge Colors */
+/* 배지 색상 */
 .comm-badge.recruitment {
     background-color: #E8F3FF;
     color: #0064FF;
 }
 .comm-badge.event {
-    background-color: #FFF1F4; /* Light Red/Pink */
-    color: #F04452; /* Destructive Red */
+    background-color: #FFF1F4; /* 연한 빨강/분홍 */
+    color: #F04452; /* 파괴적인 빨강 */
 }
 .comm-badge.announcement {
     background-color: #F2F4F6;
@@ -331,7 +331,7 @@
     color: var(--grey-500);
 }
 
-/* Static Promo Banner (Brand Gradient) */
+/* 정적 프로모션 배너 (브랜드 그라데이션) */
 .promo-banner {
     background: linear-gradient(100deg, #0064FF, #3E8BFF);
     border-radius: 28px;
@@ -342,7 +342,7 @@
     color: white;
     gap: 3rem;
     flex-wrap: wrap;
-    box-shadow: none; /* Removed shadow */
+    box-shadow: none; /* 그림자 제거 */
 }
 
 .promo-content {
@@ -422,7 +422,7 @@
     transform: scale(1.05);
 }
 
-/* Responsive */
+/* 반응형 */
 @media (max-width: 768px) {
     .dev-hero {
         flex-direction: column;

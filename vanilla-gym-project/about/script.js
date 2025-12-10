@@ -1,5 +1,5 @@
 function initAbout() {
-    // --- Map Initialization (Updated: Keyword Search) ---
+    // --- 지도 초기화 (업데이트: 키워드 검색) ---
     const container = document.getElementById('kakao-map');
     
     if (window.kakao && window.kakao.maps) {
@@ -12,23 +12,23 @@ function initAbout() {
         map.setZoomable(false); 
         map.setDraggable(false);
 
-        // Search for the location
+        // 위치 검색
         const ps = new kakao.maps.services.Places();
         ps.keywordSearch('상명대학교 천안캠퍼스 상명스포츠센터', function(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
                 const place = data[0];
                 const coords = new kakao.maps.LatLng(place.y, place.x);
                 
-                // Move map center
+                // 지도 중심 이동
                 map.setCenter(coords);
                 
-                // Add marker
+                // 마커 추가
                 const marker = new kakao.maps.Marker({
                     map: map,
                     position: coords
                 });
 
-                // Add InfoWindow with Directions Link
+                // 길찾기 링크가 포함된 인포윈도우 추가
                 const infowindow = new kakao.maps.InfoWindow({
                     content: `
                         <div style="padding:15px; min-width:240px; color:#333; font-family:sans-serif;">
@@ -42,7 +42,7 @@ function initAbout() {
                 });
                 infowindow.open(map, marker);
             } else {
-                // Fallback
+                // 대체 동작
                 const marker = new kakao.maps.Marker({
                     position: defaultCenter
                 });
@@ -53,13 +53,13 @@ function initAbout() {
         console.error('Kakao Map script not loaded.');
     }
 
-    // --- Calendar Initialization (New) ---
+    // --- 캘린더 초기화 (신규) ---
     renderCalendar();
 
-    // --- Scroll Reveal Animation (New) ---
+    // --- 스크롤 등장 애니메이션 (신규) ---
     const observerOptions = {
-        threshold: 0.15, // Trigger when 15% of the element is visible
-        rootMargin: "0px 0px -50px 0px" // Trigger slightly before bottom
+        threshold: 0.15, // 요소의 15%가 보일 때 트리거
+        rootMargin: "0px 0px -50px 0px" // 하단보다 약간 앞에서 트리거
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -67,7 +67,7 @@ function initAbout() {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
             } else {
-                // Remove active class when scrolling out of view to reverse animation
+                // 뷰에서 벗어날 때 active 클래스를 제거하여 애니메이션 역재생 (선택 사항)
                 entry.target.classList.remove('active');
             }
         });
@@ -77,7 +77,7 @@ function initAbout() {
     revealElements.forEach(el => observer.observe(el));
 }
 
-// Calendar Logic
+// 캘린더 로직
 function renderCalendar() {
     const wrapper = document.getElementById('calendar-wrapper');
     if (!wrapper) return;
@@ -87,19 +87,19 @@ function renderCalendar() {
         return;
     }
 
-    let currentDate = new Date(); // Start with today
+    let currentDate = new Date(); // 오늘 날짜로 시작
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
 
     function generate() {
-        // Clear wrapper
+        // 래퍼 초기화
         wrapper.innerHTML = '';
 
-        // Card structure
+        // 카드 구조
         const card = document.createElement('div');
         card.className = 'brand-card calendar-card';
 
-        // Header
+        // 헤더
         const header = document.createElement('div');
         header.className = 'calendar-header';
         
@@ -140,11 +140,11 @@ function renderCalendar() {
         header.appendChild(nav);
         card.appendChild(header);
 
-        // Grid Container
+        // 그리드 컨테이너
         const grid = document.createElement('div');
         grid.className = 'calendar-grid';
 
-        // Weekdays
+        // 요일
         const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
         weekdays.forEach(day => {
             const el = document.createElement('div');
@@ -154,12 +154,12 @@ function renderCalendar() {
             grid.appendChild(el);
         });
 
-        // Days
+        // 날짜
         const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
-        // Previous Month Fillers
+        // 이전 달 채우기
         for (let i = 0; i < firstDayOfMonth; i++) {
             const el = document.createElement('div');
             el.className = 'calendar-cell prev-month';
@@ -167,7 +167,7 @@ function renderCalendar() {
             grid.appendChild(el);
         }
 
-        // Current Month Days
+        // 현재 달 날짜
         const today = new Date();
         const closedList = [];
 
@@ -182,20 +182,13 @@ function renderCalendar() {
             if (isClosed) {
                 el.classList.add('closed');
                 
-                // Add to list
+                // 목록에 추가
                 const dateObj = new Date(currentYear, currentMonth, day);
                 const holidayName = GymUtils.getHolidayName(currentYear, currentMonth, day);
                 const dayName = weekdays[dateObj.getDay()];
                 const reason = holidayName ? holidayName : '정기 휴무';
                 
-                // Only add if it's a holiday OR Sunday (maybe group Sundays? No, list them all is safer for clarity, or just Holidays?)
-                // User requirement: "Display monthly closed days". Listing all Sundays might be too long.
-                // Let's list Holidays + "Every Sunday" note? 
-                // Actually, a compact list of *exceptions* (Holidays) is better, but the calendar visual shows all.
-                // Let's list only Holidays and "Special Closures" in the text list, as Sundays are obvious visually.
-                // BUT user asked for "Month Closed Days Guide".
-                // Let's list Holidays specifically. If no holidays, say "Every Sunday is closed".
-                
+                // 휴무일 목록에는 공휴일만 표시 (일요일은 하단 고정 텍스트로 처리)
                 if (holidayName) {
                     closedList.push({ date: `${currentMonth + 1}/${day} (${dayName})`, reason: holidayName, isHoliday: true });
                 }
@@ -205,7 +198,7 @@ function renderCalendar() {
             grid.appendChild(el);
         }
 
-        // Next Month Fillers
+        // 다음 달 채우기
         const totalCells = firstDayOfMonth + daysInMonth;
         const nextMonthDays = (totalCells % 7 === 0) ? 0 : 7 - (totalCells % 7);
         for (let i = 1; i <= nextMonthDays; i++) {
@@ -217,17 +210,17 @@ function renderCalendar() {
 
         card.appendChild(grid);
 
-        // Closed Days List (Footer)
+        // 휴무일 목록 (푸터)
         const listContainer = document.createElement('div');
         listContainer.className = 'closed-days-list';
 
-        // Always add a generic Sunday note
+        // 일요일 휴무 안내는 항상 추가
         const sundayNote = document.createElement('div');
         sundayNote.className = 'closed-day-item';
         sundayNote.innerHTML = `<span class="closed-day-date">매주 일요일</span><span class="closed-day-reason">정기 휴무</span>`;
         listContainer.appendChild(sundayNote);
 
-        // Add specific holidays
+        // 특정 공휴일 추가
         closedList.forEach(item => {
             const div = document.createElement('div');
             div.className = 'closed-day-item highlight';
@@ -235,7 +228,7 @@ function renderCalendar() {
             listContainer.appendChild(div);
         });
 
-        // Check if scrollable needed (More than 2 items: 1 Sunday + >1 Holidays)
+        // 스크롤 필요 여부 확인 (2개 초과: 1 일요일 + >1 공휴일)
         if (1 + closedList.length > 2) {
             listContainer.classList.add('scrollable');
         }
@@ -249,7 +242,7 @@ function renderCalendar() {
     generate();
 }
 
-// Global Trainer Contact Toggle
+// 전역 트레이너 연락처 토글 함수
 window.toggleTrainerPhone = function(btn) {
     const container = btn.closest('.trainer-text');
     if (!container) return;
@@ -259,16 +252,16 @@ window.toggleTrainerPhone = function(btn) {
 
     if (!expEl || !phoneEl) return;
 
-    // Toggle logic
+    // 토글 로직
     const isPhoneVisible = phoneEl.style.display !== 'none';
 
     if (isPhoneVisible) {
-        // Hide Phone, Show Exp
+        // 전화번호 숨기기, 경력 표시
         phoneEl.style.display = 'none';
         expEl.style.display = 'block';
         btn.classList.remove('active');
     } else {
-        // Show Phone, Hide Exp
+        // 전화번호 표시, 경력 숨기기
         phoneEl.style.display = 'block';
         expEl.style.display = 'none';
         btn.classList.add('active');

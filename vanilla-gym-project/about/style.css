@@ -1,12 +1,12 @@
-/* About Page - Brand Design */
+/* 시설 소개 페이지 - 브랜드 디자인 */
 
 .about-wrapper {
     width: 100%;
     overflow-x: hidden;
-    padding-top: 0 !important; /* Override common padding */
+    padding-top: 0 !important; /* 공통 패딩 재정의 */
 }
 
-/* Common Utilities */
+/* 공통 유틸리티 */
 .brand-section {
     max-width: 1200px;
     margin: 0 auto;
@@ -42,20 +42,20 @@
 .brand-card {
     background: var(--white);
     border-radius: 24px;
-    box-shadow: none; /* Removed shadow */
-    border: 1px solid var(--grey-200); /* Made border more visible */
+    box-shadow: none; /* 그림자 제거 */
+    border: 1px solid var(--grey-200); /* 테두리를 더 잘 보이게 설정 */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .brand-card:hover {
-    box-shadow: none; /* Removed hover shadow */
+    box-shadow: none; /* 호버 시 그림자 제거 */
     transform: translateY(-4px);
 }
 
-/* Hero Section */
+/* 히어로 섹션 */
 .hero-section {
     text-align: center;
-    padding: 4rem 1.5rem 4rem; /* Reduced from 8rem top, 6rem bottom for cleaner initial view */
+    padding: 4rem 1.5rem 4rem; /* 깔끔한 초기 화면을 위해 상단 8rem, 하단 6rem에서 줄임 */
     background: radial-gradient(circle at 50% 50%, #F9FAFB 0%, #FFFFFF 100%);
 }
 
@@ -68,7 +68,7 @@
     letter-spacing: -0.03em;
 }
 
-/* Responsive adjustments for hero title */
+/* 히어로 제목 반응형 조정 */
 @media (max-width: 1024px) {
     .brand-hero-title {
         font-size: 3rem;
@@ -107,11 +107,11 @@
     margin: 0 auto;
 }
 
-/* Trainer Section */
+/* 트레이너 섹션 */
 .trainer-section {
     background-color: var(--grey-50);
     width: 100%;
-    max-width: none; /* Full width background */
+    max-width: none; /* 전체 너비 배경 */
 }
 
 .trainer-section .section-header {
@@ -130,7 +130,7 @@
 
 .trainer-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive Grid */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 반응형 그리드 */
     gap: 1.5rem;
 }
 
@@ -182,7 +182,7 @@
     font-size: 1.2rem;
     font-weight: 800;
     color: var(--grey-900);
-    margin-bottom: 0; /* Handled by header */
+    margin-bottom: 0; /* 헤더에서 처리됨 */
 }
 
 .trainer-contact-btn {
@@ -228,7 +228,7 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Facility Section */
+/* 시설 섹션 */
 .facility-section {
     text-align: left;
 }
@@ -239,7 +239,7 @@
 
 .facility-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive Grid */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 반응형 그리드 */
     gap: 2rem;
 }
 
@@ -285,7 +285,7 @@
     line-height: 1.6;
 }
 
-/* Calendar Section (Integrated Widget) */
+/* 캘린더 섹션 (통합 위젯) */
 .calendar-wrapper {
     width: 100%;
 }
@@ -353,7 +353,7 @@
 .calendar-cell {
     position: relative;
     width: 100%;
-    aspect-ratio: 1; /* Square cells */
+    aspect-ratio: 1; /* 정사각형 셀 */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -391,7 +391,7 @@
     background: transparent !important;
 }
 
-/* Legend/List Area */
+/* 범례/목록 영역 */
 .closed-days-list {
     border-top: 1px solid var(--grey-100);
     padding-top: 1rem;
@@ -401,12 +401,12 @@
 }
 
 .closed-days-list.scrollable {
-    max-height: 100px; /* Height for ~2 items */
+    max-height: 100px; /* 항목 약 2개 높이 */
     overflow-y: auto;
-    padding-right: 0.25rem; /* Avoid content hitting scrollbar */
+    padding-right: 0.25rem; /* 스크롤바와 내용 겹침 방지 */
 }
 
-/* Custom Scrollbar for Closed Days List */
+/* 휴무일 목록용 커스텀 스크롤바 */
 .closed-days-list.scrollable::-webkit-scrollbar {
     width: 4px;
 }
@@ -445,7 +445,7 @@
     font-size: 0.85rem;
 }
 
-/* Info Section */
+/* 정보 섹션 */
 .info-section {
     background-color: var(--background);
     padding-top: 0;
@@ -484,7 +484,7 @@
 .brand-map-view {
     width: 100%;
     height: 100%;
-    min-height: 400px; /* Slightly increased Height */
+    min-height: 400px; /* 높이 약간 증가 */
     background-color: var(--grey-100);
     border-radius: 16px;
 }
@@ -564,7 +564,7 @@
 }
 
 
-/* Responsive */
+/* 반응형 */
 @media (max-width: 1024px) {
     .trainer-list {
         grid-template-columns: repeat(2, 1fr);
@@ -575,7 +575,7 @@
     .info-grid-layout {
         grid-template-columns: 1fr;
     }
-    /* Contact card takes full width on smaller screens */
+    /* 작은 화면에서 연락처 카드가 전체 너비를 차지하도록 함 */
     .info-section > .contact-card-new {
         max-width: none; 
     }

@@ -4,16 +4,16 @@
   padding: 4rem 1.5rem;
 }
 
-/* Tabs */
+/* 탭 */
 .equipment-tabs {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
-  width: fit-content; /* Make the container fit its content */
-  margin-left: auto;   /* Center horizontally */
-  margin-right: auto;  /* Center horizontally */
+  width: fit-content; /* 컨테이너가 콘텐츠에 맞게 조절됨 */
+  margin-left: auto;   /* 수평 중앙 정렬 */
+  margin-right: auto;  /* 수평 중앙 정렬 */
 }
 
 .equipment-tab {
@@ -36,7 +36,7 @@
   color: white;
 }
 
-/* Grid Layout */
+/* 그리드 레이아웃 */
 .equipment-grid {
   display: none;
   grid-template-columns: 1fr;
@@ -52,7 +52,7 @@
 
 @media (min-width: 1024px) {
   .equipment-grid.active {
-    grid-template-columns: 1fr 1fr; /* 2 Column layout */
+    grid-template-columns: 1fr 1fr; /* 2열 레이아웃 */
     align-items: start;
   }
 }
@@ -62,13 +62,13 @@
   to { opacity: 1; }
 }
 
-/* Left Column: Media */
+/* 왼쪽 열: 미디어 */
 .equipment-media-section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   position: sticky;
-  top: 6rem; /* Sticky on desktop */
+  top: 6rem; /* 데스크탑에서 고정 */
 }
 
 .equipment-image-container {
@@ -125,7 +125,7 @@
   aspect-ratio: 16 / 9;
 }
 
-/* Right Column: Info */
+/* 오른쪽 열: 정보 */
 .equipment-info-section {
   display: flex;
   flex-direction: column;
@@ -146,7 +146,7 @@
   /* box-shadow: var(--shadow); */
 }
 
-/* Typography & Badges */
+/* 타이포그래피 & 배지 */
 .equipment-category-badge {
   padding: 0.4rem 0.8rem;
   background-color: var(--brand-blue-light);
@@ -182,7 +182,7 @@
   gap: 0.5rem;
 }
 
-/* Muscles */
+/* 근육 */
 .equipment-muscles {
   display: flex;
   flex-wrap: wrap;
@@ -204,7 +204,7 @@
   color: var(--grey-900);
 }
 
-/* Muscle Map */
+/* 근육 지도 */
 .muscle-map-container {
   margin-top: 1.5rem;
   background-color: var(--grey-50);
@@ -219,7 +219,7 @@
 .muscle-map-wrapper {
     position: relative;
     width: 100%;
-    max-width: 400px; /* Limit size */
+    max-width: 400px; /* 크기 제한 */
     aspect-ratio: 665 / 368;
 }
 
@@ -262,7 +262,7 @@
   100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
 }
 
-/* Usage List */
+/* 사용법 목록 */
 .equipment-usage-list {
   display: flex;
   flex-direction: column;
@@ -296,7 +296,7 @@
   padding-top: 0.1rem;
 }
 
-/* Caution */
+/* 주의사항 */
 .equipment-caution-title {
   margin-bottom: 1rem;
   color: #ef4444; /* Red-500 */
@@ -329,7 +329,7 @@
   font-weight: bold;
 }
 
-/* Inquiry Section */
+/* 문의 섹션 */
 .equipment-inquiry {
   margin-top: 4rem;
   background: linear-gradient(135deg, var(--grey-50) 0%, white 100%);
@@ -363,7 +363,7 @@
   display: inline-block;
 }
 
-/* Responsive */
+/* 반응형 */
 @media (max-width: 768px) {
   .equipment-container {
     padding: 2rem 1rem;

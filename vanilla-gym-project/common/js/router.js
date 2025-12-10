@@ -79,7 +79,7 @@ class Router {
             // 2. 두 리소스가 모두 준비될 때까지 대기
             const [html, newStyleLink] = await Promise.all([htmlPromise, stylePromise]);
 
-            // 3. 로딩 도중 페이지가 바뀌었는지 확인 (Race Condition 방지)
+            // 3. 로딩 도중 페이지가 바뀌었는지 확인 (경쟁 상태 방지)
             const currentPath = window.location.hash.slice(1) || '/';
             if (currentPath !== path) {
                 if (newStyleLink) newStyleLink.remove(); // 불필요해진 스타일 제거
@@ -166,13 +166,13 @@ class Router {
 
         const scriptsToLoad = Array.isArray(src) ? src : [src];
 
-        // Wait for ALL scripts to finish loading
+        // 모든 스크립트가 로드될 때까지 대기
         const loadPromises = scriptsToLoad.map(scriptSrc => {
             return new Promise((resolve, reject) => {
                 const existingScript = document.querySelector(`script[src="${scriptSrc}"]`);
                 
                 if (existingScript) {
-                    resolve(); // Already loaded
+                    resolve(); // 이미 로드됨
                     return;
                 }
 
@@ -186,7 +186,7 @@ class Router {
 
         await Promise.all(loadPromises);
 
-        // Only AFTER all scripts are loaded, call the initialization function
+        // 모든 스크립트가 로드된 후에만 초기화 함수 호출
         if (typeof window[initFunctionName] === 'function') {
             window[initFunctionName]();
         }

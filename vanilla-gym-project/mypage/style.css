@@ -1,4 +1,4 @@
-/* My Page - Brand Design System */
+/* 마이페이지 - 브랜드 디자인 시스템 */
 
 .mypage-container {
   max-width: 1200px;
@@ -6,7 +6,7 @@
   padding: 6rem 1.5rem;
 }
 
-/* View Switching */
+/* 뷰 전환 */
 .view-section {
   display: none;
 }
@@ -27,7 +27,7 @@
   }
 }
 
-/* Login View */
+/* 로그인 뷰 */
 .mypage-login-container {
   max-width: 420px;
   margin: 2rem auto;
@@ -110,7 +110,7 @@
   font-weight: 700;
 }
 
-/* Dashboard View */
+/* 대시보드 뷰 */
 .mypage-header {
   display: flex;
   justify-content: space-between;
@@ -197,7 +197,7 @@
   font-size: 1.1rem;
 }
 
-/* Reservation List Styles */
+/* 예약 목록 스타일 */
 .reservation-list {
   display: flex;
   flex-direction: column;
@@ -205,12 +205,12 @@
 }
 
 .reservation-list--scrollable {
-  max-height: 200px; /* Approximate height for 2-3 items, adjusted to ensure 2 items are fully visible */
+  max-height: 200px; /* 2-3개 항목의 대략적인 높이, 2개 항목이 완전히 보이도록 조정됨 */
   overflow-y: auto;
-  padding-right: 0.5rem; /* Space for scrollbar */
+  padding-right: 0.5rem; /* 스크롤바 공간 */
 }
 
-/* Custom Scrollbar */
+/* 커스텀 스크롤바 */
 .reservation-list--scrollable::-webkit-scrollbar {
   width: 6px;
 }
@@ -268,7 +268,7 @@
   margin-left: 1.5rem;
 }
 
-/* Locker Styles */
+/* 사물함 스타일 */
 .mypage-locker-password {
   display: flex;
   align-items: center;
@@ -309,7 +309,7 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* Payment Tabs */
+/* 결제 탭 */
 .payment-tabs {
     background-color: var(--grey-100);
     padding: 0.4rem;
@@ -404,7 +404,7 @@
   margin-top: 1rem;
 }
 
-/* Modal */
+/* 모달 */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -425,10 +425,10 @@
   padding: 2.5rem;
   border-radius: 28px;
   width: 90%;
-  max-width: 1200px; /* Increased from 800px to make it larger */
+  max-width: 1200px; /* 더 크게 만들기 위해 800px에서 증가 */
   box-shadow: var(--shadow-brand);
-  max-height: 95vh; /* Increased from 90vh, allowing more height */
-  overflow-y: auto; /* Changed back to auto to ensure accessibility if content overflows */
+  max-height: 95vh; /* 90vh에서 증가하여 더 많은 높이 허용 */
+  overflow-y: auto; /* 내용이 넘칠 경우 접근성을 보장하기 위해 auto로 변경 */
   animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -448,22 +448,22 @@
   color: var(--grey-900);
 }
 
-/* Locker Styles */
+/* 사물함 스타일 */
 .locker-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr); /* 10 cols */
+  grid-template-columns: repeat(10, 1fr); /* 10열 */
   gap: 0.5rem;
   margin-top: 0.5rem;
-  padding: 0.5rem; /* Increased padding */
+  padding: 0.5rem; /* 패딩 증가 */
   border: 1px solid var(--grey-200);
   border-radius: 0.5rem;
-  background-color: var(--grey-50); /* Light background for the grid container */
+  background-color: var(--grey-50); /* 그리드 컨테이너의 밝은 배경 */
 }
 
 .locker-item {
   aspect-ratio: 1;
-  min-width: 2.5rem; /* Ensure minimum size */
-  min-height: 2.5rem; /* Ensure minimum size */
+  min-width: 2.5rem; /* 최소 크기 보장 */
+  min-height: 2.5rem; /* 최소 크기 보장 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -472,48 +472,48 @@
   background-color: var(--white);
   cursor: pointer;
   font-weight: 500;
-  font-size: 1rem; /* Larger font size */
+  font-size: 1rem; /* 글꼴 크기 확대 */
   transition: all 0.2s;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* 미세한 그림자 */
 }
 
 .locker-item:hover:not(.disabled):not(.selected) {
-  background-color: var(--brand-blue-light); /* Lighter blue on hover for available */
+  background-color: var(--brand-blue-light); /* 사용 가능 시 호버하면 밝은 파란색 */
   border-color: var(--brand-blue); /* blue-300 */
 }
 
 .locker-item.selected {
-  background-color: var(--brand-blue); /* Darker blue background */
-  border-color: var(--brand-blue-dark); /* Even darker blue */
-  color: var(--white); /* White text for contrast */
+  background-color: var(--brand-blue); /* 진한 파란색 배경 */
+  border-color: var(--brand-blue-dark); /* 더 진한 파란색 */
+  color: var(--white); /* 대비를 위한 흰색 텍스트 */
   font-weight: bold;
-  box-shadow: 0 0 0 2px var(--brand-blue-light); /* Accent ring */
+  box-shadow: 0 0 0 2px var(--brand-blue-light); /* 강조 링 */
   transform: scale(1.05);
   z-index: 1;
 }
 
 .locker-item.disabled {
-  background-color: var(--grey-200); /* Grey background for disabled */
-  color: var(--grey-500); /* Darker grey text */
+  background-color: var(--grey-200); /* 비활성 시 회색 배경 */
+  color: var(--grey-500); /* 더 어두운 회색 텍스트 */
   cursor: not-allowed;
   border-color: var(--grey-300);
-  pointer-events: none; /* Prevent clicks */
+  pointer-events: none; /* 클릭 방지 */
   box-shadow: none;
 }
 
-/* Removed Dot indicator completely */
+/* 점 표시기 완전히 제거 */
 .locker-item::after {
   display: none;
 }
 
-/* Password Toggle Button */
+/* 비밀번호 토글 버튼 */
 .password-input-wrapper {
   position: relative;
   width: 100%;
 }
 
 .password-input-wrapper input {
-  padding-right: 3rem !important; /* Ensure space for icon */
+  padding-right: 3rem !important; /* 아이콘 공간 확보 */
 }
 
 .password-toggle-btn {
@@ -542,7 +542,7 @@
   height: 1.25rem;
 }
 
-/* Modal Footer */
+/* 모달 푸터 */
 .modal-footer {
   display: flex;
   gap: 1rem;
@@ -569,7 +569,7 @@
   gap: 2rem;
 }
 
-/* Coupon Tags */
+/* 쿠폰 태그 */
 .mypage-applied-coupons {
   display: flex;
   flex-wrap: wrap;
@@ -606,14 +606,14 @@
   opacity: 1;
 }
 
-/* Responsive */
+/* 반응형 */
 @media (max-width: 768px) {
   .mypage-container {
     padding: 4rem 1rem;
   }
   
   .locker-grid {
-    grid-template-columns: repeat(5, 1fr); /* 5 cols on tablet/mobile */
+    grid-template-columns: repeat(5, 1fr); /* 태블릿/모바일에서 5열 */
   }
   
   .modal-content {
@@ -630,10 +630,10 @@
   }
 }
 
-/* Payment Options Grid */
+/* 결제 옵션 그리드 */
 .payment-options-container {
     display: grid;
-    grid-template-columns: 1fr; /* Display one item per row vertically */
+    grid-template-columns: 1fr; /* 수직으로 한 행에 하나씩 표시 */
     gap: 0.75rem;
     max-height: 240px;
     overflow-y: auto;
@@ -641,7 +641,7 @@
     transition: all 0.3s ease;
 }
 
-/* Custom Scrollbar */
+/* 커스텀 스크롤바 */
 .payment-options-container::-webkit-scrollbar {
     width: 6px;
 }
@@ -704,9 +704,9 @@
     color: var(--brand-blue);
 }
 
-/* Payment Options Toggle (Collapsed State) */
+/* 결제 옵션 토글 (접힌 상태) */
 .payment-options-container.collapsed {
-    grid-template-columns: 1fr 48px; /* Option + Toggle Btn */
+    grid-template-columns: 1fr 48px; /* 옵션 + 토글 버튼 */
     gap: 0.5rem;
     max-height: 100px;
     overflow: hidden;
@@ -732,7 +732,7 @@
     border-color: var(--brand-blue);
 }
 
-/* Payment Bottom Bar */
+/* 결제 하단 바 */
 .mypage-bottom-bar {
     position: fixed;
     bottom: 2rem;
@@ -758,7 +758,7 @@
     to { opacity: 1; transform: translate(-50%, 0); }
 }
 
-/* Responsive Bottom Bar */
+/* 반응형 하단 바 */
 @media (max-width: 600px) {
     .mypage-bottom-bar {
         flex-direction: column;
@@ -775,7 +775,7 @@
     }
 }
 
-/* Ensure spacing for bottom bar */
+/* 하단 바 공간 확보 */
 #view-payment {
     padding-bottom: 8rem;
 }

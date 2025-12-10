@@ -4,7 +4,7 @@
   padding: 4rem 1.5rem;
 }
 
-/* View Switching */
+/* 뷰 전환 */
 .view-section {
   display: none;
 }
@@ -124,7 +124,7 @@
   color: #ef4444;
 }
 
-.notice-table-cell:nth-child(3) { /* Title cell */
+.notice-table-cell:nth-child(3) { /* 제목 셀 */
   font-weight: 600;
   color: var(--grey-800);
   font-size: 1rem;
@@ -150,7 +150,7 @@
   opacity: 0.7;
 }
 
-/* Detail View */
+/* 상세 보기 */
 .notice-detail-container {
   max-width: 64rem;
   margin: 0 auto;
@@ -249,20 +249,20 @@
   box-shadow: var(--shadow);
 }
 
-/* Responsive */
+/* 반응형 */
 @media (max-width: 768px) {
   .notice-container {
     padding: 2rem 1rem;
   }
   
   .notice-table-row {
-    grid-template-columns: 50px 1fr 1fr; /* Simplified columns for mobile */
+    grid-template-columns: 50px 1fr 1fr; /* 모바일용 단순화된 열 */
   }
 
-  .notice-table-header .notice-table-cell:nth-child(2), /* Category header */
-  .notice-table-header .notice-table-cell:nth-child(5), /* Views header */
-  .notice-table-row .notice-table-cell:nth-child(2), /* Category cell */
-  .notice-table-row .notice-table-cell:nth-child(5) { /* Views cell */
+  .notice-table-header .notice-table-cell:nth-child(2), /* 카테고리 헤더 */
+  .notice-table-header .notice-table-cell:nth-child(5), /* 조회수 헤더 */
+  .notice-table-row .notice-table-cell:nth-child(2), /* 카테고리 셀 */
+  .notice-table-row .notice-table-cell:nth-child(5) { /* 조회수 셀 */
     display: none;
   }
   

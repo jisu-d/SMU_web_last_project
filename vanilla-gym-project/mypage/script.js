@@ -1,21 +1,20 @@
-// Make initMyPage globally available for the Router
+// initMyPage를 라우터에서 전역적으로 사용할 수 있도록 설정
 window.initMyPage = function() {
     console.log("MyPage Initialized");
 
-    // --- Dependency Check ---
+    // --- 의존성 확인 ---
     if (typeof MEMBERS === 'undefined' || typeof COUPON_TYPES === 'undefined') {
-        console.error("Critical Error: Database (MEMBERS/COUPON_TYPES) not loaded.");
+        console.error("치명적 오류: 데이터베이스(MEMBERS/COUPON_TYPES)가 로드되지 않았습니다.");
         return;
     }
 
-    // --- Global State Management ---
+    // --- 전역 상태 관리 ---
     let CURRENT_USER_ID = null;
     let appliedCoupons = [];
     let selectedOptionIndex = null;
-    let lastRenderedPaymentType = null;
     let isPaymentOptionsExpanded = false;
 
-    // --- Helpers ---
+    // --- 헬퍼 함수 ---
     function getMemberData(memberId = CURRENT_USER_ID) {
         if (!memberId || !MEMBERS[memberId]) return null;
         return MEMBERS[memberId];
@@ -59,7 +58,7 @@ window.initMyPage = function() {
         return CURRENT_USER_ID;
     }
 
-    // --- DOM Elements ---
+    // --- DOM 요소 ---
     const viewLogin = document.getElementById('view-login');
     const viewMain = document.getElementById('view-main');
     const viewPayment = document.getElementById('view-payment');
@@ -81,12 +80,6 @@ window.initMyPage = function() {
     const paymentTabs = document.querySelectorAll('.payment-tab');
     const paymentOptionsContainer = document.getElementById('payment-options-container');
     const paymentSelectLabel = document.getElementById('payment-select-label');
-    
-    const basePriceDisplay = document.getElementById('base-price-display');
-    const discountRow = document.getElementById('discount-row');
-    const discountAmount = document.getElementById('discount-amount');
-    const individualCouponDiscounts = document.getElementById('individual-coupon-discounts');
-    const totalPriceDisplay = document.getElementById('total-price-display');
 
     const mypageBottomBar = document.getElementById('mypage-bottom-bar');
     const mypageSummaryText = document.getElementById('mypage-summary-text');
@@ -102,11 +95,7 @@ window.initMyPage = function() {
     const cancelReceiptBtn = document.getElementById('cancel-receipt-btn');
     const finalPayBtn = document.getElementById('final-pay-btn');
 
-    // History Elements
-    const viewResHistoryBtn = document.getElementById('view-res-history-btn');
-    const resHistoryList = document.getElementById('reservation-history-list');
-
-    // Locker Elements
+    // 사물함 요소
     const editLockerBtn = document.getElementById('edit-locker-btn');
     const cancelLockerBtn = document.getElementById('cancel-locker-btn');
     const saveLockerBtn = document.getElementById('save-locker-btn');
@@ -120,7 +109,7 @@ window.initMyPage = function() {
 
     let currentPaymentType = 'membership';
 
-    // --- Event Listeners ---
+    // --- 이벤트 리스너 ---
 
     if (loginForm) {
         loginForm.onsubmit = (e) => {
@@ -176,7 +165,7 @@ window.initMyPage = function() {
 
     setupLockerEvents();
 
-    // --- Core Functions ---
+    // --- 핵심 함수 ---
 
     function loginSuccess(id) {
         CURRENT_USER_ID = id;
@@ -255,7 +244,8 @@ window.initMyPage = function() {
         item.innerHTML = `
             <div class="reservation-info">
                 <div class="reservation-date">
-                    <i data-lucide="calendar" style="width: 1rem; height: 1rem; color: ${isHistory ? 'var(--grey-400)' : 'var(--brand-blue)'};"></i>
+                    <i data-lucide="calendar" style="width: 1rem; height: 1rem; color: ${isHistory ? 'var(--grey-400)' : 'var(--brand-blue)'};
+                    "></i>
                     ${res.date} <span style="color: var(--grey-300);">|</span> ${res.time}
                 </div>
                 <div class="reservation-trainer">
@@ -300,7 +290,7 @@ window.initMyPage = function() {
         const ptCountEl = document.getElementById('pt-count-display');
         if (ptCountEl) ptCountEl.textContent = data.ptCount;
 
-        // Locker Logic (New Registration Feature)
+        // 사물함 로직 (신규 등록 기능)
         const lockerInfoSection = document.getElementById('locker-info-section');
         const lockerRegisterSection = document.getElementById('locker-register-section');
         const editLockerBtn = document.getElementById('edit-locker-btn');
@@ -308,24 +298,24 @@ window.initMyPage = function() {
 
         if (lockerInfoSection && lockerRegisterSection) {
             if (data.locker && data.locker.number) {
-                // Has Locker -> Show Info
+                // 사물함 보유 중 -> 정보 표시
                 lockerInfoSection.style.display = 'flex';
                 lockerRegisterSection.style.display = 'none';
                 if (editLockerBtn) editLockerBtn.style.display = 'flex';
 
-                // Update Display
+                // 디스플레이 업데이트
                 if (lockerNumberDisplay) {
                     lockerNumberDisplay.textContent = `${data.locker.number}번`;
                     const pw = data.locker.password || '';
                     lockerPasswordDigits.forEach((el, i) => { if(el) el.textContent = pw[i] || '-'; });
                 }
             } else {
-                // No Locker -> Show Register Button
+                // 사물함 없음 -> 등록 버튼 표시
                 lockerInfoSection.style.display = 'none';
                 lockerRegisterSection.style.display = 'block';
                 if (editLockerBtn) editLockerBtn.style.display = 'none';
 
-                // Bind Click Event
+                // 클릭 이벤트 바인딩
                 if (registerLockerBtn) {
                     registerLockerBtn.onclick = () => {
                         const randLocker = Math.floor(Math.random() * 50) + 1;
@@ -336,13 +326,13 @@ window.initMyPage = function() {
                         });
                         
                         alert(`🎉 사물함 ${randLocker}번이 배정되었습니다.\n초기 비밀번호: ${defaultPw}`);
-                        renderDashboard(); // Refresh UI
+                        renderDashboard(); // UI 갱신
                     };
                 }
             }
         }
 
-        // Reservations Logic (Split History)
+        // 예약 로직 (기록 분리)
         const resListContainer = document.getElementById('reservation-list-container');
         const resHistoryListEl = document.getElementById('reservation-history-list'); 
         const viewHistoryBtn = document.getElementById('view-res-history-btn');
@@ -360,24 +350,24 @@ window.initMyPage = function() {
                 const past = [];
 
                 data.reservations.forEach(res => {
-                    // Simple date compare. Format YYYY-MM-DD HH:MM
+                    // 단순 날짜 비교. 형식 YYYY-MM-DD HH:MM
                     const resDate = new Date(`${res.date}T${res.time}`);
                     if (resDate < now) past.push(res);
                     else upcoming.push(res);
                 });
 
-                // Render Upcoming
+                // 예정된 예약 렌더링
                 if (upcoming.length === 0) {
                     resListContainer.innerHTML = '<p style="color: var(--grey-500); text-align: center; padding: 2rem;">예정된 일정이 없습니다.</p>';
-                    resListContainer.classList.remove('reservation-list--scrollable'); // Ensure class is removed if no items
+                    resListContainer.classList.remove('reservation-list--scrollable'); // 항목이 없으면 클래스 제거
                 } else {
-                    // Sort ascending
+                    // 오름차순 정렬
                     upcoming.sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
                     upcoming.forEach(res => {
                         resListContainer.appendChild(createResItem(res, false));
                     });
 
-                    // Add scrollable class if more than 2 upcoming reservations
+                    // 예정된 예약이 2개 이상인 경우 스크롤 가능 클래스 추가
                     if (upcoming.length > 2) {
                         resListContainer.classList.add('reservation-list--scrollable');
                     } else {
@@ -385,11 +375,11 @@ window.initMyPage = function() {
                     }
                 }
 
-                // Render Past
+                // 지난 예약 렌더링
                 if (past.length > 0 && resHistoryListEl) {
                     if(viewHistoryBtn) {
                         viewHistoryBtn.style.display = 'flex';
-                        // Ensure event listener isn't added multiple times or just replace it
+                        // 이벤트 리스너 중복 방지를 위해 덮어쓰기
                         viewHistoryBtn.onclick = () => {
                             const isHidden = resHistoryListEl.style.display === 'none';
                             resHistoryListEl.style.display = isHidden ? 'flex' : 'none';
@@ -401,7 +391,7 @@ window.initMyPage = function() {
                             if(icon) icon.style.transition = 'transform 0.2s';
                         };
                     }
-                    // Sort descending
+                    // 내림차순 정렬
                     past.sort((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
                     past.forEach(res => {
                         resHistoryListEl.appendChild(createResItem(res, true));
@@ -414,7 +404,7 @@ window.initMyPage = function() {
         if(window.lucide) lucide.createIcons();
     }
 
-    // --- Data ---
+    // --- 데이터 ---
     const membershipOptions = Array.from({length: 12}, (_, i) => ({ label: `${i+1}개월`, value: i+1 }));
     const ptOptions = [
         { label: '10회', value: 10, price: 600000 },
@@ -431,7 +421,7 @@ window.initMyPage = function() {
         
         if (paymentSelectLabel) paymentSelectLabel.textContent = isMembership ? '기간 선택' : '횟수 선택';
 
-        // Force expansion if nothing selected
+        // 선택된 것이 없으면 강제 확장
         if (selectedOptionIndex === null) {
              isPaymentOptionsExpanded = true;
         }
@@ -450,7 +440,7 @@ window.initMyPage = function() {
                 paymentOptionsContainer.appendChild(card);
             });
         } else {
-            // Only render selected if valid
+            // 유효한 선택이 있는 경우에만 렌더링
             if (selectedOptionIndex !== null && options[selectedOptionIndex]) {
                 const selectedOpt = options[selectedOptionIndex];
                 const card = createOptionCard(selectedOpt, selectedOptionIndex, isMembership);
@@ -465,7 +455,7 @@ window.initMyPage = function() {
                 };
                 paymentOptionsContainer.appendChild(toggleBtn);
             } else {
-                // Fallback (shouldn't happen due to forced expansion above, but safe)
+                // 대체 동작 (강제 확장으로 인해 발생하지 않아야 하지만 안전을 위해)
                 isPaymentOptionsExpanded = true;
                 updatePaymentOptions(); 
                 return;
@@ -679,7 +669,7 @@ window.initMyPage = function() {
             saveMemberData(CURRENT_USER_ID, { ptCount: userData.ptCount + selected.value });
         }
 
-        // Remove used coupons
+        // 사용된 쿠폰 제거
         const remainingCoupons = userData.coupons.filter(c => !appliedCoupons.includes(c));
         saveMemberData(CURRENT_USER_ID, { coupons: remainingCoupons });
 
@@ -689,7 +679,7 @@ window.initMyPage = function() {
     }
 
     function setupLockerEvents() {
-        if (!window.LockerManager) return;
+        if (!window.LockerManager) return; 
         
         if (editLockerBtn) {
             editLockerBtn.onclick = () => {
@@ -721,7 +711,7 @@ window.initMyPage = function() {
         }
     }
 
-    // --- Global Exports ---
+    // --- 전역 내보내기 ---
     window.removeCoupon = (code) => {
         appliedCoupons = appliedCoupons.filter(c => c !== code);
         renderAppliedCoupons();
@@ -738,7 +728,7 @@ window.initMyPage = function() {
         renderDashboard();
     };
 
-    // --- Init ---
+    // --- 초기화 ---
     const storedUser = localStorage.getItem('gym_user');
     if (storedUser && MEMBERS[storedUser]) {
         CURRENT_USER_ID = storedUser;

@@ -81,16 +81,16 @@
   --destructive-foreground: #ffffff;
   --border: #e5e7eb;
   --input: #e5e7eb;
-  --ring: #030213; /* Updated to match primary for visibility or keep consistent */
+  --ring: #030213; /* 가시성을 위해 primary와 일치시킴 */
   --radius: 0.5rem;
   --radius-md: 0.375rem;
   
-  /* Additional variables used in components */
+  /* 컴포넌트에서 사용되는 추가 변수 */
   --blue-600: #2563eb;
   --green-600: #059669;
   --purple-600: #9333ea;
 
-   /* Brand Color Palette */
+   /* 브랜드 색상 팔레트 */
   --brand-blue: #0064FF;
   --brand-blue-dark: #0050CC;
   --brand-blue-light: #E8F3FF;
@@ -109,7 +109,7 @@
   --white: #FFFFFF;
   --black: #000000;
 
-  /* Semantic Colors */
+  /* 시맨틱 색상 */
   --primary: var(--brand-blue);
   --primary-foreground: var(--white);
   --secondary: var(--grey-100);
@@ -166,7 +166,7 @@ button {
   cursor: pointer;
 }
 
-/* Root Layout */
+/* 루트 레이아웃 */
 .root-container {
   min-height: 100vh;
   display: flex;
@@ -177,9 +177,9 @@ button {
   flex: 1;
 }
 
-/* --- Component Styles (Ported from shadcn/ui) --- */
+/* --- 컴포넌트 스타일 (shadcn/ui 포팅) --- */
 
-/* Button */
+/* 버튼 */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -238,7 +238,7 @@ button {
   background-color: #f3f4f6;
 }
 
-/* Input */
+/* 입력 필드 */
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -253,7 +253,7 @@ select {
   padding: 0.25rem 0.75rem;
   font-size: 0.875rem;
   transition: all 0.2s;
-  margin-bottom: 0; /* Reset default margin */
+  margin-bottom: 0; /* 기본 여백 초기화 */
 }
 
 input::placeholder {
@@ -272,7 +272,7 @@ input:disabled {
   opacity: 0.5;
 }
 
-/* Header Styles */
+/* 헤더 스타일 */
 .header {
   border-bottom: 1px solid #e5e7eb;
   background-color: rgba(255, 255, 255, 0.95);
@@ -362,20 +362,20 @@ input:disabled {
 .header-right-group {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* Add gap between search and mypage */
+  gap: 0.5rem; /* 검색과 마이페이지 사이의 간격 */
 }
 
-/* Header Search */
+/* 헤더 검색 */
 .header-search-container {
   display: flex;
   align-items: center;
   background-color: transparent;
-  border-radius: 1rem; /* Matched to CS search: 1rem (16px) instead of 9999px */
+  border-radius: 1rem; /* CS 검색과 일치: 1rem (16px) */
   padding: 0;
   width: 40px;
   height: 40px;
   overflow: visible;
-  transition: all 0.2s ease-in-out; /* Matched to CS search transition */
+  transition: all 0.2s ease-in-out; /* CS 검색 전환과 일치 */
   border: 1px solid transparent;
   cursor: pointer;
   position: relative;
@@ -384,7 +384,7 @@ input:disabled {
 }
 
 .header-search-container:focus-within {
-  border-color: #e5e7eb; /* Subtle border when focused */
+  border-color: #e5e7eb; /* 포커스 시 미묘한 테두리 */
   outline: none;
 }
 
@@ -394,15 +394,14 @@ input:disabled {
 
 .header-search-container.active {
   width: 260px;
-  background-color: white; /* CS search uses white background */
-  border: 1px solid #e5e7eb; /* CS search uses this border color */
+  background-color: white; /* CS 검색은 흰색 배경 사용 */
+  border: 1px solid #e5e7eb; /* CS 검색은 이 테두리 색상 사용 */
   padding: 0 0.75rem 0 0;
-  /* Optional: Add shadow if CS search has it, CS search has: box-shadow: 0 4px 6px ... on input? No, it was commented out in CS css, but focused state has shadow. */
 }
 
-/* Active state focus effect to match CS search focus */
+/* CS 검색 포커스와 일치하는 활성 상태 포커스 효과 */
 .header-search-container.active:focus-within {
-    border-color: #2563eb; /* Blue border on focus */
+    border-color: #2563eb; /* 포커스 시 파란색 테두리 */
 }
 
 .header-search-icon {
@@ -425,7 +424,7 @@ input:disabled {
 .header-search-input {
   border: none;
   background: transparent;
-  outline: none; /* Remove default focus outline */
+  outline: none; /* 기본 포커스 아웃라인 제거 */
   padding: 0;
   margin: 0;
   width: 0;
@@ -453,7 +452,7 @@ input:disabled {
   color: #9ca3af;
 }
 
-/* Search Results Dropdown */
+/* 검색 결과 드롭다운 */
 .header-search-results {
   position: absolute;
   top: calc(100% + 8px);
@@ -539,23 +538,23 @@ input:disabled {
   font-size: 0.9rem;
 }
 
-/* MyPage Button - Ensure alignment */
+/* 마이페이지 버튼 - 정렬 보장 */
 .header-mypage-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0 1.25rem; /* Vertical padding handled by height */
-  height: 40px; /* Match search bar height */
+  padding: 0 1.25rem; /* 높이로 처리되므로 수직 패딩 불필요하지만 유지 */
+  height: 40px; /* 검색 바 높이와 일치 */
   background-color: transparent;
   color: #1f2937;
-  border: 1px solid #e5e7eb; /* Match border width */
+  border: 1px solid #e5e7eb; /* 테두리 두께 일치 */
   border-radius: 9999px;
   text-decoration: none;
   transition: all 0.2s ease;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 600;
-  box-sizing: border-box; /* Ensure border is included in height */
+  box-sizing: border-box; /* 높이에 테두리 포함 */
 }
 
 .header-mypage-btn:hover {
@@ -571,15 +570,15 @@ input:disabled {
   height: 1.1rem;
 }
 
-/* Removed coupon styles */
+/* 쿠폰 스타일 제거됨 */
 .header-mypage-icon {
   width: 1rem;
   height: 1rem;
 }
 
-/* Footer Styles */
+/* 푸터 스타일 */
 .footer {
-  background-color: var(--grey-200); /* Changed from grey-50 */
+  background-color: var(--grey-200); /* grey-50에서 변경 */
   border-top: 1px solid var(--grey-200);
   padding: 4rem 0 2rem;
   margin-top: auto;
@@ -634,25 +633,25 @@ input:disabled {
   color: var(--grey-500);
 }
 
-/* --- Unified Page Styles --- */
+/* --- 통합 페이지 스타일 --- */
 
-/* Common Page Title */
+/* 공통 페이지 제목 */
 .common-page-title {
     font-size: 2.2rem;
     font-weight: 800;
     color: var(--grey-900);
-    margin-bottom: 2.5rem; /* Default margin for common titles */
+    margin-bottom: 2.5rem; /* 공통 제목의 기본 여백 */
     letter-spacing: -0.02em;
 }
 
-/* Centered Page Header (for specific pages) */
+/* 중앙 정렬 페이지 헤더 (특정 페이지용) */
 .centered-page-header {
     text-align: center;
-    margin: 0 auto 2.5rem; /* Center block and set bottom margin */
-    display: block; /* Ensure it behaves as a block element for centering */
+    margin: 0 auto 2.5rem; /* 중앙 블록 및 하단 여백 설정 */
+    display: block; /* 중앙 정렬을 위해 블록 요소로 동작 보장 */
 }
 
-/* Fade Up Animation */
+/* 페이드 업 애니메이션 */
 .animate-fade-up {
     animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     opacity: 0;
@@ -666,7 +665,7 @@ input:disabled {
     }
 }
 
-/* --- Scroll Reveal Animation (Global) --- */
+/* --- 스크롤 등장 애니메이션 (전역) --- */
 .scroll-reveal {
     opacity: 0;
     transform: translateY(40px);
@@ -678,7 +677,7 @@ input:disabled {
     transform: translateY(0);
 }
 
-/* Staggered Delays */
+/* 시차 지연 */
 .delay-100 { transition-delay: 0.1s; }
 .delay-200 { transition-delay: 0.2s; }
 .delay-300 { transition-delay: 0.3s; }

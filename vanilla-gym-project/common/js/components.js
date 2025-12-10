@@ -16,13 +16,13 @@ const HeaderHTML = `
   </div>
 
   <div class="header-right-group">
-    <!-- Search Component -->
+    <!-- 검색 컴포넌트 -->
     <div class="header-search-container" id="header-search">
       <div class="header-search-icon">
         <i data-lucide="search"></i>
       </div>
       <input type="text" class="header-search-input" placeholder="검색...">
-      <!-- Search Results Dropdown -->
+      <!-- 검색 결과 드롭다운 -->
       <div class="header-search-results" id="search-results"></div>
     </div>
 

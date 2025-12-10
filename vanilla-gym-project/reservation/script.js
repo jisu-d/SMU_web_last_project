@@ -1,9 +1,9 @@
 function initReservation() {
-    // --- State Management (Local Storage) ---
+    // --- 상태 관리 (로컬 스토리지) ---
     const userKey = 'gym_user';
     const dataKey = 'gym_data';
 
-    // Helper to get data
+    // 데이터 가져오기 헬퍼
     function getGymData() {
         const defaultData = {
             membershipExpire: null, 
@@ -18,12 +18,12 @@ function initReservation() {
         localStorage.setItem(dataKey, JSON.stringify(data));
     }
 
-    // --- Access Control ---
+    // --- 접근 제어 ---
     const currentUser = localStorage.getItem(userKey);
     if (!currentUser) {
         alert('로그인이 필요한 서비스입니다.');
-        window.location.hash = '#/mypage'; // Redirect to login
-        return; // Stop initialization
+        window.location.hash = '#/mypage'; // 로그인으로 리디렉션
+        return; // 초기화 중단
     }
 
     const currentData = getGymData();
@@ -33,17 +33,17 @@ function initReservation() {
         return; 
     }
 
-    // --- Data ---
+    // --- 데이터 ---
     
-    // Hierarchical Schedule Data: Weekly Patterns + Exceptions
+    // 계층적 스케줄 데이터: 주간 패턴 + 예외
     const trainerSchedules = {
         // 1. 엄희수 (성실형: 주 6일, 아침~저녁)
         1: {
             weekly: {
-                1: { start: '06:00', end: '15:00', break: ['12:00'] }, // 월
+                1: null, // 월
                 2: { start: '06:00', end: '15:00', break: ['12:00'] }, // 화
                 3: { start: '06:00', end: '15:00', break: ['12:00'] }, // 수
-                4: { start: '06:00', end: '15:00', break: ['12:00'] }, // 목
+                4: null, // 목
                 5: { start: '06:00', end: '15:00', break: ['12:00'] }, // 금
                 6: { start: '09:00', end: '13:00', break: [] },        // 토
                 0: null // 일 (휴무)
@@ -57,7 +57,7 @@ function initReservation() {
             weekly: {
                 1: { start: '13:00', end: '22:00', break: ['17:00'] },
                 2: { start: '13:00', end: '22:00', break: ['17:00'] },
-                3: { start: '13:00', end: '22:00', break: ['17:00'] },
+                3: null,
                 4: { start: '13:00', end: '22:00', break: ['17:00'] },
                 5: { start: '13:00', end: '22:00', break: ['17:00'] },
                 6: null, // 토 (휴무)
@@ -72,7 +72,7 @@ function initReservation() {
                 2: { start: '09:00', end: '18:00', break: ['13:00'] },
                 3: { start: '09:00', end: '18:00', break: ['13:00'] },
                 4: { start: '09:00', end: '18:00', break: ['13:00'] },
-                5: { start: '09:00', end: '18:00', break: ['13:00'] },
+                5: null,
                 6: { start: '10:00', end: '14:00', break: [] },
                 0: null // 일 (휴무)
             },
@@ -93,7 +93,7 @@ function initReservation() {
         }
     };
 
-    // Hardcoded booked slots
+    // 하드코딩된 예약 슬롯
     const hardcodedBookedSlots = {
         '1': { // 엄희수 트레이너
             '2024-12-09': ['10:00', '14:00'], // 예시: 12월 9일 10시, 14시 예약됨
@@ -118,39 +118,39 @@ function initReservation() {
         { id: 4, name: '임지수', role: '소프트웨어', img: 'img/4.png' }
     ];
 
-    // Helper: Generate slots based on schedule
+    // 헬퍼: 스케줄에 따른 슬롯 생성
     function getAvailableSlots(trainerId, dateStr) {
-        // 0. Global Holiday Check (using GymUtils)
+        // 0. 전역 공휴일 확인 (GymUtils 사용)
         if (window.GymUtils) {
             const [y, m, d] = dateStr.split('-').map(Number);
-            if (GymUtils.isClosedDay(y, m - 1, d)) return []; // m is 0-indexed in GymUtils
+            if (GymUtils.isClosedDay(y, m - 1, d)) return []; // GymUtils에서 m은 0부터 시작
         }
 
         const schedule = trainerSchedules[trainerId];
         if (!schedule) return [];
 
         const dateObj = new Date(dateStr);
-        const dayOfWeek = dateObj.getDay(); // 0:Sun ~ 6:Sat
+        const dayOfWeek = dateObj.getDay(); // 0:일 ~ 6:토
 
-        // 1. Check Exceptions first
+        // 1. 예외 먼저 확인
         let dayConfig = null;
         if (schedule.exceptions && schedule.exceptions[dateStr] !== undefined) {
             dayConfig = schedule.exceptions[dateStr];
         } else {
-            // 2. Fallback to Weekly
+            // 2. 주간 스케줄로 폴백
             dayConfig = schedule.weekly[dayOfWeek];
         }
 
-        if (!dayConfig) return []; // Off day (including Sunday if set to null)
+        if (!dayConfig) return []; // 휴무일 (일요일이 null로 설정된 경우 포함)
 
-        // Generate slots from start to end
+        // 시작부터 종료까지 슬롯 생성
         const slots = [];
         let current = parseInt(dayConfig.start.split(':')[0]);
         const end = parseInt(dayConfig.end.split(':')[0]);
 
         while (current < end) {
             const timeStr = String(current).padStart(2, '0') + ':00';
-            // Exclude break times
+            // 휴식 시간 제외
             if (!dayConfig.break.includes(timeStr)) {
                 slots.push(timeStr);
             }
@@ -160,7 +160,7 @@ function initReservation() {
         return slots;
     }
 
-    // --- State ---
+    // --- 상태 ---
     let state = {
         selectedTrainer: null,
         selectedDate: null,
@@ -168,7 +168,7 @@ function initReservation() {
         viewMonthIndex: 0
     };
 
-    // --- DOM Elements ---
+    // --- DOM 요소 ---
     const trainerListEl = document.getElementById('trainer-list');
     const dateListEl = document.getElementById('date-list');
     const timeListEl = document.getElementById('time-list');
@@ -176,20 +176,19 @@ function initReservation() {
     
     const dateSection = document.getElementById('date-section');
     const timeSection = document.getElementById('time-section');
-    
-    const bottomBar = document.getElementById('bottom-bar');
+
     const summaryText = document.getElementById('summary-text');
     const confirmBtn = document.getElementById('res-confirm-btn');
 
-    // --- Render Functions ---
+    // --- 렌더링 함수 ---
 
     function renderTrainers() {
-        // If list is empty, build it first
+        // 목록이 비어있으면 먼저 빌드
         if (trainerListEl.children.length === 0) {
             trainers.forEach(trainer => {
                 const card = document.createElement('div');
                 card.className = 'res-trainer-card';
-                card.dataset.id = trainer.id; // Store ID for reference
+                card.dataset.id = trainer.id; // 참조용 ID 저장
                 card.innerHTML = `
                     <img src="${trainer.img}" alt="${trainer.name}" class="res-trainer-img">
                     <div class="res-trainer-info">
@@ -202,7 +201,7 @@ function initReservation() {
             });
         }
 
-        // Just update classes to avoid re-rendering DOM (prevents image blink)
+        // DOM 재렌더링 방지를 위해 클래스만 업데이트 (이미지 깜빡임 방지)
         Array.from(trainerListEl.children).forEach(card => {
             const cardId = parseInt(card.dataset.id);
             if (state.selectedTrainer && state.selectedTrainer.id === cardId) {
@@ -237,37 +236,36 @@ function initReservation() {
         dateListEl.innerHTML = '';
         const today = new Date();
         
-        // Calculate Start Date for the selected view month
+        // 선택된 뷰 월의 시작 날짜 계산
         let startDate = new Date();
         if (state.viewMonthIndex === 0) {
-            // For current month, we still want to show the full calendar grid starting from day 1,
-            // even if today is the 15th.
+            // 현재 월의 경우, 오늘이 15일이라도 1일부터 전체 캘린더 그리드를 표시
             startDate = new Date(today.getFullYear(), today.getMonth(), 1);
         } else {
             startDate = new Date(today.getFullYear(), today.getMonth() + state.viewMonthIndex, 1);
         }
 
         const year = startDate.getFullYear();
-        const month = startDate.getMonth(); // 0-indexed
+        const month = startDate.getMonth(); // 0부터 시작
 
-        // First day of the month (0=Sun, 1=Mon, ...)
+        // 월의 첫째 날 (0=일, 1=월, ...)
         const firstDayObj = new Date(year, month, 1);
         const startDayOfWeek = firstDayObj.getDay();
 
-        // Last day of the month
+        // 월의 마지막 날
         const lastDay = new Date(year, month + 1, 0).getDate();
 
-        // 1. Add Empty Slots for days before the 1st
+        // 1. 1일 이전의 날짜에 빈 슬롯 추가
         for (let i = 0; i < startDayOfWeek; i++) {
             const emptySlot = document.createElement('div');
             emptySlot.className = 'date-card empty';
             dateListEl.appendChild(emptySlot);
         }
 
-        // 2. Add Date Cards
+        // 2. 날짜 카드 추가
         for (let d = 1; d <= lastDay; d++) {
             const dateObj = new Date(year, month, d);
-            const dayIdx = dateObj.getDay(); // 0: Sun, 6: Sat
+            const dayIdx = dateObj.getDay(); // 0: 일, 6: 토
             
             const mStr = String(month + 1).padStart(2, '0');
             const dStr = String(d).padStart(2, '0');
@@ -276,14 +274,14 @@ function initReservation() {
             const isSunday = (dayIdx === 0);
             const isSaturday = (dayIdx === 6);
             
-            // Check if date is in the past relative to REAL today
-            // (Only for the current month view)
+            // 실제 오늘과 비교하여 과거 날짜인지 확인
+            // (현재 월 뷰에만 해당)
             let isPast = false;
             if (dateObj < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
                 isPast = true;
             }
 
-            // Check Trainer Availability (Is it a working day?)
+            // 트레이너 가능 여부 확인 (근무일인가?)
             let isWorkingDay = true;
             if (state.selectedTrainer) {
                 const slots = getAvailableSlots(state.selectedTrainer.id, fullDate);
@@ -291,14 +289,14 @@ function initReservation() {
             }
 
             const card = document.createElement('div');
-            // Base classes
+            // 기본 클래스
             let classString = 'date-card';
             
             if (state.selectedDate === fullDate) classString += ' selected';
             if (isSunday) classString += ' sunday';
             if (isSaturday) classString += ' saturday';
             
-            // Disable logic: Past dates OR Non-working days
+            // 비활성화 로직: 과거 날짜 또는 근무하지 않는 날
             if (isPast || !isWorkingDay) {
                 classString += ' disabled';
             }
@@ -306,7 +304,7 @@ function initReservation() {
             card.className = classString;
             card.innerHTML = `<span class="date-num">${d}</span>`;
             
-            // Allow selection if not disabled
+            // 비활성화되지 않은 경우 선택 허용
             if (!card.classList.contains('disabled')) {
                 card.onclick = () => selectDate(fullDate);
             }
@@ -319,7 +317,7 @@ function initReservation() {
         timeListEl.innerHTML = '';
         if (!state.selectedTrainer || !state.selectedDate) return;
 
-        // 1. Get Base Available Slots from Hierarchy
+        // 1. 계층 구조에서 기본 예약 가능 슬롯 가져오기
         const availableSlots = getAvailableSlots(state.selectedTrainer.id, state.selectedDate);
 
         if (availableSlots.length === 0) {
@@ -327,16 +325,16 @@ function initReservation() {
             return;
         }
 
-                    // 2. Check Real Reservations from LocalStorage (MY Booking)
+                    // 2. 로컬 스토리지에서 실제 예약 확인 (내 예약)
                     const data = getGymData();
                     const bookedTimesFromLocalStorage = data.reservations
                         .filter(r => r.trainer === state.selectedTrainer.name && r.date === state.selectedDate)
                         .map(r => r.time);
         
-                    // 3. Check hardcoded booked slots (manually added by user)
+                    // 3. 하드코딩된 예약 슬롯 확인 (사용자가 수동으로 추가함)
                     const hardcodedBookedList = hardcodedBookedSlots[state.selectedTrainer.id]?.[state.selectedDate] || [];
         
-                    // --- Validation for Past Time ---
+                    // --- 과거 시간 유효성 검사 ---
                     const now = new Date();
                     const currentDateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
                     const isToday = (state.selectedDate === currentDateStr);
@@ -345,16 +343,16 @@ function initReservation() {
                     availableSlots.forEach((time) => {
                         let isBooked = false;
         
-                        // Check MY real booking (User managed)
+                        // 내 실제 예약 확인 (사용자 관리)
                         if (bookedTimesFromLocalStorage.includes(time)) isBooked = true;
         
-                        // Check Hardcoded booked slots
+                        // 하드코딩된 예약 슬롯 확인
                         if (hardcodedBookedList.includes(time)) isBooked = true;
-            // Check Past Time (Real-time update)
+            // 과거 시간 확인 (실시간 업데이트)
             if (isToday) {
                 const slotHour = parseInt(time.split(':')[0]);
                 if (slotHour <= currentHour) {
-                    isBooked = true; // Treat past time as 'booked' (disabled)
+                    isBooked = true; // 과거 시간을 '예약됨'(비활성화)으로 처리
                 }
             }
 
@@ -369,7 +367,7 @@ function initReservation() {
         });
     }
 
-    // --- Logic Functions ---
+    // --- 로직 함수 ---
 
     function selectTrainer(trainer) {
         state.selectedTrainer = trainer;
@@ -434,23 +432,23 @@ function initReservation() {
         }
     }
 
-    // --- Initialization ---
+    // --- 초기화 ---
     renderTrainers();
     renderMonthTabs();
     renderDates();
 
-    // --- Event Listeners ---
+    // --- 이벤트 리스너 ---
     confirmBtn.onclick = () => {
         if (confirmBtn.disabled) return;
 
-        // Double Check Ticket Count
+        // 이용권 수 재확인
         const data = getGymData();
         if (data.ptCount <= 0) {
             alert('PT 이용권이 부족합니다.');
             return;
         }
 
-        // Double Check Duplicate (Client side race condition possible but ok for local)
+        // 중복 확인 (클라이언트 측 경쟁 상태가 가능하지만 로컬에서는 괜찮음)
         const isDuplicate = data.reservations.some(r => 
             r.trainer === state.selectedTrainer.name && 
             r.date === state.selectedDate && 
@@ -459,11 +457,11 @@ function initReservation() {
 
         if (isDuplicate) {
             alert('이미 예약된 시간입니다.');
-            renderTimes(); // Refresh
+            renderTimes(); // 새로고침
             return;
         }
         
-        // Process Booking
+        // 예약 처리
         data.ptCount -= 1;
         data.reservations.push({
             id: Date.now(),
@@ -474,11 +472,11 @@ function initReservation() {
         });
         saveGymData(data);
         
-        // Fill Modal Data
+        // 모달 데이터 채우기
         document.getElementById('modal-trainer').textContent = state.selectedTrainer.name;
         document.getElementById('modal-datetime').textContent = `${state.selectedDate} ${state.selectedTime}`;
         
-        // Show Modal
+        // 모달 표시
         const modal = document.getElementById('res-modal');
         modal.style.display = 'flex';
         

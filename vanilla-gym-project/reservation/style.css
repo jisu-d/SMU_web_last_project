@@ -1,9 +1,9 @@
-/* Reservation Page - Brand Design */
+/* 예약 페이지 - 브랜드 디자인 */
 
 .reservation-container {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 3rem 1.5rem 8rem; /* Rollback side padding to 1.5rem */
+    padding: 3rem 1.5rem 8rem; /* 측면 패딩 1.5rem으로 복구 */
 }
 
 .res-section {
@@ -18,11 +18,11 @@
     margin-bottom: 1.5rem;
 }
 
-/* Trainer List (Horizontal Scroll) */
+/* 트레이너 목록 (가로 스크롤) */
 .trainer-scroll-area {
     overflow-x: auto;
-    margin: 0 -1.5rem; /* Expand to full width on mobile */
-    padding: 0 1.5rem 1.5rem; /* Padding for shadow clipping */
+    margin: 0 -1.5rem; /* 모바일에서 전체 너비로 확장 */
+    padding: 0 1.5rem 1.5rem; /* 그림자 잘림 방지를 위한 패딩 */
     scrollbar-width: none;
 }
 
@@ -55,7 +55,7 @@
 
 .res-trainer-card.selected {
     border-color: var(--brand-blue);
-    background-color: var(--brand-blue-light); /* Very light blue */
+    background-color: var(--brand-blue-light); /* 아주 밝은 파란색 */
 }
 
 .res-trainer-img {
@@ -82,7 +82,7 @@
     color: var(--grey-500);
 }
 
-/* Date Header & Month Tabs */
+/* 날짜 헤더 & 월 탭 */
 .res-date-header {
     display: flex;
     justify-content: space-between;
@@ -117,7 +117,7 @@
     box-shadow: 0 4px 10px rgba(0, 100, 255, 0.3);
 }
 
-/* Date Picker (Calendar Grid) */
+/* 날짜 선택기 (캘린더 그리드) */
 .res-date-picker {
     width: 90%;
     margin: 0 auto;
@@ -140,11 +140,11 @@
 }
 
 .weekday-cell.sunday {
-    color: #F04452; /* Red for Sunday header */
+    color: #F04452; /* 일요일 헤더 빨간색 */
 }
 
 .weekday-cell.saturday {
-    color: var(--blue-600); /* Blue for Saturday header */
+    color: var(--blue-600); /* 토요일 헤더 파란색 */
 }
 
 .calendar-grid {
@@ -154,7 +154,7 @@
 }
 
 .date-card {
-    height: 125px; /* Clearly vertical rectangular shape */
+    height: 125px; /* 명확한 수직 직사각형 모양 */
     padding: 0.5rem;
     background: var(--white);
     border-radius: 12px;
@@ -168,7 +168,7 @@
     transition: all 0.2s;
 }
 
-.date-card:hover:not(.disabled):not(.selected) { /* Added :not(.selected) */
+.date-card:hover:not(.disabled):not(.selected) { /* :not(.selected) 추가 */
     background: var(--grey-50);
     border-color: var(--brand-blue);
     color: var(--brand-blue);
@@ -181,7 +181,7 @@
     color: var(--grey-300);
 }
 
-/* Empty cells for padding start of month */
+/* 월 시작 부분 채우기를 위한 빈 셀 */
 .date-card.empty {
     background: transparent;
     border: none;
@@ -197,19 +197,19 @@
 }
 
 .date-card.sunday {
-    color: #F04452; /* Red text for Sundays */
+    color: #F04452; /* 일요일 텍스트 빨간색 */
 }
 
 .date-card.selected.sunday {
-    color: var(--white); /* White text if selected, even if Sunday */
+    color: var(--white); /* 선택된 경우 일요일이라도 흰색 텍스트 */
 }
 
 .date-card.saturday {
-    color: var(--blue-600); /* Blue text for Saturdays */
+    color: var(--blue-600); /* 토요일 텍스트 파란색 */
 }
 
 .date-card.selected.saturday {
-    color: var(--white); /* White text if selected, even if Saturday */
+    color: var(--white); /* 선택된 경우 토요일이라도 흰색 텍스트 */
 }
 
 .date-num {
@@ -217,7 +217,7 @@
     font-weight: 600;
 }
 
-/* Time Grid */
+/* 시간 그리드 */
 .res-time-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -282,17 +282,17 @@
 .dot.selected { background-color: var(--brand-blue); }
 .dot.booked { background-color: var(--grey-200); }
 
-/* Bottom Bar */
+/* 하단 바 */
 .res-bottom-bar {
     position: fixed;
-    bottom: 2rem; /* Reverted to floating style */
+    bottom: 2rem; /* 플로팅 스타일로 복구 */
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 3rem);
-    max-width: 950px; /* Increased to match container width */
+    max-width: 950px; /* 컨테이너 너비에 맞게 증가 */
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(10px);
-    border-radius: 24px; /* Fully rounded again */
+    border-radius: 24px; /* 다시 완전히 둥글게 */
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     padding: 1.2rem 1.5rem;
     display: flex;
@@ -315,7 +315,7 @@
     font-size: 1rem;
 }
 
-/* Modal Styles */
+/* 모달 스타일 */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -327,18 +327,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999; /* High z-index to cover bottom bar */
-    opacity: 1; /* Ensure visibility */
+    z-index: 9999; /* 하단 바를 덮도록 높은 z-index */
+    opacity: 1; /* 가시성 보장 */
 }
 
 .res-modal-content {
-    background-color: var(--white); /* Added background color */
-    padding: 2rem; /* Added padding */
-    border-radius: 24px; /* Added border radius */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2); /* Added shadow */
+    background-color: var(--white); /* 배경색 추가 */
+    padding: 2rem; /* 패딩 추가 */
+    border-radius: 24px; /* 테두리 반경 추가 */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); /* 그림자 추가 */
     text-align: center;
     max-width: 400px;
-    width: 90%; /* Responsive width */
+    width: 90%; /* 반응형 너비 */
     animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -366,7 +366,7 @@
 }
 
 .res-ticket {
-    background-color: #F2F4F6; /* Changed to a distinct grey/blue */
+    background-color: #F2F4F6; /* 구별되는 회색/파란색으로 변경 */
     padding: 1.5rem;
     border-radius: 16px;
     margin-bottom: 2rem;
@@ -392,7 +392,7 @@
     color: var(--grey-900);
 }
 
-/* Responsive */
+/* 반응형 */
 @media (max-width: 600px) {
     .res-time-grid {
         grid-template-columns: repeat(3, 1fr);
