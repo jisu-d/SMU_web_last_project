@@ -162,26 +162,26 @@ window.initCustomerService = function() {
                     faqEl.className = `cs-faq-item ${activeFaqId === item.id ? 'active' : ''}`;
                     faqEl.setAttribute('data-id', item.id);
                     
-                    faqEl.innerHTML = "`
-                        <button class=\"cs-faq-question-btn\">
-                            <div class=\"cs-faq-question-content\">
-                                <span class=\"cs-q-badge\">Q</span>
-                                <div class=\"cs-question-wrapper\">
-                                    <div class=\"cs-category-tag-wrapper\">
-                                        <span class=\"cs-category-tag\">${item.category}</span>
+                    faqEl.innerHTML = `
+                        <button class="cs-faq-question-btn">
+                            <div class="cs-faq-question-content">
+                                <span class="cs-q-badge">Q</span>
+                                <div class="cs-question-wrapper">
+                                    <div class="cs-category-tag-wrapper">
+                                        <span class="cs-category-tag">${item.category}</span>
                                     </div>
-                                    <h3 class=\"cs-question-text\">${item.question}</h3>
+                                    <h3 class="cs-question-text">${item.question}</h3>
                                 </div>
                             </div>
-                            <i data-lucide=\"chevron-down\" class=\"cs-chevron-icon\"></i>
+                            <i data-lucide="chevron-down" class="cs-chevron-icon"></i>
                         </button>
-                        <div class=\"cs-faq-answer\">
-                            <div class=\"cs-answer-content\">
-                                <span class=\"cs-a-badge\">A</span>
-                                <p class=\"cs-answer-text\">${item.answer}</p>
+                        <div class="cs-faq-answer">
+                            <div class="cs-answer-content">
+                                <span class="cs-a-badge">A</span>
+                                <p class="cs-answer-text">${item.answer}</p>
                             </div>
                         </div>
-                    ";
+                    `;
 
                     // 아코디언 클릭 리스너 추가
                     const btn = faqEl.querySelector('.cs-faq-question-btn');
