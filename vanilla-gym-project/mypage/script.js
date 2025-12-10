@@ -11,7 +11,7 @@ window.initMyPage = function() {
     // --- Global State Management ---
     let CURRENT_USER_ID = null;
     let appliedCoupons = [];
-    let selectedOptionIndex = 0;
+    let selectedOptionIndex = null;
     let lastRenderedPaymentType = null;
     let isPaymentOptionsExpanded = false;
 
@@ -160,7 +160,7 @@ window.initMyPage = function() {
             paymentTabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
             currentPaymentType = tab.dataset.type;
-            selectedOptionIndex = 0;
+            selectedOptionIndex = null;
             isPaymentOptionsExpanded = false; 
             updatePaymentOptions();
         };
@@ -214,7 +214,7 @@ window.initMyPage = function() {
         if (couponInput) couponInput.value = '';
         if (couponMessage) couponMessage.textContent = '';
         appliedCoupons = []; 
-        selectedOptionIndex = 0;
+        selectedOptionIndex = null;
         isPaymentOptionsExpanded = false;
 
         if (pendingPayment && pendingCoupon) {
@@ -431,6 +431,11 @@ window.initMyPage = function() {
         
         if (paymentSelectLabel) paymentSelectLabel.textContent = isMembership ? '기간 선택' : '횟수 선택';
 
+        // Force expansion if nothing selected
+        if (selectedOptionIndex === null) {
+             isPaymentOptionsExpanded = true;
+        }
+
         if (isPaymentOptionsExpanded) {
             paymentOptionsContainer.classList.remove('collapsed');
             paymentOptionsContainer.style.gridTemplateColumns = '1fr';
@@ -445,18 +450,26 @@ window.initMyPage = function() {
                 paymentOptionsContainer.appendChild(card);
             });
         } else {
-            const selectedOpt = options[selectedOptionIndex];
-            const card = createOptionCard(selectedOpt, selectedOptionIndex, isMembership);
-            paymentOptionsContainer.appendChild(card);
+            // Only render selected if valid
+            if (selectedOptionIndex !== null && options[selectedOptionIndex]) {
+                const selectedOpt = options[selectedOptionIndex];
+                const card = createOptionCard(selectedOpt, selectedOptionIndex, isMembership);
+                paymentOptionsContainer.appendChild(card);
 
-            const toggleBtn = document.createElement('div');
-            toggleBtn.className = 'payment-toggle-btn';
-            toggleBtn.innerHTML = '<i data-lucide="chevron-down"></i>';
-            toggleBtn.onclick = () => {
+                const toggleBtn = document.createElement('div');
+                toggleBtn.className = 'payment-toggle-btn';
+                toggleBtn.innerHTML = '<i data-lucide="chevron-down"></i>';
+                toggleBtn.onclick = () => {
+                    isPaymentOptionsExpanded = true;
+                    updatePaymentOptions();
+                };
+                paymentOptionsContainer.appendChild(toggleBtn);
+            } else {
+                // Fallback (shouldn't happen due to forced expansion above, but safe)
                 isPaymentOptionsExpanded = true;
-                updatePaymentOptions();
-            };
-            paymentOptionsContainer.appendChild(toggleBtn);
+                updatePaymentOptions(); 
+                return;
+            }
         }
 
         calculatePrice();
@@ -645,6 +658,11 @@ window.initMyPage = function() {
         }
 
         const data = calculateData();
+        if (!data) {
+            alert('이용권(기간/횟수)을 선택해주세요.');
+            return;
+        }
+
         const userData = getMemberData();
 
         if (currentPaymentType === 'membership') {
