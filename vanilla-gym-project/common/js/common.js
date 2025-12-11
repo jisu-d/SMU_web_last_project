@@ -13,7 +13,7 @@ const MEMBERS = {
         name: '홍길동',
         password: '1234',
         contact: '010-1234-5678',
-        coupons: ['WELCOME', 'FRIENDS', 'X-mas'], // 사용자가 보유한 쿠폰
+        coupons: ['WELCOME', 'FRIENDS'], // 사용자가 보유한 쿠폰
         points: 2000,
         membershipExpire: null,
         ptCount: 0,

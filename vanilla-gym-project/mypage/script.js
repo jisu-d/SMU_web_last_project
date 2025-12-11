@@ -40,17 +40,33 @@ window.initMyPage = function() {
     }
 
     function syncFromLocalStorage(memberId) {
+        // 1. 기존 gym_data (예약, 만료일 등) 동기화
         const storedData = localStorage.getItem('gym_data');
-        if (!storedData || !MEMBERS[memberId]) return;
-        const gymData = JSON.parse(storedData);
-        MEMBERS[memberId].ptCount = gymData.ptCount;
-        MEMBERS[memberId].reservations = gymData.reservations || [];
-        MEMBERS[memberId].membershipExpire = gymData.membershipExpire;
-        if (gymData.lockerNumber) {
-            MEMBERS[memberId].locker = {
-                number: gymData.lockerNumber,
-                password: gymData.lockerPassword
-            };
+        if (storedData && MEMBERS[memberId]) {
+            const gymData = JSON.parse(storedData);
+            MEMBERS[memberId].ptCount = gymData.ptCount;
+            MEMBERS[memberId].reservations = gymData.reservations || [];
+            MEMBERS[memberId].membershipExpire = gymData.membershipExpire;
+            if (gymData.lockerNumber) {
+                MEMBERS[memberId].locker = {
+                    number: gymData.lockerNumber,
+                    password: gymData.lockerPassword
+                };
+            }
+        }
+
+        // 2. gym_user (쿠폰 정보 등) 동기화
+        const storedUser = localStorage.getItem('gym_user');
+        if (storedUser) {
+            try {
+                const userObj = JSON.parse(storedUser);
+                // ID가 일치하는 경우에만 쿠폰 정보 업데이트
+                if (userObj.id === memberId && Array.isArray(userObj.coupons)) {
+                    MEMBERS[memberId].coupons = userObj.coupons;
+                }
+            } catch (e) {
+                console.warn("gym_user 파싱 실패, 쿠폰 동기화 건너뜀", e);
+            }
         }
     }
 
@@ -126,8 +142,13 @@ window.initMyPage = function() {
 
     if (testAccountBtn) {
         testAccountBtn.onclick = () => {
+            // 테스트 계정 자동 로그인
             document.getElementById('userId').value = 'user123';
             document.getElementById('password').value = '1234';
+            // 폼 제출 트리거 또는 직접 로그인 함수 호출
+            if (MEMBERS['user123']) {
+                loginSuccess('user123');
+            }
         };
     }
 
@@ -169,7 +190,14 @@ window.initMyPage = function() {
 
     function loginSuccess(id) {
         CURRENT_USER_ID = id;
-        localStorage.setItem('gym_user', id);
+        
+        // gym_user에 전체 유저 객체를 JSON 문자열로 저장 (다른 페이지에서 참조용)
+        const userObj = { ...MEMBERS[id] };
+        // id 필드도 편의상 추가
+        userObj.id = id;
+        
+        localStorage.setItem('gym_user', JSON.stringify(userObj));
+        
         syncToLocalStorage(id);
         appliedCoupons = [];
         if (window.updateHeaderState) window.updateHeaderState();
@@ -729,9 +757,45 @@ window.initMyPage = function() {
     };
 
     // --- 초기화 ---
-    const storedUser = localStorage.getItem('gym_user');
-    if (storedUser && MEMBERS[storedUser]) {
-        CURRENT_USER_ID = storedUser;
+    let storedUser = localStorage.getItem('gym_user');
+    
+    // 저장된 값이 JSON 객체인지 일반 문자열(ID)인지 확인
+    let userId = null;
+    if (storedUser) {
+        if (storedUser.startsWith('{')) {
+            try {
+                const parsed = JSON.parse(storedUser);
+                userId = parsed.id || parsed.name; // ID 필드가 없으면 이름 등을 대신 사용 (보완 필요)
+                // 하지만 MEMBERS 키는 ID이므로, 저장 시 ID를 포함시켰는지 확인해야 함.
+                // 위 loginSuccess 수정에서 id를 포함시켰으므로 parsed.id 사용
+                
+                // 만약 id가 없다면(구조 변경 전 데이터), 키를 역추적하거나 로그아웃 처리
+                if (!userId) {
+                    // MEMBERS에서 매칭되는 유저 찾기 (이름/연락처 등)
+                    for(const key in MEMBERS) {
+                        if(MEMBERS[key].name === parsed.name) {
+                            userId = key;
+                            break;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("User parse error", e);
+                localStorage.removeItem('gym_user');
+            }
+        } else {
+            // 구버전: 단순히 ID 문자열만 저장된 경우
+            userId = storedUser;
+            // 신버전 포맷으로 마이그레이션
+            if (MEMBERS[userId]) {
+                const userObj = { ...MEMBERS[userId], id: userId };
+                localStorage.setItem('gym_user', JSON.stringify(userObj));
+            }
+        }
+    }
+
+    if (userId && MEMBERS[userId]) {
+        CURRENT_USER_ID = userId;
         syncFromLocalStorage(CURRENT_USER_ID);
         if (window.updateHeaderState) window.updateHeaderState();
         showMain();
